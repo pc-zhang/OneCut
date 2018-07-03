@@ -3,7 +3,7 @@
 //  OneCut
 //
 //  Created by zpc on 2018/7/3.
-//  Copyright © 2018年 zpc. All rights reserved.
+//  Copyright © 2018年 Apple Inc. All rights reserved.
 //
 
 import UIKit
@@ -20,8 +20,8 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         allowsPickingMultipleItems = false
         
         // Update the style of the UIDocumentBrowserViewController
-        // browserUserInterfaceStyle = .dark
-        // view.tintColor = .white
+        browserUserInterfaceStyle = .dark
+        view.tintColor = .white
         
         // Specify the allowed content types of your application via the Info.plist.
         
@@ -32,6 +32,7 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
     // MARK: UIDocumentBrowserViewControllerDelegate
     
     func documentBrowser(_ controller: UIDocumentBrowserViewController, didRequestDocumentCreationWithHandler importHandler: @escaping (URL?, UIDocumentBrowserViewController.ImportMode) -> Void) {
+        
         let newDocumentURL: URL? = nil
         
         // Set the URL for the new document here. Optionally, you can present a template chooser before calling the importHandler.
@@ -65,7 +66,7 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
     func presentDocument(at documentURL: URL) {
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let documentViewController = storyBoard.instantiateViewController(withIdentifier: "DocumentViewController") as! DocumentViewController
+        let documentViewController = storyBoard.instantiateViewController(withIdentifier: "DocumentViewController") as! MainViewController
         documentViewController.document = Document(fileURL: documentURL)
         
         present(documentViewController, animated: true, completion: nil)
