@@ -15,108 +15,6 @@ private var MainViewControllerKVOContext = 0
 
 class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    @IBOutlet weak var documentNameLabel: UILabel!
-    
-    var document: UIDocument?
-    
-    
-    @IBAction func dismissDocumentViewController() {
-        dismiss(animated: true) {
-            self.document?.close(completionHandler: nil)
-        }
-    }
-    
-    // MARK: camera
-    
-    @IBOutlet weak var cameraButton: UIButton! {
-        didSet {
-            cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum)
-        }
-    }
-    
-    @IBAction func AddVideo(_ sender: UIButton) {
-        let picker = UIImagePickerController()
-        picker.sourceType = .savedPhotosAlbum
-        picker.mediaTypes = [kUTTypeMovie as String]
-        picker.delegate = self
-        picker.allowsEditing = false
-        present(picker, animated: true)
-    }
-    
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.presentingViewController?.dismiss(animated: true, completion: nil)
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        if let videoURL = info[UIImagePickerControllerMediaURL] as? URL {
-            addClip(videoURL)
-        }
-        picker.presentingViewController?.dismiss(animated: true, completion: nil)
-    }
-    
-    func pinch(_ recognizer: UIPinchGestureRecognizer) {
-        visibleTimeRange = 30 * timelineView.zoomScale
-        timelineView.collectionViewLayout.invalidateLayout()
-        timelineView.contentOffset.x = CGFloat(self.currentTime/CMTimeGetSeconds(self.composition!.duration)*Double(self.timelineView.frame.width)) - self.timelineView.frame.size.width/2
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first
-        return CGSize(width: CGFloat(CMTimeGetSeconds((compositionVideoTrack?.segments[indexPath.row].timeMapping.target.duration)!)) * scaledDurationToWidth, height: timelineView.frame.height)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first!
-        
-        return compositionVideoTrack.segments.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let segmentView = collectionView.dequeueReusableCell(withReuseIdentifier: "segment", for: indexPath)
-        
-        let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first
-        
-        if true {
-            var times = [NSValue]()
-            
-            let timerange = (compositionVideoTrack?.segments[indexPath.item].timeMapping.target)!
-            
-            // Generate an image at time zero.
-            let incrementTime = CMTime(seconds: Double(timelineView.frame.height /  scaledDurationToWidth), preferredTimescale: 60)
-            
-            var iterTime = timerange.start
-            
-            while iterTime <= timerange.end {
-                times.append(iterTime as NSValue)
-                iterTime = CMTimeAdd(iterTime, incrementTime);
-            }
-            
-            // Set a videoComposition on the ImageGenerator if the underlying movie has more than 1 video track.
-            imageGenerator?.generateCGImagesAsynchronously(forTimes: times as [NSValue]) { (requestedTime, image, actualTime, result, error) in
-                if (image != nil) {
-                    DispatchQueue.main.async {
-                        let nextX = CGFloat(CMTimeGetSeconds(requestedTime - timerange.start)) * self.scaledDurationToWidth
-                        let nextView = UIImageView.init(frame: CGRect(x: nextX, y: 0.0, width: self.timelineView.bounds.height, height: self.timelineView.bounds.height))
-                        nextView.contentMode = .scaleAspectFill
-                        nextView.clipsToBounds = true
-                        nextView.image = UIImage.init(cgImage: image!)
-                        
-                        segmentView.addSubview(nextView)
-                    }
-                }
-            }
-        }
-        
-        return segmentView
-    }
-    
-    
     // MARK: Properties
     
     var emptyView = UIView(frame: CGRect.zero)
@@ -154,18 +52,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         case copy(Array<AVCompositionTrackSegment>.Index)
     }
     
-    func push(op: OpType) {
-        var newComposition = self.composition!.mutableCopy() as! AVMutableComposition
-        
-        while undoPos < stack.count - 1 {
-            stack.removeLast()
-        }
-        
-        stack.append(opsAndComps(comp: newComposition, op: op))
-        undoPos = stack.count - 1
-        
-        redoOp(op: op)
-    }
     
     // Attempt load and test these asset keys before playing.
     static let assetKeysRequiredToPlay = [
@@ -230,9 +116,16 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     private var timeObserverToken: Any?
     
     private var playerItem: AVPlayerItem? = nil
+    var document: UIDocument?
     
     // MARK: - IBOutlets
     
+    @IBOutlet weak var splitButton: UIButton!
+    @IBOutlet weak var copyButton: UIButton!
+    @IBOutlet weak var removeButton: UIButton!
+    @IBOutlet weak var undoButton: UIButton!
+    @IBOutlet weak var redoButton: UIButton!
+    @IBOutlet weak var documentNameLabel: UILabel!
     @IBOutlet weak var startTimeLabel: UILabel!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var playerView: PlayerView!
@@ -246,88 +139,10 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             //            timelineView.pinchGestureRecognizer?.addTarget(self, action: #selector(MainViewController.pinch))
         }
     }
-    
-    @IBOutlet weak var splitButton: UIButton!
-    @IBOutlet weak var copyButton: UIButton!
-    @IBOutlet weak var removeButton: UIButton!
-    @IBOutlet weak var undoButton: UIButton!
-    @IBOutlet weak var redoButton: UIButton!
-    
-    // MARK: - View Controller
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // Access the document
-        document?.open(completionHandler: { (success) in
-            if success {
-                // Display the content of the document, e.g.:
-                self.documentNameLabel.text = self.document?.fileURL.lastPathComponent
-            } else {
-                // Make sure to handle the failed import appropriately, e.g., by presenting an error message to the user.
-            }
-        })
-        
-        /*
-         Update the UI when these player properties change.
-         
-         Use the context parameter to distinguish KVO for our particular observers
-         and not those destined for a subclass that also happens to be observing
-         these properties.
-         */
-//        addObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.duration), options: [.new, .initial], context: &MainViewControllerKVOContext)
-//        addObserver(self, forKeyPath: #keyPath(MainViewController.player.rate), options: [.new, .initial], context: &MainViewControllerKVOContext)
-//        addObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.status), options: [.new, .initial], context: &MainViewControllerKVOContext)
-        
-        playerView.playerLayer.player = player
-        
-        // Make sure we don't have a strong reference cycle by only capturing self as weak.
-        let interval = CMTimeMake(1, 1)
-        timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [unowned self] time in
-            let timeElapsed = Float(CMTimeGetSeconds(time))
-            
-            self.startTimeLabel.text = self.createTimeString(time: timeElapsed)
+    @IBOutlet weak var cameraButton: UIButton! {
+        didSet {
+            cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum)
         }
-        
-        // add composition
-        if composition==nil {
-            composition = AVMutableComposition()
-            // Add two video tracks and two audio tracks.
-            _ = composition!.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)
-            
-            _ = composition!.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
-        }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        if let timeObserverToken = timeObserverToken {
-            player.removeTimeObserver(timeObserverToken)
-            self.timeObserverToken = nil
-        }
-        
-        player.pause()
-        
-//        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.duration), context: &MainViewControllerKVOContext)
-//        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.rate), context: &MainViewControllerKVOContext)
-//        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.status), context: &MainViewControllerKVOContext)
-    }
-    
-    // MARK: todo
-    
-    func updatePlayer() {
-        if composition == nil {
-            return
-        }
-        
-        playerItem = AVPlayerItem(asset: composition!)
-        playerItem!.videoComposition = videoComposition
-        playerItem!.audioMix = audioMix
-        player.replaceCurrentItem(with: playerItem)
-        
-        currentTime = Double((timelineView.contentOffset.x + timelineView.frame.width/2) / scaledDurationToWidth)
-        
     }
     
     // MARK: - IBActions
@@ -389,7 +204,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     
                 } else {
                     for s in compositionVideoTrack!.segments {
-                        var timeRangeInAsset = s.timeMapping.target // assumes non-scaled edit
+                        let timeRangeInAsset = s.timeMapping.target // assumes non-scaled edit
                         
                         if timeRangeInAsset.containsTime(self.player.currentTime()) {
                             
@@ -469,7 +284,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             return
         }
         
-        undoPos -= 1
+        undoPos -= 1 
         self.composition = stack[undoPos].comp.mutableCopy() as! AVMutableComposition
         
         undoOp(op: stack[undoPos+1].op)
@@ -584,6 +399,111 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
     }
     
+    func push(op: OpType) {
+        var newComposition = self.composition!.mutableCopy() as! AVMutableComposition
+        
+        while undoPos < stack.count - 1 {
+            stack.removeLast()
+        }
+        
+        stack.append(opsAndComps(comp: newComposition, op: op))
+        undoPos = stack.count - 1
+        
+        redoOp(op: op)
+    }
+    
+    
+    @IBAction func dismissDocumentViewController() {
+        dismiss(animated: true) {
+            self.document?.close(completionHandler: nil)
+        }
+    }
+    
+    @IBAction func AddVideo(_ sender: UIButton) {
+        let picker = UIImagePickerController()
+        picker.sourceType = .savedPhotosAlbum
+        picker.mediaTypes = [kUTTypeMovie as String]
+        picker.delegate = self
+        picker.allowsEditing = false
+        present(picker, animated: true)
+    }
+    
+    
+    func updatePlayer() {
+        if composition == nil {
+            return
+        }
+        
+        playerItem = AVPlayerItem(asset: composition!)
+        playerItem!.videoComposition = videoComposition
+        playerItem!.audioMix = audioMix
+        player.replaceCurrentItem(with: playerItem)
+        
+        currentTime = Double((timelineView.contentOffset.x + timelineView.frame.width/2) / scaledDurationToWidth)
+        
+    }
+    
+    // MARK: - View Controller
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Access the document
+        document?.open(completionHandler: { (success) in
+            if success {
+                // Display the content of the document, e.g.:
+                self.documentNameLabel.text = self.document?.fileURL.lastPathComponent
+            } else {
+                // Make sure to handle the failed import appropriately, e.g., by presenting an error message to the user.
+            }
+        })
+        
+        /*
+         Update the UI when these player properties change.
+         
+         Use the context parameter to distinguish KVO for our particular observers
+         and not those destined for a subclass that also happens to be observing
+         these properties.
+         */
+        //        addObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.duration), options: [.new, .initial], context: &MainViewControllerKVOContext)
+        //        addObserver(self, forKeyPath: #keyPath(MainViewController.player.rate), options: [.new, .initial], context: &MainViewControllerKVOContext)
+        //        addObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.status), options: [.new, .initial], context: &MainViewControllerKVOContext)
+        
+        playerView.playerLayer.player = player
+        
+        // Make sure we don't have a strong reference cycle by only capturing self as weak.
+        let interval = CMTimeMake(1, 1)
+        timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [unowned self] time in
+            let timeElapsed = Float(CMTimeGetSeconds(time))
+            
+            self.startTimeLabel.text = self.createTimeString(time: timeElapsed)
+        }
+        
+        // add composition
+        if composition==nil {
+            composition = AVMutableComposition()
+            // Add two video tracks and two audio tracks.
+            _ = composition!.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)
+            
+            _ = composition!.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        if let timeObserverToken = timeObserverToken {
+            player.removeTimeObserver(timeObserverToken)
+            self.timeObserverToken = nil
+        }
+        
+        player.pause()
+        
+        //        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.duration), context: &MainViewControllerKVOContext)
+        //        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.rate), context: &MainViewControllerKVOContext)
+        //        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.status), context: &MainViewControllerKVOContext)
+    }
+    
     
     // MARK: - KVO Observation
     
@@ -696,33 +616,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     // MARK: Convenience
     
-    func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
-        let size = image.size
-        
-        let widthRatio  = targetSize.width  / size.width
-        let heightRatio = targetSize.height / size.height
-        
-        // Figure out what our orientation is, and use that to form the rectangle
-        var newSize: CGSize
-        if(widthRatio > heightRatio) {
-            newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
-        } else {
-            newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
-        }
-        
-        // This is the rect that we've calculated out and this is what is actually used below
-        let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
-        
-        // Actually do the resizing to the rect using the ImageContext stuff
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
-        image.draw(in: rect)
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return newImage!
-    }
-    
-    
     func createTimeString(time: Float) -> String {
         let components = NSDateComponents()
         components.second = Int(max(0.0, time))
@@ -745,4 +638,79 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             currentTime = Double((timelineView.contentOffset.x + timelineView.frame.width/2) / scaledDurationToWidth)
         }
     }
+    
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.presentingViewController?.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        if let videoURL = info[UIImagePickerControllerMediaURL] as? URL {
+            addClip(videoURL)
+        }
+        picker.presentingViewController?.dismiss(animated: true, completion: nil)
+    }
+    
+    func pinch(_ recognizer: UIPinchGestureRecognizer) {
+        visibleTimeRange = 30 * timelineView.zoomScale
+        timelineView.collectionViewLayout.invalidateLayout()
+        timelineView.contentOffset.x = CGFloat(self.currentTime/CMTimeGetSeconds(self.composition!.duration)*Double(self.timelineView.frame.width)) - self.timelineView.frame.size.width/2
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first
+        return CGSize(width: CGFloat(CMTimeGetSeconds((compositionVideoTrack?.segments[indexPath.row].timeMapping.target.duration)!)) * scaledDurationToWidth, height: timelineView.frame.height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first!
+        
+        return compositionVideoTrack.segments.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let segmentView = collectionView.dequeueReusableCell(withReuseIdentifier: "segment", for: indexPath)
+        
+        let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first
+        
+        if true {
+            var times = [NSValue]()
+            
+            let timerange = (compositionVideoTrack?.segments[indexPath.item].timeMapping.target)!
+            
+            // Generate an image at time zero.
+            let incrementTime = CMTime(seconds: Double(timelineView.frame.height /  scaledDurationToWidth), preferredTimescale: 60)
+            
+            var iterTime = timerange.start
+            
+            while iterTime <= timerange.end {
+                times.append(iterTime as NSValue)
+                iterTime = CMTimeAdd(iterTime, incrementTime);
+            }
+            
+            // Set a videoComposition on the ImageGenerator if the underlying movie has more than 1 video track.
+            imageGenerator?.generateCGImagesAsynchronously(forTimes: times as [NSValue]) { (requestedTime, image, actualTime, result, error) in
+                if (image != nil) {
+                    DispatchQueue.main.async {
+                        let nextX = CGFloat(CMTimeGetSeconds(requestedTime - timerange.start)) * self.scaledDurationToWidth
+                        let nextView = UIImageView.init(frame: CGRect(x: nextX, y: 0.0, width: self.timelineView.bounds.height, height: self.timelineView.bounds.height))
+                        nextView.contentMode = .scaleAspectFill
+                        nextView.clipsToBounds = true
+                        nextView.image = UIImage.init(cgImage: image!)
+                        
+                        segmentView.addSubview(nextView)
+                    }
+                }
+            }
+        }
+        
+        return segmentView
+    }
+    
 }

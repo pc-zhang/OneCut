@@ -62,18 +62,26 @@
 		F0C7513020EB3EFF0088D34F /* OneCut */ = {
 			isa = PBXGroup;
 			children = (
-				F0C7513120EB3EFF0088D34F /* AppDelegate.swift */,
-				F0C7514720EB3F620088D34F /* Document.swift */,
+				F0C7515320EB44340088D34F /* Supporting Files */,
 				F0C7514820EB3F620088D34F /* DocumentBrowserViewController.swift */,
+				F0C7514720EB3F620088D34F /* Document.swift */,
 				F0C7514920EB3F620088D34F /* DocumentViewController.swift */,
 				F0C7514D20EB3F6C0088D34F /* PlayerView.swift */,
 				F0C7514E20EB3F6C0088D34F /* SegmentView.swift */,
-				F0C7513C20EB3F000088D34F /* Assets.xcassets */,
-				F0C7515120EB3FAA0088D34F /* Main.storyboard */,
-				F0C7513E20EB3F000088D34F /* LaunchScreen.storyboard */,
 				F0C7514120EB3F000088D34F /* Info.plist */,
 			);
 			path = OneCut;
+			sourceTree = "<group>";
+		};
+		F0C7515320EB44340088D34F /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F0C7513120EB3EFF0088D34F /* AppDelegate.swift */,
+				F0C7513C20EB3F000088D34F /* Assets.xcassets */,
+				F0C7515120EB3FAA0088D34F /* Main.storyboard */,
+				F0C7513E20EB3F000088D34F /* LaunchScreen.storyboard */,
+			);
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
