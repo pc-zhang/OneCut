@@ -147,6 +147,30 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     // MARK: - IBActions
     
+    @IBAction func export(_ sender: Any) {
+        // Create the export session with the composition and set the preset to the highest quality.
+        let exporter = AVAssetExportSession(asset: composition!, presetName: AVAssetExportPreset640x480)!
+        // Set the desired output URL for the file created by the export process.
+        exporter.outputURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(String(Int(Date.timeIntervalSinceReferenceDate))).appendingPathExtension("mov")
+        // Set the output file type to be a QuickTime movie.
+        exporter.outputFileType = AVFileType.mov
+        exporter.shouldOptimizeForNetworkUse = true
+        exporter.videoComposition = nil
+        // Asynchronously export the composition to a video file and save this file to the camera roll once export completes.
+        exporter.exportAsynchronously {
+            DispatchQueue.main.async {
+                if (exporter.status == .completed) {
+                    if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(exporter.outputURL!.path)){
+                        UISaveVideoAtPathToSavedPhotosAlbum(exporter.outputURL!.path, self, #selector(self.video), nil)
+                    }
+                }
+            }
+        }
+    }
+    
+    @objc func video(videoPath: NSString, didFinishSavingWithError error:NSError, contextInfo contextInfo:Any) -> Void {
+    }
+    
     func addClip(_ movieURL: URL) {
         let newAsset = AVURLAsset(url: movieURL, options: nil)
         /*
@@ -452,7 +476,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         document?.open(completionHandler: { (success) in
             if success {
                 // Display the content of the document, e.g.:
-                self.documentNameLabel.text = self.document?.fileURL.lastPathComponent
+//                self.documentNameLabel.text = self.document?.fileURL.lastPathComponent
             } else {
                 // Make sure to handle the failed import appropriately, e.g., by presenting an error message to the user.
             }

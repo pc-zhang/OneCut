@@ -68,6 +68,7 @@
 				F0C7514920EB3F620088D34F /* DocumentViewController.swift */,
 				F0C7514D20EB3F6C0088D34F /* PlayerView.swift */,
 				F0C7514E20EB3F6C0088D34F /* SegmentView.swift */,
+				F0C7515120EB3FAA0088D34F /* Main.storyboard */,
 				F0C7514120EB3F000088D34F /* Info.plist */,
 			);
 			path = OneCut;
@@ -78,7 +79,6 @@
 			children = (
 				F0C7513120EB3EFF0088D34F /* AppDelegate.swift */,
 				F0C7513C20EB3F000088D34F /* Assets.xcassets */,
-				F0C7515120EB3FAA0088D34F /* Main.storyboard */,
 				F0C7513E20EB3F000088D34F /* LaunchScreen.storyboard */,
 			);
 			path = "Supporting Files";
