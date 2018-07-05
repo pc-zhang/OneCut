@@ -141,6 +141,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             timelineView.contentInset = UIEdgeInsets(top: 0, left: timelineView.frame.width/2, bottom: 0, right: timelineView.frame.width/2)
             timelineView.addSubview(emptyView)
             //            timelineView.pinchGestureRecognizer?.addTarget(self, action: #selector(MainViewController.pinch))
+            timelineView.panGestureRecognizer.addTarget(self, action: #selector(MainViewController.pan))
         }
     }
     @IBOutlet weak var cameraButton: UIButton! {
@@ -417,7 +418,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             if #available(iOS 10.0, *) {
                 seekTimer?.invalidate()
                 seekTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (timer) in
-                    self.timelineView.contentOffset.x = CGFloat(self.currentTime/CMTimeGetSeconds(self.composition!.duration)*Double(self.timelineView.frame.width)) - self.timelineView.frame.size.width/2
+                    self.timelineView.contentOffset.x = CGFloat(self.currentTime/30*Double(self.timelineView.frame.width)) - self.timelineView.frame.size.width/2
                 })
             } else {
                 // Fallback on earlier versions
@@ -672,6 +673,11 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         visibleTimeRange = 30 * timelineView.zoomScale
         timelineView.collectionViewLayout.invalidateLayout()
         timelineView.contentOffset.x = CGFloat(self.currentTime/CMTimeGetSeconds(self.composition!.duration)*Double(self.timelineView.frame.width)) - self.timelineView.frame.size.width/2
+    }
+    
+    @objc func pan(_ recognizer: UIPanGestureRecognizer) {
+        player.pause()
+        seekTimer?.invalidate()
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
