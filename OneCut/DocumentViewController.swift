@@ -17,6 +17,9 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     // MARK: Properties
     
+    var newStatus: AVPlayerItemStatus? = nil
+    var newDuration: CMTime? = nil
+    
     var emptyView = UIView(frame: CGRect.zero)
     var seekTimer: Timer? = nil
     var visibleTimeRange: CGFloat = 30
@@ -59,7 +62,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         "hasProtectedContent"
     ]
     
-    let player = AVPlayer()
+    @objc let player = AVPlayer()
     
     var zoomCurrentTime: Double = 0
     
@@ -68,7 +71,8 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             return CMTimeGetSeconds(player.currentTime())
         }
         set {
-            let newTime = CMTimeMakeWithSeconds(newValue, 60)
+            let newTime = CMTimeMakeWithSeconds(newValue, 600)
+            //todo: more tolerance
             player.seek(to: newTime, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
         }
     }
@@ -149,6 +153,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     @IBAction func export(_ sender: Any) {
         // Create the export session with the composition and set the preset to the highest quality.
+        let compatiblePresets = AVAssetExportSession.exportPresets(compatibleWith: composition!)
         let exporter = AVAssetExportSession(asset: composition!, presetName: AVAssetExportPreset640x480)!
         // Set the desired output URL for the file created by the export process.
         exporter.outputURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(String(Int(Date.timeIntervalSinceReferenceDate))).appendingPathExtension("mov")
@@ -172,7 +177,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func addClip(_ movieURL: URL) {
-        let newAsset = AVURLAsset(url: movieURL, options: nil)
+        let newAsset = AVURLAsset(url: movieURL, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
         /*
          Using AVAsset now runs the risk of blocking the current thread (the
          main UI thread) whilst I/O happens to populate the properties. It's
@@ -344,6 +349,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 try! self.composition!.removeTimeRange(CMTimeRange(start:player.currentTime(), duration:timeRangeInAsset!.duration - CMTime(value: 1, timescale: 600)))
                 
+                
                 push(op:.split(index!))
                 
                 break
@@ -407,6 +413,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             
             player.play()
             
+            //todo: animate
             if #available(iOS 10.0, *) {
                 seekTimer?.invalidate()
                 seekTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (timer) in
@@ -489,14 +496,14 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
          and not those destined for a subclass that also happens to be observing
          these properties.
          */
-        //        addObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.duration), options: [.new, .initial], context: &MainViewControllerKVOContext)
-        //        addObserver(self, forKeyPath: #keyPath(MainViewController.player.rate), options: [.new, .initial], context: &MainViewControllerKVOContext)
-        //        addObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.status), options: [.new, .initial], context: &MainViewControllerKVOContext)
+        addObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.duration), options: [.new, .initial], context: &MainViewControllerKVOContext)
+        addObserver(self, forKeyPath: #keyPath(MainViewController.player.rate), options: [.new, .initial], context: &MainViewControllerKVOContext)
+        addObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.status), options: [.new, .initial], context: &MainViewControllerKVOContext)
         
         playerView.playerLayer.player = player
         
         // Make sure we don't have a strong reference cycle by only capturing self as weak.
-        let interval = CMTimeMake(1, 1)
+        let interval = CMTimeMake(20, 600)
         timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [unowned self] time in
             let timeElapsed = Float(CMTimeGetSeconds(time))
             
@@ -523,101 +530,87 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         player.pause()
         
-        //        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.duration), context: &MainViewControllerKVOContext)
-        //        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.rate), context: &MainViewControllerKVOContext)
-        //        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.status), context: &MainViewControllerKVOContext)
+        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.duration), context: &MainViewControllerKVOContext)
+        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.rate), context: &MainViewControllerKVOContext)
+        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.status), context: &MainViewControllerKVOContext)
     }
     
     
     // MARK: - KVO Observation
     
-    // Update our UI when player or `player.currentItem` changes.
-//    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
-//        // Make sure the this KVO callback was intended for this view controller.
-//        guard context == &MainViewControllerKVOContext else {
-//            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
-//            return
-//        }
-//
-//        if keyPath == #keyPath(MainViewController.player.currentItem.duration) {
-//            // Update timeSlider and enable/disable controls when duration > 0.0
-//
-//            /*
-//             Handle `NSNull` value for `NSKeyValueChangeNewKey`, i.e. when
-//             `player.currentItem` is nil.
-//             */
-//            let newDuration: CMTime
-//            if let newDurationAsValue = change?[NSKeyValueChangeKey.newKey] as? NSValue {
-//                newDuration = newDurationAsValue.timeValue
-//            }
-//            else {
-//                newDuration = kCMTimeZero
-//            }
-//
-//            let hasValidDuration = newDuration.isNumeric && newDuration.value != 0
-//            let newDurationSeconds = hasValidDuration ? CMTimeGetSeconds(newDuration) : 0.0
-//            let currentTime = hasValidDuration ? Float(CMTimeGetSeconds(player.currentTime())) : 0.0
-//
-//            //            timeSlider.maximumValue = Float(newDurationSeconds)
-//            //
-//            //            timeSlider.value = currentTime
-//            //
-//            //            rewindButton.isEnabled = hasValidDuration
-//
-//            playPauseButton.isEnabled = hasValidDuration
-//
-//            //            fastForwardButton.isEnabled = hasValidDuration
-//            //
-//            //            timeSlider.isEnabled = hasValidDuration
-//
-//            startTimeLabel.isEnabled = hasValidDuration
-//            startTimeLabel.text = createTimeString(time: currentTime)
-//
-//            //            durationLabel.isEnabled = hasValidDuration
-//            //            durationLabel.text = createTimeString(time: Float(newDurationSeconds))
-//        }
-//        else if keyPath == #keyPath(MainViewController.player.rate) {
-//            // Update `playPauseButton` image.
-//
-//            let newRate = (change?[NSKeyValueChangeKey.newKey] as! NSNumber).doubleValue
-//
-//            let buttonImageName = newRate == 1.0 ? "pausebutton" : "playbutton"
-//
-//            let buttonImage = UIImage(named: buttonImageName)
-//
-//            playPauseButton.setImage(buttonImage, for: UIControlState())
-//        }
-//        else if keyPath == #keyPath(MainViewController.player.currentItem.status) {
-//            // Display an error if status becomes `.Failed`.
-//
-//            /*
-//             Handle `NSNull` value for `NSKeyValueChangeNewKey`, i.e. when
-//             `player.currentItem` is nil.
-//             */
-//            let newStatus: AVPlayerItemStatus
-//
-//            if let newStatusAsNumber = change?[NSKeyValueChangeKey.newKey] as? NSNumber {
-//                newStatus = AVPlayerItemStatus(rawValue: newStatusAsNumber.intValue)!
-//            }
-//            else {
-//                newStatus = .unknown
-//            }
-//
-//            if newStatus == .failed {
-//                handleErrorWithMessage(player.currentItem?.error?.localizedDescription, error:player.currentItem?.error)
-//            }
-//        }
-//    }
+    //   Update our UI when player or `player.currentItem` changes.
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
+        // Make sure the this KVO callback was intended for this view controller.
+        guard context == &MainViewControllerKVOContext else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+            return
+        }
+        
+        if keyPath == #keyPath(MainViewController.player.currentItem.duration) {
+            // Update timeSlider and enable/disable controls when duration > 0.0
+
+            /*
+             Handle `NSNull` value for `NSKeyValueChangeNewKey`, i.e. when
+             `player.currentItem` is nil.
+             */
+            if let newDurationAsValue = change?[NSKeyValueChangeKey.newKey] as? NSValue {
+                newDuration = newDurationAsValue.timeValue
+            }
+            else {
+                newDuration = kCMTimeZero
+            }
+
+        }
+        else if keyPath == #keyPath(MainViewController.player.rate) {
+            // Update `playPauseButton` image.
+
+            let newRate = (change?[NSKeyValueChangeKey.newKey] as! NSNumber).doubleValue
+
+            let buttonImageName = newRate == 1.0 ? "PauseButton" : "PlayButton"
+
+            let buttonImage = UIImage(named: buttonImageName)
+
+            playPauseButton.setImage(buttonImage, for: UIControlState())
+        }
+        else if keyPath == #keyPath(MainViewController.player.currentItem.status) {
+            // Display an error if status becomes `.Failed`.
+
+            /*
+             Handle `NSNull` value for `NSKeyValueChangeNewKey`, i.e. when
+             `player.currentItem` is nil.
+             */
+
+            if let newStatusAsNumber = change?[NSKeyValueChangeKey.newKey] as? NSNumber {
+                newStatus = AVPlayerItemStatus(rawValue: newStatusAsNumber.intValue)!
+            }
+            else {
+                newStatus = .unknown
+            }
+
+            if newStatus == .failed {
+                handleErrorWithMessage(player.currentItem?.error?.localizedDescription, error:player.currentItem?.error)
+            }
+            
+        }
+        
+        let hasValidDuration = newDuration != nil ? newDuration!.isNumeric && newDuration!.value != 0 : true
+        let currentTime = hasValidDuration ? Float(CMTimeGetSeconds(player.currentTime())) : 0.0
+        
+        playPauseButton.isEnabled = hasValidDuration
+        startTimeLabel.text = createTimeString(time: currentTime)
+        playPauseButton.isEnabled = newStatus == .readyToPlay && hasValidDuration
+
+    }
     
     // Trigger KVO for anyone observing our properties affected by player and player.currentItem
-//    override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
-//        let affectedKeyPathsMappingByKey: [String: Set<String>] = [
-//            "duration":     [#keyPath(MainViewController.player.currentItem.duration)],
-//            "rate":         [#keyPath(MainViewController.player.rate)]
-//        ]
-//        
-//        return affectedKeyPathsMappingByKey[key] ?? super.keyPathsForValuesAffectingValue(forKey: key)
-//    }
+    override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
+        let affectedKeyPathsMappingByKey: [String: Set<String>] = [
+            "duration":     [#keyPath(MainViewController.player.currentItem.duration)],
+            "rate":         [#keyPath(MainViewController.player.rate)]
+        ]
+        
+        return affectedKeyPathsMappingByKey[key] ?? super.keyPathsForValuesAffectingValue(forKey: key)
+    }
     
     // MARK: - Error Handling
     
@@ -709,7 +702,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             let timerange = (compositionVideoTrack?.segments[indexPath.item].timeMapping.target)!
             
             // Generate an image at time zero.
-            let incrementTime = CMTime(seconds: Double(timelineView.frame.height /  scaledDurationToWidth), preferredTimescale: 60)
+            let incrementTime = CMTime(seconds: Double(timelineView.frame.height /  scaledDurationToWidth), preferredTimescale: 600)
             
             var iterTime = timerange.start
             
@@ -738,3 +731,14 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
 }
+
+
+//extension AVMutableComposition: Codable {
+//    public convenience init(from decoder: Decoder) throws {
+//
+//    }
+//
+//    public func encode(to encoder: Encoder) throws {
+//
+//    }
+//}
