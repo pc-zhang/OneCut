@@ -260,7 +260,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func redoOp(op: OpType) {
         imageGenerator?.cancelAllCGImageGeneration()
         imageGenerator = AVAssetImageGenerator.init(asset: composition!)
-        imageGenerator?.maximumSize = CGSize(width: self.timelineView.bounds.height * 2, height: self.timelineView.bounds.height)
+        imageGenerator?.maximumSize = CGSize(width: self.timelineView.bounds.height * 2, height: self.timelineView.bounds.height * 2)
         
         switch op {
         case let .copy(index):
