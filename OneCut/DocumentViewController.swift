@@ -50,10 +50,11 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     enum OpType {
-        case add(Array<AVCompositionTrackSegment>.Index)
-        case remove(Array<AVCompositionTrackSegment>.Index)
-        case split(Array<AVCompositionTrackSegment>.Index)
-        case copy(Array<AVCompositionTrackSegment>.Index)
+        case add(Int)
+        case remove(Int)
+        case split(Int)
+        case copy(Int)
+        case nothing
     }
     
     
@@ -155,39 +156,42 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     @IBAction func export(_ sender: Any)
     {
-        let size = CGSize(width: 30, height: 30)
+        // Create the export session with the composition and set the preset to the highest quality.
+        let compatiblePresets = AVAssetExportSession.exportPresets(compatibleWith: composition!)
+        let exporter = AVAssetExportSession(asset: composition!, presetName: AVAssetExportPreset640x480)!
+        // Set the desired output URL for the file created by the export process.
+        exporter.outputURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(String(Int(Date.timeIntervalSinceReferenceDate))).appendingPathExtension("mov")
+        // Set the output file type to be a QuickTime movie.
+        exporter.outputFileType = AVFileType.mov
+        exporter.shouldOptimizeForNetworkUse = true
+        exporter.videoComposition = nil
+        // Asynchronously export the composition to a video file and save this file to the camera roll once export completes.
         
-        startAnimating(size, message: "Loading...", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballPulse.rawValue)!)
+        let size = CGSize(width: 100, height: 100)
         
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.5) {
-            NVActivityIndicatorPresenter.sharedInstance.setMessage("Authenticating...")
-        }
+        startAnimating(size, message: "正在导出...", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.lineScalePulseOut.rawValue)!)
         
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
-            self.stopAnimating()
+        exporter.exportAsynchronously {
+            DispatchQueue.main.async {
+                if (exporter.status == .completed) {
+                    if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(exporter.outputURL!.path)){
+                        UISaveVideoAtPathToSavedPhotosAlbum(exporter.outputURL!.path, self, #selector(self.video), nil)
+                    }
+                    NVActivityIndicatorPresenter.sharedInstance.setMessage("导出成功")
+                    
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                        self.stopAnimating()
+                    }
+                } else {
+                    NVActivityIndicatorPresenter.sharedInstance.setMessage("导出失败")
+                    
+                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                        self.stopAnimating()
+                    }
+                }
+            }
         }
     }
-//    {
-//        // Create the export session with the composition and set the preset to the highest quality.
-//        let compatiblePresets = AVAssetExportSession.exportPresets(compatibleWith: composition!)
-//        let exporter = AVAssetExportSession(asset: composition!, presetName: AVAssetExportPreset640x480)!
-//        // Set the desired output URL for the file created by the export process.
-//        exporter.outputURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(String(Int(Date.timeIntervalSinceReferenceDate))).appendingPathExtension("mov")
-//        // Set the output file type to be a QuickTime movie.
-//        exporter.outputFileType = AVFileType.mov
-//        exporter.shouldOptimizeForNetworkUse = true
-//        exporter.videoComposition = nil
-//        // Asynchronously export the composition to a video file and save this file to the camera roll once export completes.
-//        exporter.exportAsynchronously {
-//            DispatchQueue.main.async {
-//                if (exporter.status == .completed) {
-//                    if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(exporter.outputURL!.path)){
-//                        UISaveVideoAtPathToSavedPhotosAlbum(exporter.outputURL!.path, self, #selector(self.video), nil)
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     @objc func video(videoPath: NSString, didFinishSavingWithError error:NSError, contextInfo contextInfo:Any) -> Void {
     }
@@ -242,32 +246,35 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first
                 
-                if compositionVideoTrack!.segments.isEmpty {
-                    try! self.composition!.insertTimeRange(CMTimeRangeMake(kCMTimeZero, newAsset.duration), of: newAsset, at: kCMTimeZero)
+                
+                for s in compositionVideoTrack!.segments {
+                    let timeRangeInAsset = s.timeMapping.target // assumes non-scaled edit
                     
-                    self.push(op:.add(0))
-                    
-                } else {
-                    for s in compositionVideoTrack!.segments {
-                        let timeRangeInAsset = s.timeMapping.target // assumes non-scaled edit
+                    if timeRangeInAsset.containsTime(self.player.currentTime()) {
                         
-                        if timeRangeInAsset.containsTime(self.player.currentTime()) {
-                            
-                            let index = compositionVideoTrack!.segments.index(of: s)
-                            
-                            try! self.composition!.insertTimeRange(CMTimeRangeMake(kCMTimeZero, newAsset.duration), of: newAsset, at: timeRangeInAsset.end)
-                            
-                            self.push(op:.add(index! + 1))
-                            
-                            break
-                        }
+                        let index = compositionVideoTrack!.segments.index(of: s)
+                        
+                        try! self.composition!.insertTimeRange(CMTimeRangeMake(kCMTimeZero, newAsset.duration), of: newAsset, at: timeRangeInAsset.end)
+                        
+                        self.push(op:.add(index! + 1))
+                        
+                        // update timeline
+                        self.updatePlayer()
+                        
+                        return
                     }
-                    
                 }
+                
+                let index = compositionVideoTrack!.segments.count
+                
+                try! self.composition!.insertTimeRange(CMTimeRangeMake(kCMTimeZero, newAsset.duration), of: newAsset, at: compositionVideoTrack!.timeRange.end)
+                
+                self.push(op:.add(index))
                 
                 // update timeline
                 self.updatePlayer()
                 
+                return
             }
         }
     }
@@ -492,6 +499,21 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     // MARK: - View Controller
     
+    override func viewDidLoad() {
+        // add composition
+        if composition==nil {
+            composition = AVMutableComposition()
+            // Add two video tracks and two audio tracks.
+            _ = composition!.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)
+            
+            _ = composition!.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
+        }
+        
+        self.push(op:.nothing)
+        
+        playerView.playerLayer.player = player
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -516,23 +538,12 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         addObserver(self, forKeyPath: #keyPath(MainViewController.player.rate), options: [.new, .initial], context: &MainViewControllerKVOContext)
         addObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.status), options: [.new, .initial], context: &MainViewControllerKVOContext)
         
-        playerView.playerLayer.player = player
-        
         // Make sure we don't have a strong reference cycle by only capturing self as weak.
         let interval = CMTimeMake(20, 600)
         timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [unowned self] time in
             let timeElapsed = Float(CMTimeGetSeconds(time))
             
             self.startTimeLabel.text = self.createTimeString(time: timeElapsed)
-        }
-        
-        // add composition
-        if composition==nil {
-            composition = AVMutableComposition()
-            // Add two video tracks and two audio tracks.
-            _ = composition!.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)
-            
-            _ = composition!.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
         }
     }
     
@@ -707,6 +718,8 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first!
+        
+        assert(self.composition!.tracks(withMediaType: AVMediaType.video).count == 1)
         
         return compositionVideoTrack.segments.count
     }
