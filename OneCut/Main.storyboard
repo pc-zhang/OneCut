@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -191,6 +192,54 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0JK-fP-XLx" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1008.8" y="653.94088669950747"/>
+        </scene>
+        <!--Speak View Controller-->
+        <scene sceneID="mgn-UZ-J3U">
+            <objects>
+                <viewController id="mY0-cP-5g6" customClass="SpeakViewController" customModule="OneCut" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="z9v-fH-KIX"/>
+                        <viewControllerLayoutGuide type="bottom" id="fWF-fU-Ma6"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="CZU-SH-WMg">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="0Q7-Ri-yuU">
+                                <rect key="frame" x="16" y="44" width="343" height="676"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zxZ-8L-oqq">
+                                <rect key="frame" x="16" y="728" width="343" height="30"/>
+                                <state key="normal" title="Start Recording!"/>
+                                <connections>
+                                    <action selector="recordButtonTapped" destination="mY0-cP-5g6" eventType="touchUpInside" id="7pK-5Y-r8x"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="0Q7-Ri-yuU" firstAttribute="leading" secondItem="CZU-SH-WMg" secondAttribute="leadingMargin" id="38l-98-nYe"/>
+                            <constraint firstItem="fWF-fU-Ma6" firstAttribute="top" secondItem="zxZ-8L-oqq" secondAttribute="bottom" constant="20" id="Mul-wz-1UU"/>
+                            <constraint firstItem="zxZ-8L-oqq" firstAttribute="trailing" secondItem="CZU-SH-WMg" secondAttribute="trailingMargin" id="Ouk-Pr-Gi2"/>
+                            <constraint firstItem="zxZ-8L-oqq" firstAttribute="leading" secondItem="CZU-SH-WMg" secondAttribute="leadingMargin" id="aGJ-dU-urR"/>
+                            <constraint firstItem="0Q7-Ri-yuU" firstAttribute="trailing" secondItem="CZU-SH-WMg" secondAttribute="trailingMargin" id="eo1-h8-vC1"/>
+                            <constraint firstItem="0Q7-Ri-yuU" firstAttribute="top" secondItem="z9v-fH-KIX" secondAttribute="bottom" id="lSw-gG-Isx"/>
+                            <constraint firstItem="zxZ-8L-oqq" firstAttribute="top" secondItem="0Q7-Ri-yuU" secondAttribute="bottom" constant="8" id="vgm-c2-sIY"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="jGw-IQ-2em"/>
+                    </view>
+                    <connections>
+                        <outlet property="recordButton" destination="zxZ-8L-oqq" id="KWm-1w-8Ml"/>
+                        <outlet property="textView" destination="0Q7-Ri-yuU" id="aJb-AN-iYD"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mza-tR-S8O" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="25" y="-68"/>
         </scene>
     </scenes>
     <resources>
