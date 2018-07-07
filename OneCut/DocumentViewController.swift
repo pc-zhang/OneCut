@@ -10,10 +10,11 @@ import Foundation
 import AVFoundation
 import UIKit
 import MobileCoreServices
+import NVActivityIndicatorView
 
 private var MainViewControllerKVOContext = 0
 
-class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, NVActivityIndicatorViewable {
     
     // MARK: Properties
     
@@ -152,27 +153,41 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     // MARK: - IBActions
     
-    @IBAction func export(_ sender: Any) {
-        // Create the export session with the composition and set the preset to the highest quality.
-        let compatiblePresets = AVAssetExportSession.exportPresets(compatibleWith: composition!)
-        let exporter = AVAssetExportSession(asset: composition!, presetName: AVAssetExportPreset640x480)!
-        // Set the desired output URL for the file created by the export process.
-        exporter.outputURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(String(Int(Date.timeIntervalSinceReferenceDate))).appendingPathExtension("mov")
-        // Set the output file type to be a QuickTime movie.
-        exporter.outputFileType = AVFileType.mov
-        exporter.shouldOptimizeForNetworkUse = true
-        exporter.videoComposition = nil
-        // Asynchronously export the composition to a video file and save this file to the camera roll once export completes.
-        exporter.exportAsynchronously {
-            DispatchQueue.main.async {
-                if (exporter.status == .completed) {
-                    if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(exporter.outputURL!.path)){
-                        UISaveVideoAtPathToSavedPhotosAlbum(exporter.outputURL!.path, self, #selector(self.video), nil)
-                    }
-                }
-            }
+    @IBAction func export(_ sender: Any)
+    {
+        let size = CGSize(width: 30, height: 30)
+        
+        startAnimating(size, message: "Loading...", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.ballPulse.rawValue)!)
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1.5) {
+            NVActivityIndicatorPresenter.sharedInstance.setMessage("Authenticating...")
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+            self.stopAnimating()
         }
     }
+//    {
+//        // Create the export session with the composition and set the preset to the highest quality.
+//        let compatiblePresets = AVAssetExportSession.exportPresets(compatibleWith: composition!)
+//        let exporter = AVAssetExportSession(asset: composition!, presetName: AVAssetExportPreset640x480)!
+//        // Set the desired output URL for the file created by the export process.
+//        exporter.outputURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(String(Int(Date.timeIntervalSinceReferenceDate))).appendingPathExtension("mov")
+//        // Set the output file type to be a QuickTime movie.
+//        exporter.outputFileType = AVFileType.mov
+//        exporter.shouldOptimizeForNetworkUse = true
+//        exporter.videoComposition = nil
+//        // Asynchronously export the composition to a video file and save this file to the camera roll once export completes.
+//        exporter.exportAsynchronously {
+//            DispatchQueue.main.async {
+//                if (exporter.status == .completed) {
+//                    if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(exporter.outputURL!.path)){
+//                        UISaveVideoAtPathToSavedPhotosAlbum(exporter.outputURL!.path, self, #selector(self.video), nil)
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     @objc func video(videoPath: NSString, didFinishSavingWithError error:NSError, contextInfo contextInfo:Any) -> Void {
     }
