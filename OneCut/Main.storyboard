@@ -41,6 +41,17 @@
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hu7-DO-mQg" customClass="PlayerView" customModule="OneCut" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="84" width="375" height="331"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="kPJ-Gv-V1o">
+                                        <rect key="frame" x="12" y="244" width="351" height="79"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="40"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES"/>
+                                    </textView>
+                                </subviews>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e3x-oC-ppg" userLabel="StartTime">
@@ -171,6 +182,14 @@
                                     <action selector="export:" destination="G8I-hc-TQb" eventType="touchUpInside" id="EQS-ed-iDm"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CC1-OY-hXx">
+                                <rect key="frame" x="71" y="723" width="68" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="recognize"/>
+                                <connections>
+                                    <action selector="recordButtonTapped" destination="G8I-hc-TQb" eventType="touchUpInside" id="vlb-Di-OuJ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Ebh-r4-GKs"/>
@@ -180,10 +199,12 @@
                         <outlet property="copyButton" destination="8Fk-V7-Ytg" id="tqv-tx-y8b"/>
                         <outlet property="playPauseButton" destination="2ut-Iw-LNe" id="Dnn-s9-J57"/>
                         <outlet property="playerView" destination="hu7-DO-mQg" id="xiM-Yi-Zs3"/>
+                        <outlet property="recordButton" destination="CC1-OY-hXx" id="XAk-mE-LEU"/>
                         <outlet property="redoButton" destination="U4r-Re-ND9" id="l0e-GY-KML"/>
                         <outlet property="removeButton" destination="mFv-uz-DXc" id="o1j-t1-SV9"/>
                         <outlet property="splitButton" destination="nJK-pN-g70" id="SBf-7G-LKI"/>
                         <outlet property="startTimeLabel" destination="e3x-oC-ppg" id="B4d-nr-3tS"/>
+                        <outlet property="textView" destination="kPJ-Gv-V1o" id="v1F-K4-VFt"/>
                         <outlet property="timelineView" destination="hf9-HS-VQh" id="VlD-q5-eFd"/>
                         <outlet property="undoButton" destination="txo-ro-r4L" id="jer-yP-EXY"/>
                         <outlet property="view" destination="7Y5-0K-2yx" id="kfq-2M-EAZ"/>
