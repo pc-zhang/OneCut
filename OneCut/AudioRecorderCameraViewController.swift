@@ -16,7 +16,7 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
 		super.viewDidLoad()
 		
 		// Disable UI. The UI is enabled if and only if the session starts running.
-		recordButton.isEnabled = false
+		recordButton.isEnabled = true
 		
 		// Set up the video preview view.
 		previewView.session = session
@@ -112,7 +112,31 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
                     }
 			}
 		}
-	}
+        
+        
+            sessionQueue.async {
+                let movieFileOutput = AVCaptureMovieFileOutput()
+                
+                if self.session.canAddOutput(movieFileOutput) {
+                    self.session.beginConfiguration()
+                    self.session.addOutput(movieFileOutput)
+                    self.session.sessionPreset = .high
+                    if let connection = movieFileOutput.connection(with: .video) {
+                        if connection.isVideoStabilizationSupported {
+                            connection.preferredVideoStabilizationMode = .auto
+                        }
+                    }
+                    self.session.commitConfiguration()
+                    
+                    self.movieFileOutput = movieFileOutput
+                    
+                    DispatchQueue.main.async {
+                        self.recordButton.isEnabled = true
+                    }
+                }
+            }
+
+    }
 	
 	override func viewWillDisappear(_ animated: Bool) {
 		sessionQueue.async {
