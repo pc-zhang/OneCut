@@ -9,9 +9,8 @@
 /* Begin PBXBuildFile section */
 		D1B54F0B755442D1D714DE84 /* Pods_OneCut.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF6CC1A04370BB81EEE0D8CE /* Pods_OneCut.framework */; };
 		F01DF4D120F0F93E003E238E /* SpeakViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DF4D020F0F93D003E238E /* SpeakViewController.swift */; };
-		F01DF4D520F1DEF8003E238E /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DF4D220F1DEF7003E238E /* CameraViewController.swift */; };
-		F01DF4D620F1DEF8003E238E /* PhotoCaptureDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DF4D320F1DEF7003E238E /* PhotoCaptureDelegate.swift */; };
-		F01DF4D720F1DEF8003E238E /* PreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DF4D420F1DEF8003E238E /* PreviewView.swift */; };
+		F01DF4DB20F367E6003E238E /* AudioRecorderCameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DF4D820F367E5003E238E /* AudioRecorderCameraViewController.swift */; };
+		F01DF4DD20F367E6003E238E /* AudioRecorderPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DF4DA20F367E6003E238E /* AudioRecorderPreviewView.swift */; };
 		F0C7513220EB3EFF0088D34F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7513120EB3EFF0088D34F /* AppDelegate.swift */; };
 		F0C7513D20EB3F000088D34F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0C7513C20EB3F000088D34F /* Assets.xcassets */; };
 		F0C7514020EB3F000088D34F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0C7513E20EB3F000088D34F /* LaunchScreen.storyboard */; };
@@ -27,9 +26,8 @@
 		950801BD8380DFDBA8D063B4 /* Pods-OneCut.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneCut.release.xcconfig"; path = "Pods/Target Support Files/Pods-OneCut/Pods-OneCut.release.xcconfig"; sourceTree = "<group>"; };
 		AF6CC1A04370BB81EEE0D8CE /* Pods_OneCut.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneCut.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F01DF4D020F0F93D003E238E /* SpeakViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeakViewController.swift; sourceTree = "<group>"; };
-		F01DF4D220F1DEF7003E238E /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
-		F01DF4D320F1DEF7003E238E /* PhotoCaptureDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCaptureDelegate.swift; sourceTree = "<group>"; };
-		F01DF4D420F1DEF8003E238E /* PreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewView.swift; sourceTree = "<group>"; };
+		F01DF4D820F367E5003E238E /* AudioRecorderCameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRecorderCameraViewController.swift; sourceTree = "<group>"; };
+		F01DF4DA20F367E6003E238E /* AudioRecorderPreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRecorderPreviewView.swift; sourceTree = "<group>"; };
 		F0C7512E20EB3EFF0088D34F /* OneCut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneCut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0C7513120EB3EFF0088D34F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F0C7513C20EB3F000088D34F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -94,9 +92,8 @@
 		F0C7513020EB3EFF0088D34F /* OneCut */ = {
 			isa = PBXGroup;
 			children = (
-				F01DF4D220F1DEF7003E238E /* CameraViewController.swift */,
-				F01DF4D320F1DEF7003E238E /* PhotoCaptureDelegate.swift */,
-				F01DF4D420F1DEF8003E238E /* PreviewView.swift */,
+				F01DF4D820F367E5003E238E /* AudioRecorderCameraViewController.swift */,
+				F01DF4DA20F367E6003E238E /* AudioRecorderPreviewView.swift */,
 				F01DF4D020F0F93D003E238E /* SpeakViewController.swift */,
 				F0C7514920EB3F620088D34F /* DocumentViewController.swift */,
 				F0C7514820EB3F620088D34F /* DocumentBrowserViewController.swift */,
@@ -236,10 +233,9 @@
 				F0C7514C20EB3F620088D34F /* DocumentViewController.swift in Sources */,
 				F0C7514B20EB3F620088D34F /* DocumentBrowserViewController.swift in Sources */,
 				F0C7514F20EB3F6C0088D34F /* PlayerView.swift in Sources */,
+				F01DF4DB20F367E6003E238E /* AudioRecorderCameraViewController.swift in Sources */,
 				F01DF4D120F0F93E003E238E /* SpeakViewController.swift in Sources */,
-				F01DF4D720F1DEF8003E238E /* PreviewView.swift in Sources */,
-				F01DF4D520F1DEF8003E238E /* CameraViewController.swift in Sources */,
-				F01DF4D620F1DEF8003E238E /* PhotoCaptureDelegate.swift in Sources */,
+				F01DF4DD20F367E6003E238E /* AudioRecorderPreviewView.swift in Sources */,
 				F0C7515020EB3F6C0088D34F /* SegmentView.swift in Sources */,
 				F0C7513220EB3EFF0088D34F /* AppDelegate.swift in Sources */,
 			);

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="M4o-Eo-pzv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xkv-nJ-mNZ">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -265,6 +265,12 @@
         <!--Camera View Controller-->
         <scene sceneID="nMZ-9G-lod">
             <objects>
+                <tapGestureRecognizer id="Ih0-hp-aVK">
+                    <connections>
+                        <action selector="focusAndExposeTap:" destination="M4o-Eo-pzv" id="jvf-kK-hkS"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4O7-vX-qG1" sceneMemberID="firstResponder"/>
                 <viewController id="M4o-Eo-pzv" userLabel="Camera View Controller" customClass="CameraViewController" customModule="AVCam" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="p79-9o-ZA5">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
@@ -459,14 +465,97 @@
                         <outlet property="resumeButton" destination="RLo-3y-KaR" id="GLF-fz-rAM"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4O7-vX-qG1" sceneMemberID="firstResponder"/>
-                <tapGestureRecognizer id="Ih0-hp-aVK">
+            </objects>
+            <point key="canvasLocation" x="1009" y="-69"/>
+        </scene>
+        <!--Camera View Controller-->
+        <scene sceneID="uKT-tF-O05">
+            <objects>
+                <viewController id="xkv-nJ-mNZ" userLabel="Camera View Controller" customClass="AudioRecorderCameraViewController" customModule="OneCut" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="rog-Ln-XpO">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Si0-sr-ZnF" userLabel="Preview" customClass="AudioRecorderPreviewView" customModule="OneCut" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="SXR-iZ-tb2" appends="YES" id="qwx-f8-Qbs"/>
+                                </connections>
+                            </view>
+                            <label hidden="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Camera Unavailable" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="taJ-a3-o6m" userLabel="Camera Unavailable">
+                                <rect key="frame" x="83.666666666666686" y="391.66666666666669" width="208" height="28.666666666666686"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <color key="textColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eqX-pn-FSd" userLabel="Resume">
+                                <rect key="frame" x="105" y="386.66666666666669" width="165" height="39"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <inset key="contentEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
+                                <state key="normal" title="Tap to resume">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="resumeInterruptedSession:" destination="xkv-nJ-mNZ" eventType="touchUpInside" id="Cmi-Zs-OVj"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2SE-8B-4vE" userLabel="Record">
+                                <rect key="frame" x="47.666666666666657" y="728" width="80" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Record">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="toggleMovieRecording:" destination="xkv-nJ-mNZ" eventType="touchUpInside" id="jUE-yd-oxN"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Si0-sr-ZnF" firstAttribute="bottom" secondItem="rog-Ln-XpO" secondAttribute="bottom" id="G6b-Q7-7dL"/>
+                            <constraint firstItem="eqX-pn-FSd" firstAttribute="centerX" secondItem="UTM-db-h8n" secondAttribute="centerX" id="N3o-tI-jVA"/>
+                            <constraint firstItem="Si0-sr-ZnF" firstAttribute="centerY" secondItem="rog-Ln-XpO" secondAttribute="centerY" id="cXk-zm-hip"/>
+                            <constraint firstItem="Si0-sr-ZnF" firstAttribute="trailing" secondItem="UTM-db-h8n" secondAttribute="trailing" id="iXW-va-Cqq"/>
+                            <constraint firstItem="eqX-pn-FSd" firstAttribute="centerY" secondItem="rog-Ln-XpO" secondAttribute="centerY" id="jAv-Cg-gS8"/>
+                            <constraint firstItem="taJ-a3-o6m" firstAttribute="centerY" secondItem="rog-Ln-XpO" secondAttribute="centerY" id="n8x-4K-FEa"/>
+                            <constraint firstItem="taJ-a3-o6m" firstAttribute="centerX" secondItem="UTM-db-h8n" secondAttribute="centerX" id="sJi-yA-wlq"/>
+                            <constraint firstItem="Si0-sr-ZnF" firstAttribute="leading" secondItem="UTM-db-h8n" secondAttribute="leading" id="z1n-ha-Bxf"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="UTM-db-h8n"/>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <connections>
-                        <action selector="focusAndExposeTap:" destination="M4o-Eo-pzv" id="jvf-kK-hkS"/>
+                        <outlet property="cameraUnavailableLabel" destination="taJ-a3-o6m" id="4Vs-Zb-wfv"/>
+                        <outlet property="previewView" destination="Si0-sr-ZnF" id="1R1-Ge-zc1"/>
+                        <outlet property="recordButton" destination="2SE-8B-4vE" id="3AB-lB-Ak9"/>
+                        <outlet property="resumeButton" destination="eqX-pn-FSd" id="19a-ym-a4S"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8i3-or-e12" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="SXR-iZ-tb2">
+                    <connections>
+                        <action selector="focusAndExposeTap:" destination="xkv-nJ-mNZ" id="KHu-JK-5qf"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1009" y="-69"/>
+            <point key="canvasLocation" x="1914" y="-69"/>
         </scene>
     </scenes>
     <resources>
