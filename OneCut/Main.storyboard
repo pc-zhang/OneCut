@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="G8I-hc-TQb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="M4o-Eo-pzv">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -261,6 +261,212 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mza-tR-S8O" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="25" y="-68"/>
+        </scene>
+        <!--Camera View Controller-->
+        <scene sceneID="nMZ-9G-lod">
+            <objects>
+                <viewController id="M4o-Eo-pzv" userLabel="Camera View Controller" customClass="CameraViewController" customModule="AVCam" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="p79-9o-ZA5">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cpr-Ib-59Q" userLabel="Preview" customClass="PreviewView" customModule="AVCam" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="Ih0-hp-aVK" appends="YES" id="nnm-uh-s2A"/>
+                                </connections>
+                            </view>
+                            <label hidden="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Camera Unavailable" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eJp-Td-4G0" userLabel="Camera Unavailable">
+                                <rect key="frame" x="83.666666666666686" y="391.66666666666669" width="208" height="28.666666666666686"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <color key="textColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RLo-3y-KaR" userLabel="Resume">
+                                <rect key="frame" x="105" y="386.66666666666669" width="165" height="39"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <inset key="contentEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
+                                <state key="normal" title="Tap to resume">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="resumeInterruptedSession:" destination="M4o-Eo-pzv" eventType="touchUpInside" id="Fna-JY-Ncl"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ygM-m9-vtv" userLabel="Record">
+                                <rect key="frame" x="47.666666666666657" y="728" width="80" height="30"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Record">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="toggleMovieRecording:" destination="M4o-Eo-pzv" eventType="touchUpInside" id="Bmk-xn-Oea"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NW4-HF-oFe" userLabel="Photo">
+                                <rect key="frame" x="147.66666666666666" y="728" width="80" height="30"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="NL8-dE-pnW"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="80" id="V57-qS-ofd"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Photo">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="capturePhoto:" destination="M4o-Eo-pzv" eventType="touchUpInside" id="ekw-Ux-EaN"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bQK-49-hY6" userLabel="Camera">
+                                <rect key="frame" x="247.66666666666663" y="728" width="80" height="30"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Camera">
+                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="changeCamera:" destination="M4o-Eo-pzv" eventType="touchUpInside" id="lkj-8d-QAi"/>
+                                </connections>
+                            </button>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="NhL-LZ-M8y" userLabel="Capture Mode">
+                                <rect key="frame" x="136" y="680" width="103" height="29"/>
+                                <segments>
+                                    <segment title="Photo"/>
+                                    <segment title="Movie"/>
+                                </segments>
+                                <connections>
+                                    <action selector="toggleCaptureMode:" destination="M4o-Eo-pzv" eventType="valueChanged" id="END-2d-tAM"/>
+                                </connections>
+                            </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h7b-e8-CL3" userLabel="Depth Data Delivery">
+                                <rect key="frame" x="82.666666666666686" y="52" width="210" height="25"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="Z6O-w8-XZu"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Depth Data Delivery: On"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="toggleDepthDataDeliveryMode:" destination="M4o-Eo-pzv" eventType="touchUpInside" id="aPV-qA-nun"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DtA-tr-AFe" userLabel="Live Photo Mode">
+                                <rect key="frame" x="96.666666666666686" y="85" width="182" height="25"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="my5-9x-3Vb"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <state key="normal" title="Live Photo Mode: On"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="toggleLivePhotoMode:" destination="M4o-Eo-pzv" eventType="touchUpInside" id="ezj-9a-eqc"/>
+                                </connections>
+                            </button>
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Live" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H6i-Ny-etV" userLabel="Capturing Live Photo">
+                                <rect key="frame" x="172" y="118.00000000000001" width="31" height="20.666666666666671"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="NW4-HF-oFe" firstAttribute="width" secondItem="bQK-49-hY6" secondAttribute="width" id="1iv-5H-nwU"/>
+                            <constraint firstItem="AIx-ul-lyX" firstAttribute="bottom" secondItem="NW4-HF-oFe" secondAttribute="bottom" constant="20" id="3nE-mc-eOj"/>
+                            <constraint firstItem="h7b-e8-CL3" firstAttribute="top" secondItem="AIx-ul-lyX" secondAttribute="top" constant="8" id="7vT-EU-EY0"/>
+                            <constraint firstItem="bQK-49-hY6" firstAttribute="leading" secondItem="ygM-m9-vtv" secondAttribute="trailing" constant="120" id="9jC-uA-5nf"/>
+                            <constraint firstItem="Cpr-Ib-59Q" firstAttribute="bottom" secondItem="p79-9o-ZA5" secondAttribute="bottom" id="9kk-Sz-YYR"/>
+                            <constraint firstItem="Cpr-Ib-59Q" firstAttribute="centerY" secondItem="p79-9o-ZA5" secondAttribute="centerY" id="DRA-vi-7JI"/>
+                            <constraint firstItem="Cpr-Ib-59Q" firstAttribute="trailing" secondItem="AIx-ul-lyX" secondAttribute="trailing" id="EG0-21-jtI"/>
+                            <constraint firstItem="NW4-HF-oFe" firstAttribute="height" secondItem="ygM-m9-vtv" secondAttribute="height" id="IGf-tB-XDk"/>
+                            <constraint firstItem="DtA-tr-AFe" firstAttribute="top" secondItem="h7b-e8-CL3" secondAttribute="bottom" constant="8" id="Ibq-7U-Xz2"/>
+                            <constraint firstItem="H6i-Ny-etV" firstAttribute="top" secondItem="DtA-tr-AFe" secondAttribute="bottom" constant="8" id="OCY-tW-G4o"/>
+                            <constraint firstItem="H6i-Ny-etV" firstAttribute="centerX" secondItem="AIx-ul-lyX" secondAttribute="centerX" id="TfE-4I-kVW"/>
+                            <constraint firstItem="NW4-HF-oFe" firstAttribute="height" secondItem="bQK-49-hY6" secondAttribute="height" id="Tz3-gS-xe3"/>
+                            <constraint firstItem="NW4-HF-oFe" firstAttribute="top" secondItem="ygM-m9-vtv" secondAttribute="top" id="XcF-MM-gld"/>
+                            <constraint firstItem="NW4-HF-oFe" firstAttribute="top" secondItem="bQK-49-hY6" secondAttribute="top" id="ai4-6h-3W8"/>
+                            <constraint firstItem="NW4-HF-oFe" firstAttribute="width" secondItem="ygM-m9-vtv" secondAttribute="width" id="asz-vm-tKr"/>
+                            <constraint firstItem="eJp-Td-4G0" firstAttribute="centerY" secondItem="p79-9o-ZA5" secondAttribute="centerY" id="bKZ-XV-YzL"/>
+                            <constraint firstItem="ygM-m9-vtv" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="p79-9o-ZA5" secondAttribute="leading" constant="20" symbolic="YES" id="bir-Lr-diY"/>
+                            <constraint firstItem="NhL-LZ-M8y" firstAttribute="centerX" secondItem="AIx-ul-lyX" secondAttribute="centerX" id="iP1-jM-K8D"/>
+                            <constraint firstItem="RLo-3y-KaR" firstAttribute="centerX" secondItem="AIx-ul-lyX" secondAttribute="centerX" id="lE0-Px-u20"/>
+                            <constraint firstItem="DtA-tr-AFe" firstAttribute="centerX" secondItem="AIx-ul-lyX" secondAttribute="centerX" id="nOU-s5-v7O"/>
+                            <constraint firstItem="Cpr-Ib-59Q" firstAttribute="leading" secondItem="AIx-ul-lyX" secondAttribute="leading" id="quL-Qg-tOA"/>
+                            <constraint firstItem="h7b-e8-CL3" firstAttribute="centerX" secondItem="AIx-ul-lyX" secondAttribute="centerX" id="rHB-aP-X40"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="bQK-49-hY6" secondAttribute="trailing" constant="20" symbolic="YES" id="udj-em-GXm"/>
+                            <constraint firstItem="eJp-Td-4G0" firstAttribute="centerX" secondItem="AIx-ul-lyX" secondAttribute="centerX" id="wBu-TE-27n"/>
+                            <constraint firstItem="NW4-HF-oFe" firstAttribute="top" secondItem="NhL-LZ-M8y" secondAttribute="bottom" constant="20" id="wdx-Yt-qPl"/>
+                            <constraint firstItem="RLo-3y-KaR" firstAttribute="centerY" secondItem="p79-9o-ZA5" secondAttribute="centerY" id="x4l-yR-wtt"/>
+                            <constraint firstItem="NW4-HF-oFe" firstAttribute="leading" secondItem="ygM-m9-vtv" secondAttribute="trailing" constant="20" id="z2b-h5-JVB"/>
+                            <constraint firstItem="AIx-ul-lyX" firstAttribute="centerX" secondItem="NW4-HF-oFe" secondAttribute="centerX" id="zBr-hk-cJ2"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="AIx-ul-lyX"/>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <connections>
+                        <outlet property="cameraButton" destination="bQK-49-hY6" id="CDQ-8j-jC7"/>
+                        <outlet property="cameraUnavailableLabel" destination="eJp-Td-4G0" id="o7I-Z6-LGy"/>
+                        <outlet property="captureModeControl" destination="NhL-LZ-M8y" id="9fd-Yo-4Lg"/>
+                        <outlet property="capturingLivePhotoLabel" destination="H6i-Ny-etV" id="h7S-Hd-wQn"/>
+                        <outlet property="depthDataDeliveryButton" destination="h7b-e8-CL3" id="3LC-my-eeM"/>
+                        <outlet property="livePhotoModeButton" destination="DtA-tr-AFe" id="SaZ-km-sPj"/>
+                        <outlet property="photoButton" destination="NW4-HF-oFe" id="Pb7-B5-8xu"/>
+                        <outlet property="previewView" destination="Cpr-Ib-59Q" id="h1b-Uo-w1q"/>
+                        <outlet property="recordButton" destination="ygM-m9-vtv" id="hDB-Xm-8Th"/>
+                        <outlet property="resumeButton" destination="RLo-3y-KaR" id="GLF-fz-rAM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4O7-vX-qG1" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="Ih0-hp-aVK">
+                    <connections>
+                        <action selector="focusAndExposeTap:" destination="M4o-Eo-pzv" id="jvf-kK-hkS"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="1009" y="-69"/>
         </scene>
     </scenes>
     <resources>
