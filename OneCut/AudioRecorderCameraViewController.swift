@@ -506,17 +506,3 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
 	}
 }
 
-
-extension AVCaptureDevice.DiscoverySession {
-	var uniqueDevicePositionsCount: Int {
-        var uniqueDevicePositions: [AVCaptureDevice.Position] = []
-        
-        for device in devices {
-            if !uniqueDevicePositions.contains(device.position) {
-                uniqueDevicePositions.append(device.position)
-            }
-        }
-        
-        return uniqueDevicePositions.count
-    }
-}
