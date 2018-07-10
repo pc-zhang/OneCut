@@ -26,7 +26,7 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
 			access is optional. If audio access is denied, audio is not recorded
 			during movie recording.
 		*/
-		switch AVCaptureDevice.authorizationStatus(for: .video) {
+		switch AVCaptureDevice.authorizationStatus(for: .audio) {
             case .authorized:
 				// The user has previously granted access to the camera.
 				break
@@ -41,7 +41,7 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
 					create an AVCaptureDeviceInput for audio during session setup.
 				*/
 				sessionQueue.suspend()
-				AVCaptureDevice.requestAccess(for: .video, completionHandler: { granted in
+				AVCaptureDevice.requestAccess(for: .audio, completionHandler: { granted in
 					if !granted {
 						self.setupResult = .notAuthorized
 					}
@@ -64,7 +64,7 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
 			that the main queue isn't blocked, which keeps the UI responsive.
 		*/
 		sessionQueue.async {
-			self.configureSession()
+            self.configureSession()
 		}
 	}
 	
@@ -114,27 +114,27 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
 		}
         
         
-            sessionQueue.async {
-                let movieFileOutput = AVCaptureMovieFileOutput()
-                
-                if self.session.canAddOutput(movieFileOutput) {
-                    self.session.beginConfiguration()
-                    self.session.addOutput(movieFileOutput)
-                    self.session.sessionPreset = .high
-                    if let connection = movieFileOutput.connection(with: .video) {
-                        if connection.isVideoStabilizationSupported {
-                            connection.preferredVideoStabilizationMode = .auto
-                        }
-                    }
-                    self.session.commitConfiguration()
-                    
-                    self.movieFileOutput = movieFileOutput
-                    
-                    DispatchQueue.main.async {
-                        self.recordButton.isEnabled = true
+        sessionQueue.async {
+            let movieFileOutput = AVCaptureMovieFileOutput()
+            
+            if self.session.canAddOutput(movieFileOutput) {
+                self.session.beginConfiguration()
+                self.session.addOutput(movieFileOutput)
+                self.session.sessionPreset = .high
+                if let connection = movieFileOutput.connection(with: .video) {
+                    if connection.isVideoStabilizationSupported {
+                        connection.preferredVideoStabilizationMode = .auto
                     }
                 }
+                self.session.commitConfiguration()
+                
+                self.movieFileOutput = movieFileOutput
+                
+                DispatchQueue.main.async {
+                    self.recordButton.isEnabled = true
+                }
             }
+        }
 
     }
 	
@@ -149,26 +149,7 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
 		
 		super.viewWillDisappear(animated)
 	}
-	
-    override var shouldAutorotate: Bool {
-		// Disable autorotation of the interface when recording is in progress.
-		if let movieFileOutput = movieFileOutput {
-			return !movieFileOutput.isRecording
-		}
-		return true
-	}
-	
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-		return .all
-	}
-	
-	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-		super.viewWillTransition(to: size, with: coordinator)
-		
-		if let videoPreviewLayerConnection = previewView.videoPreviewLayer.connection {
-			
-		}
-	}
+
 
 	// MARK: Session Management
 	
@@ -185,7 +166,7 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
 	private let sessionQueue = DispatchQueue(label: "session queue") // Communicate with the session and other session objects on this queue.
 	
 	private var setupResult: SessionSetupResult = .success
-		
+    
 	@IBOutlet private weak var previewView: AudioRecorderPreviewView!
 	
 	// Call this on the session queue.
@@ -200,7 +181,6 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
 			We do not create an AVCaptureMovieFileOutput when setting up the session because the
 			AVCaptureMovieFileOutput does not support movie recording with AVCaptureSession.Preset.Photo.
 		*/
-		session.sessionPreset = .photo
 		
 		// Add audio input.
 		do {
@@ -218,46 +198,7 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
 		
 		session.commitConfiguration()
 	}
-	
-	@IBAction private func resumeInterruptedSession(_ resumeButton: UIButton) {
-		sessionQueue.async {
-			/*
-				The session might fail to start running, e.g., if a phone or FaceTime call is still
-				using audio or video. A failure to start the session running will be communicated via
-				a session runtime error notification. To avoid repeatedly failing to start the session
-				running, we only try to restart the session running in the session runtime error handler
-				if we aren't trying to resume the session running.
-			*/
-			self.session.startRunning()
-			self.isSessionRunning = self.session.isRunning
-			if !self.session.isRunning {
-				DispatchQueue.main.async {
-					let message = NSLocalizedString("Unable to resume", comment: "Alert message when unable to resume the session running")
-					let alertController = UIAlertController(title: "AVCam", message: message, preferredStyle: .alert)
-					let cancelAction = UIAlertAction(title: NSLocalizedString("OK", comment: "Alert OK button"), style: .cancel, handler: nil)
-					alertController.addAction(cancelAction)
-					self.present(alertController, animated: true, completion: nil)
-				}
-			} else {
-				DispatchQueue.main.async {
-					self.resumeButton.isHidden = true
-				}
-			}
-		}
-	}
-	
-	private enum CaptureMode: Int {
-		case photo = 0
-		case movie = 1
-	}
-
-
-	// MARK: Device Configuration
-		
-	@IBOutlet private weak var cameraUnavailableLabel: UILabel!
-	private let videoDeviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera, .builtInDualCamera],
-                                                                               mediaType: .video, position: .unspecified)
-			
+    
 	
 	// MARK: Recording Movies
 	
@@ -287,7 +228,6 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
 			before entering the session queue. We do this to ensure UI elements are
 			accessed on the main thread and session configuration is done on the session queue.
 		*/
-        let videoPreviewLayerOrientation = previewView.videoPreviewLayer.connection?.videoOrientation
 		
 		sessionQueue.async {
 			if !movieFileOutput.isRecording {
@@ -304,8 +244,7 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
 				}
 				
 				// Update the orientation on the movie file output video connection before starting recording.
-                let movieFileOutputConnection = movieFileOutput.connection(with: .video)
-                movieFileOutputConnection?.videoOrientation = videoPreviewLayerOrientation!
+                let movieFileOutputConnection = movieFileOutput.connection(with: .audio)
                 
                 let availableVideoCodecTypes = movieFileOutput.availableVideoCodecTypes
                 
@@ -487,11 +426,6 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
 				showResumeButton = true
 			} else if reason == .videoDeviceNotAvailableWithMultipleForegroundApps {
 				// Simply fade-in a label to inform the user that the camera is unavailable.
-				cameraUnavailableLabel.alpha = 0
-				cameraUnavailableLabel.isHidden = false
-				UIView.animate(withDuration: 0.25) {
-					self.cameraUnavailableLabel.alpha = 1
-				}
 			}
 			
 			if showResumeButton {
@@ -515,15 +449,6 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
 					self.resumeButton.alpha = 0
 				}, completion: { _ in
 					self.resumeButton.isHidden = true
-				}
-			)
-		}
-		if !cameraUnavailableLabel.isHidden {
-			UIView.animate(withDuration: 0.25,
-			    animations: {
-					self.cameraUnavailableLabel.alpha = 0
-				}, completion: { _ in
-					self.cameraUnavailableLabel.isHidden = true
 				}
 			)
 		}
