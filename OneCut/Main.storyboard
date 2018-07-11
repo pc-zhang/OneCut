@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xkv-nJ-mNZ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cyP-8F-BeK">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -24,7 +24,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="26" y="654"/>
+            <point key="canvasLocation" x="-1570" y="675"/>
         </scene>
         <!--Main View Controller-->
         <scene sceneID="5dr-Lq-hUu">
@@ -212,7 +212,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0JK-fP-XLx" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1008.8" y="653.94088669950747"/>
+            <point key="canvasLocation" x="-676" y="675"/>
         </scene>
         <!--Speak View Controller-->
         <scene sceneID="mgn-UZ-J3U">
@@ -260,7 +260,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mza-tR-S8O" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="25" y="-68"/>
+            <point key="canvasLocation" x="-1570" y="-69"/>
         </scene>
         <!--Camera View Controller-->
         <scene sceneID="nMZ-9G-lod">
@@ -466,7 +466,7 @@
                 </tapGestureRecognizer>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4O7-vX-qG1" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1009" y="-69"/>
+            <point key="canvasLocation" x="-676" y="-69"/>
         </scene>
         <!--Camera View Controller-->
         <scene sceneID="uKT-tF-O05">
@@ -545,7 +545,165 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1914" y="-69"/>
+            <point key="canvasLocation" x="2657" y="-69"/>
+        </scene>
+        <!--Source Movie-->
+        <scene sceneID="oLE-jb-AQu">
+            <objects>
+                <viewController title="Source Movie" id="cyP-8F-BeK" customClass="StartViewController" customModule="AVReaderWriter" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="IN0-ZR-mTT"/>
+                        <viewControllerLayoutGuide type="bottom" id="yda-Ct-g2r"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Vd1-Xx-e9I">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8RO-Yp-ykV">
+                                <rect key="frame" x="16" y="52" width="343" height="668"/>
+                                <connections>
+                                    <segue destination="xsp-nY-RCX" kind="embed" identifier="playerViewController" id="MNu-HX-WWP"/>
+                                </connections>
+                            </containerView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qEK-an-sgU">
+                                <rect key="frame" x="159.66666666666666" y="728" width="56" height="30"/>
+                                <state key="normal" title="Cyanify!"/>
+                                <connections>
+                                    <segue destination="Abd-oK-WBb" kind="show" id="Ivy-Li-tmu"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="qEK-an-sgU" firstAttribute="centerX" secondItem="Vd1-Xx-e9I" secondAttribute="centerX" id="2qw-Gj-1mu"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="8RO-Yp-ykV" secondAttribute="trailing" id="C47-5H-MH7"/>
+                            <constraint firstItem="qEK-an-sgU" firstAttribute="top" secondItem="8RO-Yp-ykV" secondAttribute="bottom" constant="8" id="JSB-8a-xK4"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="8RO-Yp-ykV" secondAttribute="leading" id="ZN8-wi-ZFK"/>
+                            <constraint firstItem="8RO-Yp-ykV" firstAttribute="top" secondItem="IN0-ZR-mTT" secondAttribute="bottom" constant="8" id="fBI-uE-BL4"/>
+                            <constraint firstItem="yda-Ct-g2r" firstAttribute="top" secondItem="qEK-an-sgU" secondAttribute="bottom" constant="20" id="tla-NO-maZ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="2aY-Xi-n2H"/>
+                    </view>
+                    <connections>
+                        <outlet property="startButton" destination="qEK-an-sgU" id="g9u-pQ-uVg"/>
+                        <outlet property="view" destination="Vd1-Xx-e9I" id="lGC-Dm-h9T"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Jvi-MA-AjL" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="172" y="358"/>
+        </scene>
+        <!--Processing...-->
+        <scene sceneID="MGt-GH-Mqr">
+            <objects>
+                <viewController storyboardIdentifier="progress" title="Processing..." id="Abd-oK-WBb" customClass="ProgressViewController" customModule="AVReaderWriter" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="A8b-vx-2Ci"/>
+                        <viewControllerLayoutGuide type="bottom" id="N6Q-mq-Udp"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="LDx-kv-hZd">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ySa-dN-xWw">
+                                <rect key="frame" x="177.66666666666666" y="80" width="20" height="20"/>
+                            </activityIndicatorView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cyanifying!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TMm-LU-8e9">
+                                <rect key="frame" x="144.66666666666666" y="52" width="86" height="20.666666666666671"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XB8-uO-Ler">
+                                <rect key="frame" x="163.66666666666666" y="108" width="48" height="30"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancel" destination="Abd-oK-WBb" eventType="touchUpInside" id="EqN-Ck-5ok"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="ySa-dN-xWw" firstAttribute="top" secondItem="A8b-vx-2Ci" secondAttribute="bottom" constant="36" id="1ip-SV-oLA"/>
+                            <constraint firstItem="TMm-LU-8e9" firstAttribute="top" secondItem="A8b-vx-2Ci" secondAttribute="bottom" constant="8" id="40V-Ua-Pfg"/>
+                            <constraint firstItem="TMm-LU-8e9" firstAttribute="centerX" secondItem="LDx-kv-hZd" secondAttribute="centerX" id="8uA-CP-Ufe"/>
+                            <constraint firstItem="ySa-dN-xWw" firstAttribute="centerX" secondItem="LDx-kv-hZd" secondAttribute="centerX" id="A9Q-iO-ydB"/>
+                            <constraint firstItem="XB8-uO-Ler" firstAttribute="top" secondItem="A8b-vx-2Ci" secondAttribute="bottom" constant="64" id="C6D-Qf-jGG"/>
+                            <constraint firstItem="XB8-uO-Ler" firstAttribute="centerX" secondItem="LDx-kv-hZd" secondAttribute="centerX" id="o4t-D7-dJI"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="BvB-LR-wWc"/>
+                    </view>
+                    <connections>
+                        <outlet property="view" destination="LDx-kv-hZd" id="1j2-M2-lUR"/>
+                        <segue destination="SEK-fG-ZKB" kind="show" identifier="finishing" id="qea-jH-wsz"/>
+                        <segue destination="cyP-8F-BeK" kind="show" identifier="error" id="QKl-Gn-zaT"/>
+                        <segue destination="cyP-8F-BeK" kind="show" identifier="cancel" id="7aq-ic-YkA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2b1-ca-LtF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="860" y="358"/>
+        </scene>
+        <!--AV Player View Controller-->
+        <scene sceneID="kJK-NL-z7p">
+            <objects>
+                <avPlayerViewController videoGravity="AVLayerVideoGravityResizeAspect" id="xsp-nY-RCX" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jBv-QI-Cc4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="192" y="1051"/>
+        </scene>
+        <!--AV Player View Controller-->
+        <scene sceneID="1gR-qP-xB4">
+            <objects>
+                <avPlayerViewController videoGravity="AVLayerVideoGravityResizeAspect" id="wAn-2I-rYJ" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5al-SH-9Gd" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1482" y="1051"/>
+        </scene>
+        <!--Cyanified!-->
+        <scene sceneID="ard-nh-tJy">
+            <objects>
+                <viewController storyboardIdentifier="result" title="Cyanified!" id="SEK-fG-ZKB" customClass="ResultViewController" customModule="AVReaderWriter" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="EMt-cG-B8d"/>
+                        <viewControllerLayoutGuide type="bottom" id="F4B-xc-jan"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="tFX-Hy-Nga">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iC3-1A-o46">
+                                <rect key="frame" x="166" y="728" width="43" height="30"/>
+                                <state key="normal" title="Again!"/>
+                                <connections>
+                                    <segue destination="cyP-8F-BeK" kind="show" id="ZaC-XR-fuo"/>
+                                </connections>
+                            </button>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="59a-a0-XV1">
+                                <rect key="frame" x="16" y="52" width="343" height="668"/>
+                                <connections>
+                                    <segue destination="wAn-2I-rYJ" kind="embed" identifier="playerViewController" id="4XK-h0-UN0"/>
+                                </connections>
+                            </containerView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="59a-a0-XV1" firstAttribute="top" secondItem="EMt-cG-B8d" secondAttribute="bottom" constant="8" id="6By-Gl-rhr"/>
+                            <constraint firstItem="F4B-xc-jan" firstAttribute="top" secondItem="iC3-1A-o46" secondAttribute="bottom" constant="20" id="ALF-bo-SEk"/>
+                            <constraint firstItem="iC3-1A-o46" firstAttribute="top" secondItem="59a-a0-XV1" secondAttribute="bottom" constant="8" id="HeR-cn-FWF"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="59a-a0-XV1" secondAttribute="leading" id="JpH-YJ-Z1K"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="59a-a0-XV1" secondAttribute="trailing" id="fM7-d0-leB"/>
+                            <constraint firstItem="iC3-1A-o46" firstAttribute="centerX" secondItem="tFX-Hy-Nga" secondAttribute="centerX" id="y9F-16-9nP"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="gOC-uJ-07x"/>
+                    </view>
+                    <connections>
+                        <outlet property="view" destination="tFX-Hy-Nga" id="j8K-Hi-kDs"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pYT-4Y-afg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1546" y="358"/>
         </scene>
     </scenes>
     <resources>
@@ -557,4 +715,8 @@
         <image name="split" width="71" height="140"/>
         <image name="undo_ban" width="102" height="85"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="Ivy-Li-tmu"/>
+        <segue reference="QKl-Gn-zaT"/>
+    </inferredMetricsTieBreakers>
 </document>
