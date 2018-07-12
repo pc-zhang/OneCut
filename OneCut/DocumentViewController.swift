@@ -31,8 +31,70 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     @IBOutlet var recordButton : UIButton!
     
-    // MARK: UIViewController
+    // MARK: - View Controller
     
+    override func viewDidLoad() {
+        // add composition
+        if composition==nil {
+            composition = AVMutableComposition()
+            // Add two video tracks and two audio tracks.
+            _ = composition!.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)
+            
+            _ = composition!.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
+        }
+        
+        self.push(op:.nothing)
+        
+        playerView.playerLayer.player = player
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Access the document
+        document?.open(completionHandler: { (success) in
+            if success {
+                // Display the content of the document, e.g.:
+                //                self.documentNameLabel.text = self.document?.fileURL.lastPathComponent
+            } else {
+                // Make sure to handle the failed import appropriately, e.g., by presenting an error message to the user.
+            }
+        })
+        
+        /*
+         Update the UI when these player properties change.
+         
+         Use the context parameter to distinguish KVO for our particular observers
+         and not those destined for a subclass that also happens to be observing
+         these properties.
+         */
+        addObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.duration), options: [.new, .initial], context: &MainViewControllerKVOContext)
+        addObserver(self, forKeyPath: #keyPath(MainViewController.player.rate), options: [.new, .initial], context: &MainViewControllerKVOContext)
+        addObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.status), options: [.new, .initial], context: &MainViewControllerKVOContext)
+        
+        // Make sure we don't have a strong reference cycle by only capturing self as weak.
+        let interval = CMTimeMake(20, 600)
+        timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [unowned self] time in
+            let timeElapsed = Float(CMTimeGetSeconds(time))
+            
+            self.startTimeLabel.text = self.createTimeString(time: timeElapsed)
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        if let timeObserverToken = timeObserverToken {
+            player.removeTimeObserver(timeObserverToken)
+            self.timeObserverToken = nil
+        }
+        
+        player.pause()
+        
+        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.duration), context: &MainViewControllerKVOContext)
+        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.rate), context: &MainViewControllerKVOContext)
+        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.status), context: &MainViewControllerKVOContext)
+    }
     override public func viewDidAppear(_ animated: Bool) {
         speechRecognizer.delegate = self
         
@@ -129,6 +191,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
     }
     
+    
     // MARK: Interface Builder actions
     @IBAction func recognize(_ sender: Any) {
         if true {
@@ -151,7 +214,10 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 var isFinal = false
                 
                 if let result = result {
-                    self.textView.text = result.bestTranscription.formattedString
+                    let subtitles = Subtitles(transcription: result.bestTranscription)
+                    subtitles.segments.append(subtitles.segments.first!)
+                    subtitles.segments.first?.substring = "hello"
+                    self.textView.text = subtitles.formattedString
                     isFinal = result.isFinal
                 }
                 
@@ -719,71 +785,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
     }
     
-    // MARK: - View Controller
-    
-    override func viewDidLoad() {
-        // add composition
-        if composition==nil {
-            composition = AVMutableComposition()
-            // Add two video tracks and two audio tracks.
-            _ = composition!.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)
-            
-            _ = composition!.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
-        }
-        
-        self.push(op:.nothing)
-        
-        playerView.playerLayer.player = player
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        // Access the document
-        document?.open(completionHandler: { (success) in
-            if success {
-                // Display the content of the document, e.g.:
-//                self.documentNameLabel.text = self.document?.fileURL.lastPathComponent
-            } else {
-                // Make sure to handle the failed import appropriately, e.g., by presenting an error message to the user.
-            }
-        })
-        
-        /*
-         Update the UI when these player properties change.
-         
-         Use the context parameter to distinguish KVO for our particular observers
-         and not those destined for a subclass that also happens to be observing
-         these properties.
-         */
-        addObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.duration), options: [.new, .initial], context: &MainViewControllerKVOContext)
-        addObserver(self, forKeyPath: #keyPath(MainViewController.player.rate), options: [.new, .initial], context: &MainViewControllerKVOContext)
-        addObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.status), options: [.new, .initial], context: &MainViewControllerKVOContext)
-        
-        // Make sure we don't have a strong reference cycle by only capturing self as weak.
-        let interval = CMTimeMake(20, 600)
-        timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [unowned self] time in
-            let timeElapsed = Float(CMTimeGetSeconds(time))
-            
-            self.startTimeLabel.text = self.createTimeString(time: timeElapsed)
-        }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        if let timeObserverToken = timeObserverToken {
-            player.removeTimeObserver(timeObserverToken)
-            self.timeObserverToken = nil
-        }
-        
-        player.pause()
-        
-        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.duration), context: &MainViewControllerKVOContext)
-        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.rate), context: &MainViewControllerKVOContext)
-        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.status), context: &MainViewControllerKVOContext)
-    }
-    
     
     // MARK: - KVO Observation
     
@@ -991,6 +992,49 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
 }
 
+class TranscriptionSegment {
+    open var substring: String
+    open var substringRange: NSRange
+    // Relative to start of utterance
+    open var timestamp: TimeInterval
+    open var duration: TimeInterval
+    // Confidence in the accuracy of transcription. Scale is 0 (least confident) to 1.0 (most confident)
+    open var confidence: Float
+    // Other possible interpretations of this segment
+    open var alternativeSubstrings: [String]
+    
+    init(segment: SFTranscriptionSegment) {
+        substring = segment.substring
+        substringRange = segment.substringRange
+        timestamp = segment.timestamp
+        duration = segment.duration
+        confidence = segment.confidence
+        alternativeSubstrings = segment.alternativeSubstrings
+    }
+}
+
+class Subtitles {
+    var formattedString: String {
+        var result = ""
+        for segment in segments {
+            result += "\(segment.substring)"
+        }
+        
+        return result
+    }
+    
+    var segments: [TranscriptionSegment]
+    
+    init(transcription: SFTranscription) {
+        segments = [TranscriptionSegment]()
+        
+        for segment in transcription.segments {
+            let subtitleSegment = TranscriptionSegment(segment: segment)
+            segments.append(subtitleSegment)
+        }
+        
+    }
+}
 
 //extension AVMutableComposition: Codable {
 //    public convenience init(from decoder: Decoder) throws {
