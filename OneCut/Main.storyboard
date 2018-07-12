@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="cyP-8F-BeK">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="G8I-hc-TQb">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -182,10 +182,18 @@
                                     <action selector="export:" destination="G8I-hc-TQb" eventType="touchUpInside" id="EQS-ed-iDm"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CC1-OY-hXx">
-                                <rect key="frame" x="71" y="723" width="68" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3PN-Pn-kGv">
+                                <rect key="frame" x="8" y="723" width="68" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="recognize"/>
+                                <connections>
+                                    <action selector="recognize:" destination="G8I-hc-TQb" eventType="touchUpInside" id="IJW-l7-3HS"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CC1-OY-hXx">
+                                <rect key="frame" x="99" y="723" width="45" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="record"/>
                                 <connections>
                                     <action selector="recordButtonTapped" destination="G8I-hc-TQb" eventType="touchUpInside" id="vlb-Di-OuJ"/>
                                 </connections>
@@ -550,7 +558,7 @@
         <!--Source Movie-->
         <scene sceneID="oLE-jb-AQu">
             <objects>
-                <viewController title="Source Movie" id="cyP-8F-BeK" customClass="StartViewController" customModule="AVReaderWriter" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Source Movie" id="cyP-8F-BeK" customClass="StartViewController" customModule="OneCut" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="IN0-ZR-mTT"/>
                         <viewControllerLayoutGuide type="bottom" id="yda-Ct-g2r"/>
@@ -596,7 +604,7 @@
         <!--Processing...-->
         <scene sceneID="MGt-GH-Mqr">
             <objects>
-                <viewController storyboardIdentifier="progress" title="Processing..." id="Abd-oK-WBb" customClass="ProgressViewController" customModule="AVReaderWriter" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="progress" title="Processing..." id="Abd-oK-WBb" customClass="ProgressViewController" customModule="OneCut" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="A8b-vx-2Ci"/>
                         <viewControllerLayoutGuide type="bottom" id="N6Q-mq-Udp"/>
@@ -663,7 +671,7 @@
         <!--Cyanified!-->
         <scene sceneID="ard-nh-tJy">
             <objects>
-                <viewController storyboardIdentifier="result" title="Cyanified!" id="SEK-fG-ZKB" customClass="ResultViewController" customModule="AVReaderWriter" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="result" title="Cyanified!" id="SEK-fG-ZKB" customClass="ResultViewController" customModule="OneCut" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="EMt-cG-B8d"/>
                         <viewControllerLayoutGuide type="bottom" id="F4B-xc-jan"/>
@@ -716,7 +724,6 @@
         <image name="undo_ban" width="102" height="85"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Ivy-Li-tmu"/>
         <segue reference="QKl-Gn-zaT"/>
     </inferredMetricsTieBreakers>
 </document>

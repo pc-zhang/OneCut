@@ -121,11 +121,7 @@ class AudioRecorderCameraViewController: UIViewController, AVCaptureFileOutputRe
                 self.session.beginConfiguration()
                 self.session.addOutput(movieFileOutput)
                 self.session.sessionPreset = .high
-                if let connection = movieFileOutput.connection(with: .video) {
-                    if connection.isVideoStabilizationSupported {
-                        connection.preferredVideoStabilizationMode = .auto
-                    }
-                }
+                
                 self.session.commitConfiguration()
                 
                 self.movieFileOutput = movieFileOutput

@@ -130,6 +130,63 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     // MARK: Interface Builder actions
+    @IBAction func recognize(_ sender: Any) {
+        let assetReader: AVAssetReader
+        
+        do {
+            // Make sure that the asset tracks loaded successfully.
+            
+            let compositionAudioTrack = self.composition!.tracks(withMediaType: AVMediaType.audio).first
+            
+            assetReader = try AVAssetReader(asset: self.composition!)
+            
+            let readerOutput = AVAssetReaderTrackOutput(track: compositionAudioTrack!, outputSettings: nil)
+            
+            if assetReader.canAdd(readerOutput) {
+                assetReader.add(readerOutput)
+            }
+            
+            // Start reading/writing.
+            
+            guard assetReader.startReading() else {
+                // `error` is non-nil when startReading returns false.
+                throw assetReader.error!
+            }
+            
+            var isDone = false
+            // Transfer data from input file to output file.
+            while !isDone {
+                
+                // Grab next sample from the asset reader output.
+                guard let sampleBuffer = readerOutput.copyNextSampleBuffer() else {
+                    /*
+                     At this point, the asset reader output has no more samples
+                     to vend.
+                     */
+                    isDone = true
+                    break
+                }
+                
+                // Process the sample, if requested.
+                do {
+//                    try sampleBufferProcessor?(sampleBuffer)
+                }
+                catch {
+                    // This error will be picked back up in `readingAndWritingDidFinish()`.
+                    //                    self.sampleTransferError = error
+                    isDone = true
+                }
+                
+            }
+            
+        }
+        catch {
+            //                self.finish(result: .Failure(error))
+            return
+        }
+        
+        
+    }
     
     @IBAction func recordButtonTapped() {
         if audioEngine.isRunning {
@@ -888,6 +945,9 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         return segmentView
     }
+    
+    // todo: subtitle
+    
     
 }
 
