@@ -42,8 +42,8 @@
                                 <rect key="frame" x="0.0" y="84" width="375" height="331"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" text="text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="kPJ-Gv-V1o">
-                                        <rect key="frame" x="12" y="244" width="351" height="79"/>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="kPJ-Gv-V1o">
+                                        <rect key="frame" x="12" y="0.0" width="351" height="323"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -220,7 +220,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0JK-fP-XLx" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-676" y="675"/>
+            <point key="canvasLocation" x="-676" y="674.6305418719212"/>
         </scene>
         <!--Speak View Controller-->
         <scene sceneID="mgn-UZ-J3U">

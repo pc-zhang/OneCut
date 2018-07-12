@@ -131,6 +131,41 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     // MARK: Interface Builder actions
     @IBAction func recognize(_ sender: Any) {
+        if true {
+            // Cancel the previous task if it's running.
+            if let recognitionTask = recognitionTask {
+                recognitionTask.cancel()
+                self.recognitionTask = nil
+            }
+            
+            recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+            
+            guard let recognitionRequest = recognitionRequest else { fatalError("Unable to created a SFSpeechAudioBufferRecognitionRequest object") }
+            
+            // Configure request so that results are returned before audio recording is finished
+            recognitionRequest.shouldReportPartialResults = false
+            
+            // A recognition task represents a speech recognition session.
+            // We keep a reference to the task so that it can be cancelled.
+            recognitionTask = speechRecognizer.recognitionTask(with: recognitionRequest) { result, error in
+                var isFinal = false
+                
+                if let result = result {
+                    self.textView.text = result.bestTranscription.formattedString
+                    isFinal = result.isFinal
+                }
+                
+                if error != nil || isFinal {
+                    self.recognitionRequest = nil
+                    self.recognitionTask = nil
+                    
+                    self.recordButton.isEnabled = true
+                    self.recordButton.setTitle("Start Recording", for: [])
+                }
+            }
+            
+        }
+        
         let assetReader: AVAssetReader
         
         do {
@@ -140,7 +175,11 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             
             assetReader = try AVAssetReader(asset: self.composition!)
             
-            let readerOutput = AVAssetReaderTrackOutput(track: compositionAudioTrack!, outputSettings: nil)
+            let decompressionAudioSettings: [String: AnyObject] = [
+                String(AVFormatIDKey): NSNumber(value: kAudioFormatLinearPCM),
+            ]
+            
+            let readerOutput = AVAssetReaderTrackOutput(track: compositionAudioTrack!, outputSettings: decompressionAudioSettings)
             
             if assetReader.canAdd(readerOutput) {
                 assetReader.add(readerOutput)
@@ -164,12 +203,13 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                      to vend.
                      */
                     isDone = true
+                    self.recognitionRequest?.endAudio()
                     break
                 }
                 
                 // Process the sample, if requested.
                 do {
-//                    try sampleBufferProcessor?(sampleBuffer)
+                    self.recognitionRequest?.appendAudioSampleBuffer(sampleBuffer)
                 }
                 catch {
                     // This error will be picked back up in `readingAndWritingDidFinish()`.
