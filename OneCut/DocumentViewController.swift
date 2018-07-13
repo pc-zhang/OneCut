@@ -215,9 +215,14 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 if let result = result {
                     let subtitles = Subtitles(transcription: result.bestTranscription)
-                    subtitles.segments.append(subtitles.segments.first!)
-                    subtitles.segments.first?.substring = "hello"
                     self.textView.text = subtitles.formattedString
+                    
+                    let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                    let subtitlesTableViewController = storyBoard.instantiateViewController(withIdentifier: "SubtitlesTableViewController") as! SubtitlesTableViewController
+                    subtitlesTableViewController.subtitles = subtitles
+                    
+                    self.present(subtitlesTableViewController, animated: true, completion: nil)
+                    
                     isFinal = result.isFinal
                 }
                 
