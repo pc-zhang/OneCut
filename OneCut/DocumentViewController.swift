@@ -235,8 +235,8 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     scrollLayer.frame = syncLayer.frame
                     scrollLayer.frame.origin = .zero
                     scrollLayer.frame.size.height = CGFloat(self.subtitleAreaHeight)
-                    
-                    scrollLayer.addSublayer(self.makeSubtitlesLayer(subtitles: subtitles))
+                    let containerLayer = self.makeSubtitlesLayer(subtitles: subtitles)
+                    scrollLayer.addSublayer(containerLayer)
                     syncLayer.addSublayer(scrollLayer)   // These sublayers will be synchronized.
                     self.playerView.layer.addSublayer(syncLayer)
                     
@@ -1014,6 +1014,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func makeSubtitlesLayer(subtitles: Subtitles) -> CALayer {
         let containerLayer = CALayer()
 
+        containerLayer.anchorPoint = .zero
         containerLayer.frame = self.playerView.frame
         containerLayer.frame.origin = .zero
         containerLayer.frame.size.height = CGFloat(subtitleAreaHeight * subtitles.segments.count)
@@ -1024,6 +1025,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         for index in 0..<subtitles.segments.count {
             let sublayer = CALayer()
+            sublayer.anchorPoint = .zero
             sublayer.frame = containerLayer.frame
             sublayer.frame.origin = .zero
             sublayer.frame.origin.y = CGFloat(subtitleAreaHeight * index)

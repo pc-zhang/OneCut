@@ -18,7 +18,6 @@
 		F01DF4EA20F648D7003E238E /* ProgressViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DF4E620F648D6003E238E /* ProgressViewController.swift */; };
 		F01DF4EB20F648D7003E238E /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DF4E720F648D6003E238E /* StartViewController.swift */; };
 		F01DF4EC20F648D7003E238E /* CyanifyOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F01DF4E820F648D6003E238E /* CyanifyOperation.swift */; };
-		F01DF4EF20F64A21003E238E /* ElephantSeals.mov in Resources */ = {isa = PBXBuildFile; fileRef = F01DF4EE20F64A21003E238E /* ElephantSeals.mov */; };
 		F0C7513220EB3EFF0088D34F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7513120EB3EFF0088D34F /* AppDelegate.swift */; };
 		F0C7513D20EB3F000088D34F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0C7513C20EB3F000088D34F /* Assets.xcassets */; };
 		F0C7514020EB3F000088D34F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0C7513E20EB3F000088D34F /* LaunchScreen.storyboard */; };
@@ -225,7 +224,6 @@
 			files = (
 				F0C7515220EB3FAA0088D34F /* Main.storyboard in Resources */,
 				F0C7514020EB3F000088D34F /* LaunchScreen.storyboard in Resources */,
-				F01DF4EF20F64A21003E238E /* ElephantSeals.mov in Resources */,
 				F0C7513D20EB3F000088D34F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
