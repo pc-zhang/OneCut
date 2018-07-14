@@ -27,11 +27,11 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     private let audioEngine = AVAudioEngine()
     
-    private var subtitlesLayer = CALayer()
-    
     @IBOutlet var textView : UITextView!
     
     @IBOutlet var recordButton : UIButton!
+    
+    private let subtitleAreaHeight = 50
     
     // MARK: - View Controller
     
@@ -225,8 +225,20 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     
 //                    self.present(subtitlesTableViewController, animated: true, completion: nil)
                     
-                    self.subtitlesLayer = self.makeSubtitlesLayer(subtitles: subtitles)
-                    self.subtitlesLayer.frame = self.playerView.frame
+                    // Set up a synchronized layer to sync the layer timing of its subtree
+                    // with the playback of the playerItem/
+                    let syncLayer = AVSynchronizedLayer(playerItem: self.player.currentItem!)
+                    syncLayer.frame = self.playerView.frame
+                    syncLayer.frame.origin = .zero
+                    
+                    let scrollLayer = CAScrollLayer()
+                    scrollLayer.frame = syncLayer.frame
+                    scrollLayer.frame.origin = .zero
+                    scrollLayer.frame.size.height = CGFloat(self.subtitleAreaHeight)
+                    
+                    scrollLayer.addSublayer(self.makeSubtitlesLayer(subtitles: subtitles))
+                    syncLayer.addSublayer(scrollLayer)   // These sublayers will be synchronized.
+                    self.playerView.layer.addSublayer(syncLayer)
                     
                     isFinal = result.isFinal
                 }
@@ -239,7 +251,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     self.recordButton.setTitle("Start Recording", for: [])
                 }
                 
-                self.updatePlayer()
             }
             
         }
@@ -793,13 +804,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         playerItem!.audioMix = audioMix
         player.replaceCurrentItem(with: playerItem)
         
-        // Set up a synchronized layer to sync the layer timing of its subtree
-        // with the playback of the playerItem/
-        let syncLayer = AVSynchronizedLayer(playerItem: player.currentItem!)
-        
-        syncLayer.addSublayer(subtitlesLayer)   // These sublayers will be synchronized.
-        playerView.layer.addSublayer(subtitlesLayer)
-        
         currentTime = Double((timelineView.contentOffset.x + timelineView.frame.width/2) / scaledDurationToWidth)
         
     }
@@ -1008,33 +1012,22 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     // todo: subtitle
     func makeSubtitlesLayer(subtitles: Subtitles) -> CALayer {
-        
-        let subtitleAreaHeight = 100
-        
-        let scrollLayer = CAScrollLayer()
-        var newFrame = playerView.layer.bounds
-        newFrame.size.height = CGFloat(subtitleAreaHeight)
-        scrollLayer.frame = newFrame
-        
         let containerLayer = CALayer()
-        newFrame.size.height = CGFloat(subtitleAreaHeight * subtitles.segments.count)
-        containerLayer.frame = newFrame
+
+        containerLayer.frame = self.playerView.frame
+        containerLayer.frame.origin = .zero
+        containerLayer.frame.size.height = CGFloat(subtitleAreaHeight * subtitles.segments.count)
         containerLayer.backgroundColor = #colorLiteral(red: 1, green: 0, blue: 0, alpha: 0)
 
-        
         var subtitlePositions = [CGPoint]()
         var subtitleTimes = [Double]()
         
-        
         for index in 0..<subtitles.segments.count {
             let sublayer = CALayer()
-            sublayer.anchorPoint = CGPoint(x: 0, y: 0)
-            var newFrame = playerView.layer.bounds
-            newFrame.origin.y = CGFloat(subtitleAreaHeight * index)
-            newFrame.size.height = CGFloat(subtitleAreaHeight)
-            sublayer.frame = newFrame
-            sublayer.borderWidth = 1.0
-            sublayer.borderColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            sublayer.frame = containerLayer.frame
+            sublayer.frame.origin = .zero
+            sublayer.frame.origin.y = CGFloat(subtitleAreaHeight * index)
+            sublayer.frame.size.height = CGFloat(subtitleAreaHeight)
             
             let textLayer = CATextLayer()
             textLayer.string = subtitles.segments[index].substring
@@ -1043,10 +1036,10 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             textLayer.font = UIFont(name: "Helvetica", size: 36.0)
 
             textLayer.alignmentMode = kCAAlignmentCenter
-            newFrame = sublayer.frame
-            newFrame.origin.y = (newFrame.size.height - textLayer.preferredFrameSize().height) / 2.0  // NSMidY(newFrame) - ([textLayer preferredFrameSize].height / 2.0);
-            newFrame.size.height = textLayer.preferredFrameSize().height
-            textLayer.frame = newFrame
+            textLayer.frame = sublayer.frame
+            textLayer.frame.origin = .zero
+            textLayer.frame.origin.y = (textLayer.frame.size.height - textLayer.preferredFrameSize().height) / 2.0  // NSMidY(newFrame) - ([textLayer preferredFrameSize].height / 2.0);
+            textLayer.frame.size.height = textLayer.preferredFrameSize().height
             
             sublayer.addSublayer(textLayer)
             containerLayer.addSublayer(sublayer)
@@ -1068,9 +1061,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         anim.calculationMode = kCAAnimationDiscrete
         containerLayer.add(anim, forKey: "scrolling")
         
-        scrollLayer.addSublayer(containerLayer)
-        
-        return scrollLayer
+        return containerLayer
     }
     
 }
