@@ -26,54 +26,39 @@
             </objects>
             <point key="canvasLocation" x="-1570" y="675"/>
         </scene>
-        <!--Subtitles Table View Controller-->
-        <scene sceneID="dUb-B6-Zko">
+        <!--Subtitles Collection View Controller-->
+        <scene sceneID="Xub-UI-3ev">
             <objects>
-                <tableViewController storyboardIdentifier="SubtitlesTableViewController" id="3PN-FJ-zbi" customClass="SubtitlesTableViewController" customModule="OneCut" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="gyf-zL-xqG">
+                <collectionViewController storyboardIdentifier="SubtitlesCollectionViewController" id="FrH-Xz-8YU" customClass="SubtitlesCollectionViewController" customModule="OneCut" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="cs4-1q-hke">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="separatorColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="subtitleSegment" id="Imo-Cb-JSq" customClass="SubtitleTableViewCell" customModule="OneCut" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Imo-Cb-JSq" id="7ZL-qS-qlK">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="1kf-Re-lLO">
+                            <size key="itemSize" width="50" height="50"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="hfO-dp-iuj" customClass="SubtitleCollectionViewCell" customModule="OneCut">
+                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="time" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8sV-uV-VH8">
-                                            <rect key="frame" x="16" y="7" width="97" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <nil key="textColor"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits"/>
-                                        </textField>
-                                        <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="subtitle" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ix3-Ln-1Kc">
-                                            <rect key="frame" x="262" y="7" width="97" height="30"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <nil key="textColor"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits"/>
-                                        </textField>
-                                    </subviews>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="subtitleTextField" destination="Ix3-Ln-1Kc" id="5LJ-Qp-bP3"/>
-                                    <outlet property="timeTextField" destination="8sV-uV-VH8" id="O66-3A-u6Y"/>
-                                </connections>
-                            </tableViewCell>
-                        </prototypes>
+                                </view>
+                            </collectionViewCell>
+                        </cells>
                         <connections>
-                            <outlet property="dataSource" destination="3PN-FJ-zbi" id="shn-qC-wKk"/>
-                            <outlet property="delegate" destination="3PN-FJ-zbi" id="jXK-aF-v2X"/>
+                            <outlet property="dataSource" destination="FrH-Xz-8YU" id="4ga-h5-pDF"/>
+                            <outlet property="delegate" destination="FrH-Xz-8YU" id="VKs-dq-Lfa"/>
                         </connections>
-                    </tableView>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="JwD-Cf-4DN" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                    </collectionView>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pFx-Vs-Kkh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-676" y="1447"/>
+            <point key="canvasLocation" x="-676" y="1417"/>
         </scene>
         <!--Main View Controller-->
         <scene sceneID="5dr-Lq-hUu">
@@ -245,16 +230,6 @@
                                 <state key="normal" title="recognize"/>
                                 <connections>
                                     <action selector="recognize:" destination="G8I-hc-TQb" eventType="touchUpInside" id="IJW-l7-3HS"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NiW-Lh-S8s">
-                                <rect key="frame" x="257" y="666" width="81" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="subtitle edit"/>
-                                <connections>
-                                    <segue destination="3PN-FJ-zbi" kind="popoverPresentation" popoverAnchorView="NiW-Lh-S8s" id="VbA-tI-7xx">
-                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
-                                    </segue>
                                 </connections>
                             </button>
                         </subviews>

@@ -220,10 +220,10 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
 //                    self.textView.text = subtitles.formattedString
                     
                     let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                    let subtitlesTableViewController = storyBoard.instantiateViewController(withIdentifier: "SubtitlesTableViewController") as! SubtitlesTableViewController
-                    subtitlesTableViewController.subtitles = subtitles
+                    let subtitlesCollectionViewController = storyBoard.instantiateViewController(withIdentifier: "SubtitlesCollectionViewController") as! SubtitlesCollectionViewController
+                    subtitlesCollectionViewController.subtitles = subtitles
                     
-//                    self.present(subtitlesTableViewController, animated: true, completion: nil)
+                    self.present(subtitlesCollectionViewController, animated: true, completion: nil)
                     
                     // Set up a synchronized layer to sync the layer timing of its subtree
                     // with the playback of the playerItem/
@@ -786,7 +786,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     @IBAction func AddVideo(_ sender: UIButton) {
         let picker = UIImagePickerController()
-        picker.sourceType = .camera
+        picker.sourceType = .savedPhotosAlbum
         picker.mediaTypes = [kUTTypeMovie as String]
         picker.delegate = self
         picker.allowsEditing = false
@@ -955,6 +955,10 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first
         return CGSize(width: CGFloat(CMTimeGetSeconds((compositionVideoTrack?.segments[indexPath.row].timeMapping.target.duration)!)) * scaledDurationToWidth, height: timelineView.frame.height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsetsMake(0, 0, 0, 1)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
