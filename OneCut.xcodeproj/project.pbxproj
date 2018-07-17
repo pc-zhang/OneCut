@@ -30,6 +30,9 @@
 		F0F1128F20FCA86A00A983D0 /* RAReorderableLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1128E20FCA86A00A983D0 /* RAReorderableLayout.swift */; };
 		F0F1129120FCA8E600A983D0 /* SubtitlesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1129020FCA8E600A983D0 /* SubtitlesCollectionViewController.swift */; };
 		F0F1129320FCB43800A983D0 /* SubtitleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1129220FCB43800A983D0 /* SubtitleCollectionViewCell.swift */; };
+		F0F1129620FE291600A983D0 /* KDDragAndDropCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1129420FE291500A983D0 /* KDDragAndDropCollectionView.swift */; };
+		F0F1129720FE291600A983D0 /* KDDragAndDropManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1129520FE291600A983D0 /* KDDragAndDropManager.swift */; };
+		F0F1129920FE2A5B00A983D0 /* ColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0F1129820FE2A5B00A983D0 /* ColorCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +63,9 @@
 		F0F1128E20FCA86A00A983D0 /* RAReorderableLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RAReorderableLayout.swift; sourceTree = "<group>"; };
 		F0F1129020FCA8E600A983D0 /* SubtitlesCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitlesCollectionViewController.swift; sourceTree = "<group>"; };
 		F0F1129220FCB43800A983D0 /* SubtitleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubtitleCollectionViewCell.swift; sourceTree = "<group>"; };
+		F0F1129420FE291500A983D0 /* KDDragAndDropCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KDDragAndDropCollectionView.swift; sourceTree = "<group>"; };
+		F0F1129520FE291600A983D0 /* KDDragAndDropManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KDDragAndDropManager.swift; sourceTree = "<group>"; };
+		F0F1129820FE2A5B00A983D0 /* ColorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorCell.swift; sourceTree = "<group>"; };
 		F5248738762CAB0988E15221 /* Pods-OneCut.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneCut.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneCut/Pods-OneCut.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -166,6 +172,9 @@
 		F0F1128D20FCA53900A983D0 /* Subtitles Edit */ = {
 			isa = PBXGroup;
 			children = (
+				F0F1129820FE2A5B00A983D0 /* ColorCell.swift */,
+				F0F1129420FE291500A983D0 /* KDDragAndDropCollectionView.swift */,
+				F0F1129520FE291600A983D0 /* KDDragAndDropManager.swift */,
 				F0F1128E20FCA86A00A983D0 /* RAReorderableLayout.swift */,
 				F0F1129020FCA8E600A983D0 /* SubtitlesCollectionViewController.swift */,
 				F0F1129220FCB43800A983D0 /* SubtitleCollectionViewCell.swift */,
@@ -293,7 +302,10 @@
 				F0F1129320FCB43800A983D0 /* SubtitleCollectionViewCell.swift in Sources */,
 				F01DF4EA20F648D7003E238E /* ProgressViewController.swift in Sources */,
 				F0C7514C20EB3F620088D34F /* DocumentViewController.swift in Sources */,
+				F0F1129620FE291600A983D0 /* KDDragAndDropCollectionView.swift in Sources */,
+				F0F1129720FE291600A983D0 /* KDDragAndDropManager.swift in Sources */,
 				F01DF4EC20F648D7003E238E /* CyanifyOperation.swift in Sources */,
+				F0F1129920FE2A5B00A983D0 /* ColorCell.swift in Sources */,
 				F01DF4EB20F648D7003E238E /* StartViewController.swift in Sources */,
 				F01DF4E220F370B6003E238E /* PreviewView.swift in Sources */,
 				F0C7514B20EB3F620088D34F /* DocumentBrowserViewController.swift in Sources */,
