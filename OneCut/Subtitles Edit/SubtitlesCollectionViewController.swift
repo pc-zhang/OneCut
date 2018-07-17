@@ -36,42 +36,11 @@ import Speech
 
 import UIKit
 
-class DataItem : Equatable {
-    
-    var indexes: String
-    var colour: UIColor
-    init(_ indexes: String, _ colour: UIColor = UIColor.clear) {
-        self.indexes    = indexes
-        self.colour     = colour
-    }
-    
-    static func ==(lhs: DataItem, rhs: DataItem) -> Bool {
-        return lhs.indexes == rhs.indexes && lhs.colour == rhs.colour
-    }
-}
-
-extension UIColor {
-    static var kdBrown:UIColor {
-        return UIColor(red: 177.0/255.0, green: 88.0/255.0, blue: 39.0/255.0, alpha: 1.0)
-    }
-    static var kdGreen:UIColor {
-        return UIColor(red: 138.0/255.0, green: 149.0/255.0, blue: 86.0/255.0, alpha: 1.0)
-    }
-    static var kdBlue:UIColor {
-        return UIColor(red: 53.0/255.0, green: 102.0/255.0, blue: 149.0/255.0, alpha: 1.0)
-    }
-}
-
-let colours = [UIColor.kdBrown, UIColor.kdGreen, UIColor.kdBlue]
 
 class SubtitlesCollectionViewController: UIViewController, KDDragAndDropCollectionViewDataSource {
     var subtitles = Subtitles(transcription: SFTranscription())
     
     @IBOutlet weak var firstCollectionView: KDDragAndDropCollectionView!
-    @IBOutlet weak var secondCollectionView: KDDragAndDropCollectionView!
-    @IBOutlet weak var thirdCollectionView: KDDragAndDropCollectionView!
-    
-    var data : [[DataItem]] = [[DataItem]]()
     
     var dragAndDropManager : KDDragAndDropManager?
     
@@ -79,21 +48,30 @@ class SubtitlesCollectionViewController: UIViewController, KDDragAndDropCollecti
         
         super.viewDidLoad()
         
-        // generate some mock data (change in real world project)
-        self.data = (0...2).map({ i in (0...20).map({ j in DataItem("\(String(i)):\(String(j))", colours[i])})})
-        
         self.dragAndDropManager = KDDragAndDropManager(
             canvas: self.view,
-            collectionViews: [firstCollectionView, secondCollectionView, thirdCollectionView]
+            collectionViews: [firstCollectionView]
         )
         
     }
     
     
-    // MARK : UICollectionViewDataSource
+    // MARK: UICollectionViewDataSource
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 2.0
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 2.0
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 2
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data[collectionView.tag].count
+        return subtitles.segments.count
     }
     
     // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
@@ -101,10 +79,7 @@ class SubtitlesCollectionViewController: UIViewController, KDDragAndDropCollecti
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! ColorCell
         
-        let dataItem = data[collectionView.tag][indexPath.item]
-        
-        cell.label.text = String(indexPath.item) + "\n\n" + dataItem.indexes
-        cell.backgroundColor = dataItem.colour
+        cell.label.text = String(indexPath.item) + "\n\n" + subtitles.segments[indexPath.item].substring
         
         cell.isHidden = false
         
@@ -123,36 +98,36 @@ class SubtitlesCollectionViewController: UIViewController, KDDragAndDropCollecti
         return cell
     }
     
-    // MARK : KDDragAndDropCollectionViewDataSource
+    // MARK: KDDragAndDropCollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, dataItemForIndexPath indexPath: IndexPath) -> AnyObject {
-        return data[collectionView.tag][indexPath.item]
+        return subtitles.segments[indexPath.item]
     }
     func collectionView(_ collectionView: UICollectionView, insertDataItem dataItem : AnyObject, atIndexPath indexPath: IndexPath) -> Void {
         
-        if let di = dataItem as? DataItem {
-            data[collectionView.tag].insert(di, at: indexPath.item)
+        if let di = dataItem as? TranscriptionSegment {
+            subtitles.segments.insert(di, at: indexPath.item)
         }
         
         
     }
     func collectionView(_ collectionView: UICollectionView, deleteDataItemAtIndexPath indexPath : IndexPath) -> Void {
-        data[collectionView.tag].remove(at: indexPath.item)
+        subtitles.segments.remove(at: indexPath.item)
     }
     
     func collectionView(_ collectionView: UICollectionView, moveDataItemFromIndexPath from: IndexPath, toIndexPath to : IndexPath) -> Void {
         
-        let fromDataItem: DataItem = data[collectionView.tag][from.item]
-        data[collectionView.tag].remove(at: from.item)
-        data[collectionView.tag].insert(fromDataItem, at: to.item)
+        let fromDataItem: TranscriptionSegment = subtitles.segments[from.item]
+        subtitles.segments.remove(at: from.item)
+        subtitles.segments.insert(fromDataItem, at: to.item)
         
     }
     
     func collectionView(_ collectionView: UICollectionView, indexPathForDataItem dataItem: AnyObject) -> IndexPath? {
         
-        guard let candidate = dataItem as? DataItem else { return nil }
+        guard let candidate = dataItem as? TranscriptionSegment else { return nil }
         
-        for (i,item) in data[collectionView.tag].enumerated() {
+        for (i,item) in subtitles.segments.enumerated() {
             if candidate != item { continue }
             return IndexPath(item: i, section: 0)
         }

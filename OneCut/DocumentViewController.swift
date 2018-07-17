@@ -1072,7 +1072,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
 }
 
-class TranscriptionSegment {
+class TranscriptionSegment : Equatable {
     open var substring: String
     open var substringRange: NSRange
     // Relative to start of utterance
@@ -1090,6 +1090,10 @@ class TranscriptionSegment {
         duration = segment.duration
         confidence = segment.confidence
         alternativeSubstrings = segment.alternativeSubstrings
+    }
+    
+    static func ==(lhs: TranscriptionSegment, rhs: TranscriptionSegment) -> Bool {
+        return lhs.substring == rhs.substring && lhs.timestamp == rhs.timestamp
     }
 }
 
