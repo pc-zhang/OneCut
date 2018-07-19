@@ -725,7 +725,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="nBL-LK-D36" customClass="KDDragAndDropCollectionView" customModule="KDDragAndDropCollectionViews" customModuleProvider="target">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="nBL-LK-D36" customClass="KDDragAndDropCollectionView" customModule="OneCut" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="60" width="375" height="127"/>
                                 <color key="backgroundColor" red="0.58431372550000005" green="0.58431372550000005" blue="0.58431372550000005" alpha="0.080000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -738,7 +738,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="X3k-ug-Vi5" customClass="ColorCell" customModule="KDDragAndDropCollectionViews" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="X3k-ug-Vi5" customClass="SubtitleCollectionViewCell" customModule="OneCut" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="69" height="127"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -761,7 +761,7 @@
                                             <constraint firstItem="51G-hs-i9O" firstAttribute="leading" secondItem="X3k-ug-Vi5" secondAttribute="leading" constant="8" id="pcB-KZ-x35"/>
                                         </constraints>
                                         <connections>
-                                            <outlet property="label" destination="51G-hs-i9O" id="4Lc-Xx-Txm"/>
+                                            <outlet property="label" destination="51G-hs-i9O" id="yEv-gI-GJB"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
