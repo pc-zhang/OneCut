@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import CollectionViewShelfLayout
 import StoreKit
 
 private let reuseIdentifier = "Cell"
@@ -96,15 +95,15 @@ class AppStoreCollectionViewLayoutDemoViewController: UICollectionViewController
     })
   }
   
-  @IBOutlet var headerView: UIView!
+
   override func viewDidLoad() {
     super.viewDidLoad()
     
     if let layout = collectionView?.collectionViewLayout as? CollectionViewShelfLayout {
       layout.sectionCellInset = UIEdgeInsets(top: 4.0, left: 4.0, bottom: 4.0, right: 4.0)
       
-      headerView.translatesAutoresizingMaskIntoConstraints = false
-      
+
+        
       collectionView?.register(AppStoreCollectionSectionHeaderView.self, forSupplementaryViewOfKind: ShelfElementKindSectionHeader, withReuseIdentifier: "Header")
     }
   }

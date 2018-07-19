@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="G8I-hc-TQb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="9Lm-AL-OSI">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -294,6 +295,74 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZhB-DQ-95Z" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-676" y="1414"/>
+        </scene>
+        <!--App Store-->
+        <scene sceneID="WUw-AO-euB">
+            <objects>
+                <collectionViewController id="9Lm-AL-OSI" customClass="AppStoreCollectionViewLayoutDemoViewController" customModule="AppStoreCollectionViewLayout_Demo" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="KJ4-aZ-HBI">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <collectionViewLayout key="collectionViewLayout" id="ovq-qG-q1G" customClass="CollectionViewShelfLayout" customModule="AppStoreCollectionViewLayout_Demo" customModuleProvider="target"/>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="KsN-UX-e4d" customClass="AppStoreCollectionViewCell" customModule="AppStoreCollectionViewLayout_Demo" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="80" height="140"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="80" height="140"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A long long app name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PBd-1L-6X0">
+                                            <rect key="frame" x="0.0" y="82" width="80" height="33.666666666666657"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mU4-aQ-4Lh">
+                                            <rect key="frame" x="0.0" y="119.66666666666669" width="80" height="17"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xmJ-wo-9I7">
+                                            <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="xmJ-wo-9I7" secondAttribute="height" multiplier="1:1" id="VZE-aa-xYx"/>
+                                            </constraints>
+                                        </imageView>
+                                    </subviews>
+                                </view>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="mU4-aQ-4Lh" secondAttribute="trailing" id="BPs-0O-wYM"/>
+                                    <constraint firstItem="PBd-1L-6X0" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="KsN-UX-e4d" secondAttribute="leading" id="Br7-vd-IEh"/>
+                                    <constraint firstItem="xmJ-wo-9I7" firstAttribute="top" secondItem="KsN-UX-e4d" secondAttribute="top" id="CRb-KU-ND1"/>
+                                    <constraint firstAttribute="leading" secondItem="xmJ-wo-9I7" secondAttribute="leading" id="PVu-kL-ejl"/>
+                                    <constraint firstAttribute="trailing" secondItem="xmJ-wo-9I7" secondAttribute="trailing" id="YIZ-b2-Rlf"/>
+                                    <constraint firstItem="PBd-1L-6X0" firstAttribute="top" secondItem="xmJ-wo-9I7" secondAttribute="bottom" constant="2" id="Ze4-ar-wI3"/>
+                                    <constraint firstItem="mU4-aQ-4Lh" firstAttribute="leading" secondItem="KsN-UX-e4d" secondAttribute="leading" id="e1F-km-ZzM"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="PBd-1L-6X0" secondAttribute="trailing" id="tt6-rR-fAQ"/>
+                                    <constraint firstItem="mU4-aQ-4Lh" firstAttribute="top" secondItem="PBd-1L-6X0" secondAttribute="bottom" constant="4" id="u66-HK-kYd"/>
+                                    <constraint firstItem="PBd-1L-6X0" firstAttribute="centerX" secondItem="KsN-UX-e4d" secondAttribute="centerX" id="wFQ-Lj-bZK"/>
+                                </constraints>
+                                <size key="customSize" width="80" height="140"/>
+                                <connections>
+                                    <outlet property="appIconImageView" destination="xmJ-wo-9I7" id="NMe-ig-vCw"/>
+                                    <outlet property="appNameLabel" destination="PBd-1L-6X0" id="ZOh-C5-c96"/>
+                                    <outlet property="appPriceLabel" destination="mU4-aQ-4Lh" id="NJT-Zu-eT4"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="9Lm-AL-OSI" id="4Ze-Tu-7Me"/>
+                            <outlet property="delegate" destination="9Lm-AL-OSI" id="xzS-fO-d01"/>
+                        </connections>
+                    </collectionView>
+                    <tabBarItem key="tabBarItem" title="App Store" id="R7f-0R-wYi"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Fmv-BY-wyb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1182" y="156"/>
         </scene>
     </scenes>
     <resources>
