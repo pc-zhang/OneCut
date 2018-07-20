@@ -44,11 +44,11 @@ class SubtitlesCollectionViewController: UIViewController, KDDragAndDropCollecti
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return subtitles.segments.count
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return subtitles.segments.count
     }
     
     // The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
@@ -56,7 +56,7 @@ class SubtitlesCollectionViewController: UIViewController, KDDragAndDropCollecti
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! SubtitleCollectionViewCell
         
-        cell.label.text = String(indexPath.item) + "\n\n" + subtitles.segments[indexPath.section].substring
+        cell.label.text = String(indexPath.item) + "\n\n" + subtitles.segments[indexPath.item].substring
         
         cell.isHidden = false
         
@@ -136,7 +136,7 @@ class SubtitlesCollectionViewController: UIViewController, KDDragAndDropCollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, cellIsDraggableAtIndexPath indexPath: IndexPath) -> Bool {
-        return indexPath.row % 2 == 0
+        return true
     }
 }
 
