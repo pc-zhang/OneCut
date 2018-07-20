@@ -10,9 +10,6 @@ import UIKit
 import Speech
 
 
-import UIKit
-
-
 class SubtitlesCollectionViewController: UIViewController, KDDragAndDropCollectionViewDataSource {
     var subtitles = Subtitles(transcription: SFTranscription())
     
@@ -29,6 +26,10 @@ class SubtitlesCollectionViewController: UIViewController, KDDragAndDropCollecti
             collectionViews: [firstCollectionView]
         )
         
+        if let layout = firstCollectionView?.collectionViewLayout as? CollectionViewShelfLayout {
+            layout.sectionCellInset = UIEdgeInsets(top: 4.0, left: 4.0, bottom: 4.0, right: 4.0)
+            firstCollectionView?.register(SubtitleSectionHeaderView.self, forSupplementaryViewOfKind: ShelfElementKindSectionHeader, withReuseIdentifier: "Header")
+        }
     }
     
     
@@ -74,11 +75,32 @@ class SubtitlesCollectionViewController: UIViewController, KDDragAndDropCollecti
         return cell
     }
     
+    private func createTimeString(time: Double) -> String? {
+        var components = DateComponents()
+        components.second = Int(max(0.0, time))
+        
+        let formatter = DateComponentsFormatter()
+        formatter.zeroFormattingBehavior = .pad
+        formatter.allowedUnits = [.minute, .second]
+        
+        return formatter.string(from: components)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath)
+        if let view = view as? SubtitleSectionHeaderView {
+//            view.label.text = String(subtitles.segments[indexPath.section].timestamp)
+            view.label.textColor = .darkGray
+        }
+        return view
+    }
+    
     // MARK: KDDragAndDropCollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, dataItemForIndexPath indexPath: IndexPath) -> AnyObject {
         return subtitles.segments[indexPath.item]
     }
+    
     func collectionView(_ collectionView: UICollectionView, insertDataItem dataItem : AnyObject, atIndexPath indexPath: IndexPath) -> Void {
         
         if let di = dataItem as? TranscriptionSegment {
@@ -87,6 +109,7 @@ class SubtitlesCollectionViewController: UIViewController, KDDragAndDropCollecti
         
         
     }
+    
     func collectionView(_ collectionView: UICollectionView, deleteDataItemAtIndexPath indexPath : IndexPath) -> Void {
         subtitles.segments.remove(at: indexPath.item)
     }
@@ -169,6 +192,35 @@ class SubtitleCollectionViewCell: UICollectionViewCell {
         gradientLayer!.locations = [0, 1]
         
         gradientView.layer.addSublayer(gradientLayer!)
+    }
+}
+
+class SubtitleSectionHeaderView: UICollectionReusableView {
+    let label: UILabel = UILabel()
+    var indexPath: IndexPath?
+    
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+        
+        self.indexPath = layoutAttributes.indexPath
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        isUserInteractionEnabled = true
+        
+        backgroundColor = UIColor.white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(label)
+        
+        label.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
+        label.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
 }
 
