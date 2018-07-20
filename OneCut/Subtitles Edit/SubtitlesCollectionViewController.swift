@@ -89,7 +89,7 @@ class SubtitlesCollectionViewController: UIViewController, KDDragAndDropCollecti
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Header", for: indexPath)
         if let view = view as? SubtitleSectionHeaderView {
-//            view.label.text = String(subtitles.segments[indexPath.section].timestamp)
+            view.label.text = String(subtitles.segments[(indexPath as NSIndexPath).section].timestamp)
             view.label.textColor = .darkGray
         }
         return view
