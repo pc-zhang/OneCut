@@ -19,6 +19,10 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     // MARK: Properties
     
+    fileprivate let labelFont = UIFont(name: "Menlo", size: 12)!
+    fileprivate let maxImageSize = CGSize(width: 120, height: 120)
+    fileprivate lazy var palette: AsciiPalette = AsciiPalette(font: self.labelFont)
+    
     private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "zh-CN"))!
     
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
@@ -465,6 +469,63 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     // MARK: - IBActions
     
+    
+    @IBAction func AsciiEffect(_ sender: Any) {
+        videoComposition = AVMutableVideoComposition(asset: self.composition!, applyingCIFiltersWithHandler: {
+            request in
+            let context = CIContext(options: nil)
+            let cgImage = context.createCGImage(request.sourceImage, from: request.sourceImage.extent)!
+
+            let resizedImage = UIImage(cgImage: cgImage)
+                .imageConstrainedToMaxSize(self.maxImageSize),
+            asciiArtist  = AsciiArtist(resizedImage, self.palette),
+            asciiArt     = asciiArtist.createAsciiArt()
+            
+            let filtered = self.asciiImage(asciiArt, font: self.labelFont, size:CGSize(width: cgImage.width, height: cgImage.height))
+            request.finish(with: filtered, context: nil)
+        })
+        
+        updatePlayer()
+    }
+    
+    func asciiImage(_ asciiText: String, font: UIFont, size: CGSize) -> CIImage {
+        let label = UILabel()
+        label.font = self.labelFont
+        label.lineBreakMode = NSLineBreakMode.byClipping
+        label.numberOfLines = 0
+        label.text = asciiText
+        label.sizeToFit()
+        let asciiSize = label.frame.size
+        
+        let
+        rect   = CGRect(origin: CGPoint.zero, size: asciiSize)
+    
+        UIGraphicsBeginImageContext(asciiSize)
+        let context = UIGraphicsGetCurrentContext()
+    
+        // Fill the background with white.
+        context?.setFillColor(UIColor.white.cgColor)
+        context?.fill(rect)
+    
+        // Draw the character with black.
+        let nsString = NSString(string: asciiText)
+        nsString.draw(in: rect, withAttributes: [
+        .font: font,
+        .foregroundColor: UIColor.black
+        ])
+    
+        let image = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        UIGraphicsBeginImageContext(size)
+        image.draw(in: CGRect(origin: .zero, size: size))
+        
+        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return CIImage(image: scaledImage!)!
+    }
+    
     @IBAction func export(_ sender: Any)
     {
         // Create the export session with the composition and set the preset to the highest quality.
@@ -475,7 +536,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         // Set the output file type to be a QuickTime movie.
         exporter.outputFileType = AVFileType.mov
         exporter.shouldOptimizeForNetworkUse = true
-        exporter.videoComposition = nil
+        exporter.videoComposition = self.videoComposition
         // Asynchronously export the composition to a video file and save this file to the camera roll once export completes.
         
         let size = CGSize(width: 100, height: 100)

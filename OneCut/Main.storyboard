@@ -198,6 +198,14 @@
                                     <action selector="recognize:" destination="G8I-hc-TQb" eventType="touchUpInside" id="IJW-l7-3HS"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hQL-AM-tlP">
+                                <rect key="frame" x="315" y="632" width="31" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="ascii"/>
+                                <connections>
+                                    <action selector="AsciiEffect:" destination="G8I-hc-TQb" eventType="touchUpInside" id="Soo-n6-q4v"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Ebh-r4-GKs"/>
