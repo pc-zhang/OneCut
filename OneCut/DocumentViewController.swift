@@ -216,7 +216,8 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 let weixin = CALayer()
                 weixin.contents = UIImage(named: "weixin")!.cgImage!
                 weixin.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
-
+                weixin.contentsGravity = "resizeAspectFill"
+                
                 let parentLayer = CALayer()
                 let videoLayer = CALayer()
                 parentLayer.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
