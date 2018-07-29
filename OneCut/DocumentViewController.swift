@@ -16,26 +16,9 @@ private var MainViewControllerKVOContext = 0
 
 class MainViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, NVActivityIndicatorViewable {
     
-    // MARK: Properties
-    
-    fileprivate let labelFont = UIFont(name: "Menlo", size: 12)!
-    fileprivate let maxImageSize = CGSize(width: 120, height: 120)
-    fileprivate lazy var palette: AsciiPalette = AsciiPalette(font: self.labelFont)
-    
     // MARK: - View Controller
     
     override func viewDidLoad() {
-        // add composition
-        if composition==nil {
-            composition = AVMutableComposition()
-            // Add two video tracks and two audio tracks.
-            _ = composition!.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)
-            
-            _ = composition!.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
-            
-        }
-        
-        
         playerView.playerLayer.player = player
     }
     
@@ -98,46 +81,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     // MARK: - IBActions
     
-    
-    func asciiImage(_ asciiText: String, font: UIFont, size: CGSize) -> CIImage {
-        let label = UILabel()
-        label.font = self.labelFont
-        label.lineBreakMode = NSLineBreakMode.byClipping
-        label.numberOfLines = 0
-        label.text = asciiText
-        label.sizeToFit()
-        let asciiSize = label.frame.size
-        
-        let
-        rect   = CGRect(origin: CGPoint.zero, size: asciiSize)
-    
-        UIGraphicsBeginImageContext(asciiSize)
-        let context = UIGraphicsGetCurrentContext()
-    
-        // Fill the background with white.
-        context?.setFillColor(UIColor.white.cgColor)
-        context?.fill(rect)
-    
-        // Draw the character with black.
-        let nsString = NSString(string: asciiText)
-        nsString.draw(in: rect, withAttributes: [
-        .font: font,
-        .foregroundColor: UIColor.black
-        ])
-    
-        let image = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        
-        UIGraphicsBeginImageContext(size)
-        image.draw(in: CGRect(origin: .zero, size: size))
-        
-        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return CIImage(image: scaledImage!)!
-    }
-    
-    @IBAction func export(_ sender: Any)
+    func export()
     {
         // Create the export session with the composition and set the preset to the highest quality.
         let compatiblePresets = AVAssetExportSession.exportPresets(compatibleWith: composition!)
@@ -181,6 +125,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     func addClip(_ movieURL: URL) {
         let newAsset = AVURLAsset(url: movieURL, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
+        
         /*
          Using AVAsset now runs the risk of blocking the current thread (the
          main UI thread) whilst I/O happens to populate the properties. It's
@@ -227,22 +172,60 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                  it our player's current item.
                  */
                 
-                if true {
-                    self.composition = AVMutableComposition()
-                    // Add two video tracks and two audio tracks.
-                    _ = self.composition!.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)
+                self.composition = AVMutableComposition()
+                // Add two video tracks and two audio tracks.
+                let firstVideoTrack = self.composition!.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid)!
+                
+                let secondVideoTrack = self.composition!.addMutableTrack(withMediaType: .video, preferredTrackID: kCMPersistentTrackID_Invalid)!
+                
+                let audioTrack = self.composition!.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid)!
                     
-                    _ = self.composition!.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
-                    
-                }
                 
-                let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first
+                let videoAssetTrack = newAsset.tracks(withMediaType: .video).first!
                 
-                try! self.composition!.insertTimeRange(CMTimeRangeMake(kCMTimeZero, newAsset.duration), of: newAsset, at: compositionVideoTrack!.timeRange.end)
+                let audioAssetTrack = newAsset.tracks(withMediaType: .audio).first!
+                
+                try! firstVideoTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, newAsset.duration), of: videoAssetTrack, at: kCMTimeZero)
+                
+                try! secondVideoTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, newAsset.duration), of: videoAssetTrack, at: kCMTimeZero)
+                
+                try! audioTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, newAsset.duration), of: audioAssetTrack, at: kCMTimeZero)
                 
                 
-                // update timeline
-                self.updatePlayer()
+                self.videoComposition = AVMutableVideoComposition()
+                self.videoComposition?.renderSize = CGSize( width: videoAssetTrack.naturalSize.width / 2, height: videoAssetTrack.naturalSize.height )
+                self.videoComposition?.frameDuration = CMTimeMake(1, 30)
+                
+                let transformer1 = AVMutableVideoCompositionLayerInstruction(assetTrack: firstVideoTrack)
+                
+                let transformer2 = AVMutableVideoCompositionLayerInstruction(assetTrack: secondVideoTrack)
+                
+                let instruction = AVMutableVideoCompositionInstruction()
+                instruction.timeRange = CMTimeRangeMake(kCMTimeZero, newAsset.duration)
+                
+                transformer1.setCropRectangle(CGRect(x: videoAssetTrack.naturalSize.width/2, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
+                transformer1.setTransform(CGAffineTransform.identity.scaledBy(x: 0.25, y: 0.25).translatedBy(x: videoAssetTrack.naturalSize.width, y: 0).translatedBy(x: -5, y: videoAssetTrack.naturalSize.height/5), at: kCMTimeZero)
+                
+//                transformer2.setCropRectangle(CGRect(x: videoAssetTrack.naturalSize.width/2, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
+                transformer2.setTransform(CGAffineTransform.identity, at: kCMTimeZero)
+                
+                instruction.layerInstructions = [transformer1, transformer2]
+                self.videoComposition?.instructions = [instruction]
+                
+                
+                let weixin = CALayer()
+                weixin.contents = UIImage(named: "weixin")!.cgImage!
+                weixin.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
+
+                let parentLayer = CALayer()
+                let videoLayer = CALayer()
+                parentLayer.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
+                videoLayer.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
+                parentLayer.addSublayer(videoLayer)
+                parentLayer.addSublayer(weixin)
+                self.videoComposition?.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
+                
+                 self.export()
                 
                 return
             }
@@ -258,35 +241,6 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         picker.allowsEditing = false
         present(picker, animated: true)
     }
-    
-    
-    func updatePlayer() {
-        if composition == nil {
-            return
-        }
-        
-        videoComposition = AVMutableVideoComposition(asset: self.composition!, applyingCIFiltersWithHandler: {
-            request in
-            let context = CIContext(options: nil)
-            let cgImage = context.createCGImage(request.sourceImage, from: request.sourceImage.extent)!
-            
-            let resizedImage = UIImage(cgImage: cgImage)
-                .imageConstrainedToMaxSize(self.maxImageSize),
-            asciiArtist  = AsciiArtist(resizedImage, self.palette),
-            asciiArt     = asciiArtist.createAsciiArt()
-            
-            let filtered = self.asciiImage(asciiArt, font: self.labelFont, size:CGSize(width: cgImage.width, height: cgImage.height))
-            request.finish(with: filtered, context: nil)
-        })
-        
-        playerItem = AVPlayerItem(asset: composition!)
-        playerItem!.videoComposition = videoComposition
-        playerItem!.audioMix = audioMix
-        player.replaceCurrentItem(with: playerItem)
-        
-        player.play()
-    }
-    
     
     
     // MARK: - Error Handling
@@ -319,6 +273,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             addClip(videoURL)
         }
         picker.presentingViewController?.dismiss(animated: true, completion: nil)
+
     }
     
 }
