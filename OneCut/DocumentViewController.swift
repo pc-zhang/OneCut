@@ -85,7 +85,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     {
         // Create the export session with the composition and set the preset to the highest quality.
         let compatiblePresets = AVAssetExportSession.exportPresets(compatibleWith: composition!)
-        let exporter = AVAssetExportSession(asset: composition!, presetName: AVAssetExportPreset640x480)!
+        let exporter = AVAssetExportSession(asset: composition!, presetName: AVAssetExportPresetHEVCHighestQuality)!
         // Set the desired output URL for the file created by the export process.
         exporter.outputURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(String(Int(Date.timeIntervalSinceReferenceDate))).appendingPathExtension("mov")
         // Set the output file type to be a QuickTime movie.
@@ -204,7 +204,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 instruction.timeRange = CMTimeRangeMake(kCMTimeZero, newAsset.duration)
                 
                 transformer1.setCropRectangle(CGRect(x: videoAssetTrack.naturalSize.width/2, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
-                transformer1.setTransform(CGAffineTransform.identity.scaledBy(x: 0.25, y: 0.25).translatedBy(x: videoAssetTrack.naturalSize.width, y: 0).translatedBy(x: -5, y: videoAssetTrack.naturalSize.height/5), at: kCMTimeZero)
+                transformer1.setTransform(CGAffineTransform.identity.scaledBy(x: 1/3.0, y: 1/3.0).translatedBy(x: videoAssetTrack.naturalSize.width/2.0, y: 0).translatedBy(x: -5, y: videoAssetTrack.naturalSize.height/9), at: kCMTimeZero)
                 
 //                transformer2.setCropRectangle(CGRect(x: videoAssetTrack.naturalSize.width/2, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
                 transformer2.setTransform(CGAffineTransform.identity, at: kCMTimeZero)
