@@ -204,7 +204,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 instruction.timeRange = CMTimeRangeMake(kCMTimeZero, newAsset.duration)
                 
                 transformer1.setCropRectangle(CGRect(x: videoAssetTrack.naturalSize.width/2, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
-                transformer1.setTransform(CGAffineTransform.identity.scaledBy(x: 1/3.0, y: 1/3.0).translatedBy(x: videoAssetTrack.naturalSize.width/2.0, y: 0).translatedBy(x: -5, y: videoAssetTrack.naturalSize.height/9), at: kCMTimeZero)
+                transformer1.setTransform(CGAffineTransform.identity.scaledBy(x: 1/3.0, y: 1/3.0).translatedBy(x: videoAssetTrack.naturalSize.width/2.0, y: 0).translatedBy(x: -5, y: videoAssetTrack.naturalSize.height/8), at: kCMTimeZero)
                 
 //                transformer2.setCropRectangle(CGRect(x: videoAssetTrack.naturalSize.width/2, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
                 transformer2.setTransform(CGAffineTransform.identity, at: kCMTimeZero)
@@ -214,9 +214,18 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 
                 
                 let weixin = CALayer()
-                weixin.contents = UIImage(named: "weixin")!.cgImage!
+                weixin.contents = UIImage(named: "weixintop")!.cgImage!
                 weixin.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
-                weixin.contentsGravity = "resizeAspectFill"
+                weixin.contentsGravity = "top"
+                weixin.contentsScale = CGFloat(UIImage(named: "weixintop")!.cgImage!.width) / self.videoComposition!.renderSize.width * 1.1
+                
+                let weixinbottom = CALayer()
+                weixinbottom.contents = UIImage(named: "weixinbottom")!.cgImage!
+                weixinbottom.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
+                weixinbottom.contentsGravity = "bottom"
+                weixinbottom.contentsScale = CGFloat(UIImage(named: "weixinbottom")!.cgImage!.width) / self.videoComposition!.renderSize.width * 1.2
+                
+                weixin.addSublayer(weixinbottom)
                 
                 let parentLayer = CALayer()
                 let videoLayer = CALayer()
@@ -239,7 +248,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         picker.sourceType = .savedPhotosAlbum
         picker.mediaTypes = [kUTTypeMovie as String]
         picker.delegate = self
-        picker.allowsEditing = false
+        picker.allowsEditing = true
         present(picker, animated: true)
     }
     
