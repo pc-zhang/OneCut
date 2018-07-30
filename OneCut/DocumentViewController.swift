@@ -193,7 +193,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 
                 
                 self.videoComposition = AVMutableVideoComposition()
-                self.videoComposition?.renderSize = CGSize( width: videoAssetTrack.naturalSize.width / 2, height: videoAssetTrack.naturalSize.height )
+                self.videoComposition?.renderSize = CGSize(width: 1080, height: 1920)
                 self.videoComposition?.frameDuration = CMTimeMake(1, 30)
                 
                 let transformer1 = AVMutableVideoCompositionLayerInstruction(assetTrack: firstVideoTrack)
@@ -202,12 +202,13 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 
                 let instruction = AVMutableVideoCompositionInstruction()
                 instruction.timeRange = CMTimeRangeMake(kCMTimeZero, newAsset.duration)
+                let scale = 2*(self.videoComposition?.renderSize.width)!/videoAssetTrack.naturalSize.width
                 
                 transformer1.setCropRectangle(CGRect(x: videoAssetTrack.naturalSize.width/2, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
-                transformer1.setTransform(CGAffineTransform.identity.scaledBy(x: 1/3.0, y: 1/3.0).translatedBy(x: videoAssetTrack.naturalSize.width/2.0, y: 0).translatedBy(x: -5, y: videoAssetTrack.naturalSize.height/8), at: kCMTimeZero)
+                transformer1.setTransform(CGAffineTransform.identity.scaledBy(x: scale/3.0, y: scale/3.0).translatedBy(x: videoAssetTrack.naturalSize.width/2-15, y: videoAssetTrack.naturalSize.height/8), at: kCMTimeZero)
                 
-//                transformer2.setCropRectangle(CGRect(x: videoAssetTrack.naturalSize.width/2, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
-                transformer2.setTransform(CGAffineTransform.identity, at: kCMTimeZero)
+                transformer2.setCropRectangle(CGRect(x: 0, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
+                transformer2.setTransform(CGAffineTransform.identity.scaledBy(x: scale, y: scale), at: kCMTimeZero)
                 
                 instruction.layerInstructions = [transformer1, transformer2]
                 self.videoComposition?.instructions = [instruction]
@@ -231,6 +232,8 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 let videoLayer = CALayer()
                 parentLayer.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
                 videoLayer.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
+//                videoLayer.contentsGravity = "resizeAspect"
+//                videoLayer.contentsScale = CGFloat(UIImage(named: "weixinbottom")!.cgImage!.width) / self.videoComposition!.renderSize.width * 1.2
                 parentLayer.addSublayer(videoLayer)
                 parentLayer.addSublayer(weixin)
                 self.videoComposition?.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
