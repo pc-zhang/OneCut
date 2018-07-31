@@ -227,22 +227,59 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 weixinbottom.contentsScale = CGFloat(UIImage(named: "weixinbottom")!.cgImage!.width) / self.videoComposition!.renderSize.width * 1.2
                 
                 weixin.addSublayer(weixinbottom)
+
+                let textLayer = CATextLayer()
+                
+                textLayer.string = "00:00"
+                textLayer.foregroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+                textLayer.fontSize = 50.0
+                textLayer.font = UIFont(name: "Helvetica", size: 36.0)
+                
+                textLayer.alignmentMode = kCAAlignmentCenter
+                textLayer.frame = weixin.frame
+                textLayer.frame.origin = .zero
+                textLayer.frame.origin.y = self.videoComposition!.renderSize.height / 4
+                textLayer.frame.size.height = textLayer.preferredFrameSize().height
+                
+                let anim = CAKeyframeAnimation(keyPath: "string")
+                let count = Int(CMTimeGetSeconds(newAsset.duration)) + 1
+                anim.duration = Double(count)
+                anim.calculationMode = kCAAnimationDiscrete
+                anim.keyTimes = (0...count).map {Double($0)/3.0/Double(count)} as [NSNumber]
+                anim.values = (0...count).map {self.createTimeString(time: Double(1000+$0))}
+                textLayer.add(anim, forKey: nil)
+                
+                weixin.addSublayer(textLayer)
                 
                 let parentLayer = CALayer()
                 let videoLayer = CALayer()
                 parentLayer.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
                 videoLayer.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
-//                videoLayer.contentsGravity = "resizeAspect"
-//                videoLayer.contentsScale = CGFloat(UIImage(named: "weixinbottom")!.cgImage!.width) / self.videoComposition!.renderSize.width * 1.2
+
                 parentLayer.addSublayer(videoLayer)
                 parentLayer.addSublayer(weixin)
                 self.videoComposition?.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
                 
-                 self.export()
+                self.export()
                 
                 return
             }
         }
+    }
+    
+    let timeRemainingFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.zeroFormattingBehavior = .pad
+        formatter.allowedUnits = [.minute, .second]
+        
+        return formatter
+    }()
+    
+    func createTimeString(time: Double) -> String {
+        let components = NSDateComponents()
+        components.second = Int(max(0.0, time))
+        
+        return timeRemainingFormatter.string(from: components as DateComponents)!
     }
     
     
