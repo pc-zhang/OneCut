@@ -147,7 +147,11 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
 
         // Create the export session with the composition and set the preset to the highest quality.
         let compatiblePresets = AVAssetExportSession.exportPresets(compatibleWith: composition)
-        let exporter = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHEVCHighestQuality)!
+        if !compatiblePresets.contains(AVAssetExportPresetHighestQuality) {
+            self.handleErrorWithMessage("这个视频坏掉了，换个视频试试？")
+            return
+        }
+        let exporter = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetHighestQuality)!
         // Set the desired output URL for the file created by the export process.
         exporter.outputURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(String(Int(Date.timeIntervalSinceReferenceDate))).appendingPathExtension("mov")
         // Set the output file type to be a QuickTime movie.
