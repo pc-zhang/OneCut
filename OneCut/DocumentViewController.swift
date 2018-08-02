@@ -192,75 +192,148 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 try! audioTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, newAsset.duration), of: audioAssetTrack, at: kCMTimeZero)
                 
                 
-                self.videoComposition = AVMutableVideoComposition()
-                self.videoComposition?.renderSize = CGSize(width: 1080, height: 1920)
-                self.videoComposition?.frameDuration = CMTimeMake(1, 30)
-                
-                let transformer1 = AVMutableVideoCompositionLayerInstruction(assetTrack: firstVideoTrack)
-                
-                let transformer2 = AVMutableVideoCompositionLayerInstruction(assetTrack: secondVideoTrack)
-                
-                let instruction = AVMutableVideoCompositionInstruction()
-                instruction.timeRange = CMTimeRangeMake(kCMTimeZero, newAsset.duration)
-                let scale = 2*(self.videoComposition?.renderSize.width)!/videoAssetTrack.naturalSize.width
-                
-                transformer1.setCropRectangle(CGRect(x: videoAssetTrack.naturalSize.width/2, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
-                transformer1.setTransform(CGAffineTransform.identity.scaledBy(x: scale/3.0, y: scale/3.0).translatedBy(x: videoAssetTrack.naturalSize.width/2-15, y: videoAssetTrack.naturalSize.height/8), at: kCMTimeZero)
-                
-                transformer2.setCropRectangle(CGRect(x: 0, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
-                transformer2.setTransform(CGAffineTransform.identity.scaledBy(x: scale, y: scale), at: kCMTimeZero)
-                
-                instruction.layerInstructions = [transformer1, transformer2]
-                self.videoComposition?.instructions = [instruction]
-                
-                
-                let weixin = CALayer()
-                weixin.contents = UIImage(named: "weixintop")!.cgImage!
-                weixin.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
-                weixin.contentsGravity = "top"
-                weixin.contentsScale = CGFloat(UIImage(named: "weixintop")!.cgImage!.width) / self.videoComposition!.renderSize.width * 1.1
-                
-                let weixinbottom = CALayer()
-                weixinbottom.contents = UIImage(named: "weixinbottom")!.cgImage!
-                weixinbottom.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
-                weixinbottom.contentsGravity = "bottom"
-                weixinbottom.contentsScale = CGFloat(UIImage(named: "weixinbottom")!.cgImage!.width) / self.videoComposition!.renderSize.width * 1.2
-                
-                weixin.addSublayer(weixinbottom)
+                if false {
+                    self.videoComposition = AVMutableVideoComposition()
+                    self.videoComposition?.renderSize = CGSize(width: 1080, height: 1920)
+                    self.videoComposition?.frameDuration = CMTimeMake(1, 30)
+                    
+                    let transformer1 = AVMutableVideoCompositionLayerInstruction(assetTrack: firstVideoTrack)
+                    
+                    let transformer2 = AVMutableVideoCompositionLayerInstruction(assetTrack: secondVideoTrack)
+                    
+                    let instruction = AVMutableVideoCompositionInstruction()
+                    instruction.timeRange = CMTimeRangeMake(kCMTimeZero, newAsset.duration)
+                    let scale = 2*(self.videoComposition?.renderSize.width)!/videoAssetTrack.naturalSize.width
+                    
+                    transformer1.setCropRectangle(CGRect(x: 0, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
+                    transformer1.setTransform(CGAffineTransform.identity.scaledBy(x: scale/3.0, y: scale/3.0).translatedBy(x: videoAssetTrack.naturalSize.width-15, y: videoAssetTrack.naturalSize.height/8), at: kCMTimeZero)
+                    
+                    transformer2.setCropRectangle(CGRect(x: videoAssetTrack.naturalSize.width/2, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
+                    transformer2.setTransform(CGAffineTransform.identity.scaledBy(x: scale, y: scale).translatedBy(x: -videoAssetTrack.naturalSize.width/2, y: 0), at: kCMTimeZero)
+                    
+                    instruction.layerInstructions = [transformer1, transformer2]
+                    self.videoComposition?.instructions = [instruction]
+                    
+                    
+                    let weixin = CALayer()
+                    weixin.contents = UIImage(named: "weixintop")!.cgImage!
+                    weixin.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
+                    weixin.contentsGravity = "top"
+                    weixin.contentsScale = CGFloat(UIImage(named: "weixintop")!.cgImage!.width) / self.videoComposition!.renderSize.width * 1.1
+                    
+                    let weixinbottom = CALayer()
+                    weixinbottom.contents = UIImage(named: "weixinbottom")!.cgImage!
+                    weixinbottom.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
+                    weixinbottom.contentsGravity = "bottom"
+                    weixinbottom.contentsScale = CGFloat(UIImage(named: "weixinbottom")!.cgImage!.width) / self.videoComposition!.renderSize.width * 1.2
+                    
+                    weixin.addSublayer(weixinbottom)
 
-                let textLayer = CATextLayer()
-                
-                textLayer.string = "00:00"
-                textLayer.foregroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-                textLayer.fontSize = 50.0
-                textLayer.font = UIFont(name: "Helvetica", size: 36.0)
-                
-                textLayer.alignmentMode = kCAAlignmentCenter
-                textLayer.frame = weixin.frame
-                textLayer.frame.origin = .zero
-                textLayer.frame.origin.y = self.videoComposition!.renderSize.height / 4
-                textLayer.frame.size.height = textLayer.preferredFrameSize().height
-                
-                let anim = CAKeyframeAnimation(keyPath: "string")
-                let count = Int(CMTimeGetSeconds(newAsset.duration)) + 1
-                anim.duration = Double(count)
-                anim.calculationMode = kCAAnimationDiscrete
-                anim.keyTimes = (0...count).map {Double($0)/3.0/Double(count)} as [NSNumber]
-                anim.values = (0...count).map {self.createTimeString(time: Double(1000+$0))}
-                textLayer.add(anim, forKey: nil)
-                
-                weixin.addSublayer(textLayer)
-                
-                let parentLayer = CALayer()
-                let videoLayer = CALayer()
-                parentLayer.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
-                videoLayer.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
+                    let textLayer = CATextLayer()
+                    
+                    textLayer.string = "00:00"
+                    textLayer.foregroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+                    textLayer.fontSize = 50.0
+                    textLayer.font = UIFont(name: "Helvetica", size: 36.0)
+                    
+                    textLayer.alignmentMode = kCAAlignmentCenter
+                    textLayer.frame = weixin.frame
+                    textLayer.frame.origin = .zero
+                    textLayer.frame.origin.y = self.videoComposition!.renderSize.height / 4
+                    textLayer.frame.size.height = textLayer.preferredFrameSize().height
+                    
+                    let anim = CAKeyframeAnimation(keyPath: "string")
+                    let count = Int(CMTimeGetSeconds(newAsset.duration)) + 1
+                    anim.duration = Double(count)
+                    anim.calculationMode = kCAAnimationDiscrete
+                    anim.keyTimes = (0...count).map {Double($0)/3.0/Double(count)} as [NSNumber]
+                    anim.values = (0...count).map {self.createTimeString(time: Double(1000+$0))}
+                    textLayer.add(anim, forKey: nil)
+                    
+                    weixin.addSublayer(textLayer)
+                    
+                    let parentLayer = CALayer()
+                    let videoLayer = CALayer()
+                    parentLayer.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
+                    videoLayer.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
 
-                parentLayer.addSublayer(videoLayer)
-                parentLayer.addSublayer(weixin)
-                self.videoComposition?.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
+                    parentLayer.addSublayer(videoLayer)
+                    parentLayer.addSublayer(weixin)
+                    self.videoComposition?.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
+                    
+                    self.export()
+                } else {
+                    self.videoComposition = AVMutableVideoComposition()
+                    self.videoComposition?.renderSize = CGSize(width: 1080, height: 1920)
+                    self.videoComposition?.frameDuration = CMTimeMake(1, 30)
+                    
+                    let transformer1 = AVMutableVideoCompositionLayerInstruction(assetTrack: firstVideoTrack)
+                    
+                    let transformer2 = AVMutableVideoCompositionLayerInstruction(assetTrack: secondVideoTrack)
+                    
+                    let instruction = AVMutableVideoCompositionInstruction()
+                    instruction.timeRange = CMTimeRangeMake(kCMTimeZero, newAsset.duration)
+                    let scale = 2*(self.videoComposition?.renderSize.width)!/videoAssetTrack.naturalSize.width
+                    
+                    transformer1.setCropRectangle(CGRect(x: videoAssetTrack.naturalSize.width/2, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
+                    transformer1.setTransform(CGAffineTransform.identity.scaledBy(x: scale/3.0, y: scale/3.0).translatedBy(x: videoAssetTrack.naturalSize.width/2-15, y: videoAssetTrack.naturalSize.height/8), at: kCMTimeZero)
+                    
+                    transformer2.setCropRectangle(CGRect(x: 0, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
+                    transformer2.setTransform(CGAffineTransform.identity.scaledBy(x: scale, y: scale), at: kCMTimeZero)
+                    
+                    instruction.layerInstructions = [transformer1, transformer2]
+                    self.videoComposition?.instructions = [instruction]
+                    
+                    
+                    let weixin = CALayer()
+                    weixin.contents = UIImage(named: "weixintop")!.cgImage!
+                    weixin.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
+                    weixin.contentsGravity = "top"
+                    weixin.contentsScale = CGFloat(UIImage(named: "weixintop")!.cgImage!.width) / self.videoComposition!.renderSize.width * 1.1
+                    
+                    let weixinbottom = CALayer()
+                    weixinbottom.contents = UIImage(named: "weixinbottom")!.cgImage!
+                    weixinbottom.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
+                    weixinbottom.contentsGravity = "bottom"
+                    weixinbottom.contentsScale = CGFloat(UIImage(named: "weixinbottom")!.cgImage!.width) / self.videoComposition!.renderSize.width * 1.2
+                    
+                    weixin.addSublayer(weixinbottom)
+                    
+                    let textLayer = CATextLayer()
+                    
+                    textLayer.string = "00:00"
+                    textLayer.foregroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+                    textLayer.fontSize = 50.0
+                    textLayer.font = UIFont(name: "Helvetica", size: 36.0)
+                    
+                    textLayer.alignmentMode = kCAAlignmentCenter
+                    textLayer.frame = weixin.frame
+                    textLayer.frame.origin = .zero
+                    textLayer.frame.origin.y = self.videoComposition!.renderSize.height / 4
+                    textLayer.frame.size.height = textLayer.preferredFrameSize().height
+                    
+                    let anim = CAKeyframeAnimation(keyPath: "string")
+                    let count = Int(CMTimeGetSeconds(newAsset.duration)) + 1
+                    anim.duration = Double(count)
+                    anim.calculationMode = kCAAnimationDiscrete
+                    anim.keyTimes = (0...count).map {Double($0)/3.0/Double(count)} as [NSNumber]
+                    anim.values = (0...count).map {self.createTimeString(time: Double(1000+$0))}
+                    textLayer.add(anim, forKey: nil)
+                    
+                    weixin.addSublayer(textLayer)
+                    
+                    let parentLayer = CALayer()
+                    let videoLayer = CALayer()
+                    parentLayer.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
+                    videoLayer.frame = CGRect(origin: .zero, size: self.videoComposition!.renderSize)
+                    
+                    parentLayer.addSublayer(videoLayer)
+                    parentLayer.addSublayer(weixin)
+                    self.videoComposition?.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
+                    
+                    self.export()
+                }
                 
-                self.export()
                 
                 return
             }
