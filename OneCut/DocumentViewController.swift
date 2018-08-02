@@ -27,7 +27,6 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             picker.mediaTypes = [kUTTypeMovie as String]
             picker.delegate = self
             picker.allowsEditing = true
-            picker.cancel
             present(picker, animated: false)
         }
     }
