@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		F020020621090093000D29E9 /* DocumentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7514920EB3F620088D34F /* DocumentViewController.swift */; };
-		F020020921090093000D29E9 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7514D20EB3F6C0088D34F /* PlayerView.swift */; };
 		F020020B21090093000D29E9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7513120EB3EFF0088D34F /* AppDelegate.swift */; };
 		F020020D21090093000D29E9 /* Pods_OneCut.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF6CC1A04370BB81EEE0D8CE /* Pods_OneCut.framework */; };
 		F020020F21090093000D29E9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0C7515120EB3FAA0088D34F /* Main.storyboard */; };
@@ -21,12 +20,13 @@
 		AF6CC1A04370BB81EEE0D8CE /* Pods_OneCut.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneCut.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F020021621090093000D29E9 /* weixin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = weixin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F020021721090094000D29E9 /* OneCut copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "OneCut copy-Info.plist"; path = "/Users/zpc/Desktop/OneCut/OneCut copy-Info.plist"; sourceTree = "<absolute>"; };
+		F07347DB211337C500058E90 /* imagepicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imagepicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F07347F12113381A00058E90 /* imagepicker2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imagepicker2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0C7513120EB3EFF0088D34F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F0C7513C20EB3F000088D34F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F0C7513F20EB3F000088D34F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F0C7514120EB3F000088D34F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F0C7514920EB3F620088D34F /* DocumentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentViewController.swift; sourceTree = "<group>"; };
-		F0C7514D20EB3F6C0088D34F /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		F0C7515120EB3FAA0088D34F /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		F5248738762CAB0988E15221 /* Pods-OneCut.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneCut.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneCut/Pods-OneCut.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -37,6 +37,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				F020020D21090093000D29E9 /* Pods_OneCut.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F07347D8211337C500058E90 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F07347EE2113381A00058E90 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +89,8 @@
 			isa = PBXGroup;
 			children = (
 				F020021621090093000D29E9 /* weixin.app */,
+				F07347DB211337C500058E90 /* imagepicker.app */,
+				F07347F12113381A00058E90 /* imagepicker2.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -84,7 +100,6 @@
 			children = (
 				F0C7514920EB3F620088D34F /* DocumentViewController.swift */,
 				F0C7515120EB3FAA0088D34F /* Main.storyboard */,
-				F0C7514D20EB3F6C0088D34F /* PlayerView.swift */,
 				F0C7514120EB3F000088D34F /* Info.plist */,
 				F0C7515320EB44340088D34F /* Supporting Files */,
 			);
@@ -123,6 +138,40 @@
 			productReference = F020021621090093000D29E9 /* weixin.app */;
 			productType = "com.apple.product-type.application";
 		};
+		F07347DA211337C500058E90 /* imagepicker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F07347EA211337C800058E90 /* Build configuration list for PBXNativeTarget "imagepicker" */;
+			buildPhases = (
+				F07347D7211337C500058E90 /* Sources */,
+				F07347D8211337C500058E90 /* Frameworks */,
+				F07347D9211337C500058E90 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = imagepicker;
+			productName = imagepicker;
+			productReference = F07347DB211337C500058E90 /* imagepicker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		F07347F02113381A00058E90 /* imagepicker2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F07348002113381B00058E90 /* Build configuration list for PBXNativeTarget "imagepicker2" */;
+			buildPhases = (
+				F07347ED2113381A00058E90 /* Sources */,
+				F07347EE2113381A00058E90 /* Frameworks */,
+				F07347EF2113381A00058E90 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = imagepicker2;
+			productName = imagepicker2;
+			productReference = F07347F12113381A00058E90 /* imagepicker2.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -132,6 +181,14 @@
 				LastSwiftUpdateCheck = 0940;
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = zpc;
+				TargetAttributes = {
+					F07347DA211337C500058E90 = {
+						CreatedOnToolsVersion = 9.4;
+					};
+					F07347F02113381A00058E90 = {
+						CreatedOnToolsVersion = 9.4;
+					};
+				};
 			};
 			buildConfigurationList = F0C7512920EB3EFF0088D34F /* Build configuration list for PBXProject "OneCut" */;
 			compatibilityVersion = "Xcode 9.3";
@@ -147,6 +204,8 @@
 			projectRoot = "";
 			targets = (
 				F020020221090093000D29E9 /* weixin */,
+				F07347DA211337C500058E90 /* imagepicker */,
+				F07347F02113381A00058E90 /* imagepicker2 */,
 			);
 		};
 /* End PBXProject section */
@@ -159,6 +218,20 @@
 				F020020F21090093000D29E9 /* Main.storyboard in Resources */,
 				F020021021090093000D29E9 /* LaunchScreen.storyboard in Resources */,
 				F020021121090093000D29E9 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F07347D9211337C500058E90 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F07347EF2113381A00058E90 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,8 +282,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				F020020621090093000D29E9 /* DocumentViewController.swift in Sources */,
-				F020020921090093000D29E9 /* PlayerView.swift in Sources */,
 				F020020B21090093000D29E9 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F07347D7211337C500058E90 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F07347ED2113381A00058E90 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,6 +351,78 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		F07347EB211337C800058E90 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5K87F3JL7S;
+				INFOPLIST_FILE = imagepicker/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = zpc.imagepicker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F07347EC211337C800058E90 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5K87F3JL7S;
+				INFOPLIST_FILE = imagepicker/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = zpc.imagepicker;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F07348012113381B00058E90 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5K87F3JL7S;
+				INFOPLIST_FILE = imagepicker2/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = zpc.imagepicker2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F07348022113381B00058E90 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5K87F3JL7S;
+				INFOPLIST_FILE = imagepicker2/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = zpc.imagepicker2;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -390,6 +548,24 @@
 			buildConfigurations = (
 				F020021421090093000D29E9 /* Debug */,
 				F020021521090093000D29E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F07347EA211337C800058E90 /* Build configuration list for PBXNativeTarget "imagepicker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F07347EB211337C800058E90 /* Debug */,
+				F07347EC211337C800058E90 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F07348002113381B00058E90 /* Build configuration list for PBXNativeTarget "imagepicker2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F07348012113381B00058E90 /* Debug */,
+				F07348022113381B00058E90 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

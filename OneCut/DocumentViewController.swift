@@ -18,20 +18,23 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     // MARK: - View Controller
     
-    override func viewDidLoad() {
-        playerView.playerLayer.player = player
-    }
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        player.play()
+        if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
+            let picker = UIImagePickerController()
+            picker.sourceType = .savedPhotosAlbum
+            picker.mediaTypes = [kUTTypeMovie as String]
+            picker.delegate = self
+            picker.allowsEditing = true
+            picker.cancel
+            present(picker, animated: false)
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        player.pause()
     }
     
     
@@ -41,44 +44,12 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         "hasProtectedContent"
     ]
     
-    @objc let player = AVPlayer()
-    
-    var rate: Float {
-        get {
-            return player.rate
-        }
-        
-        set {
-            player.rate = newValue
-        }
-    }
     
     var composition: AVMutableComposition? = nil
     var videoComposition: AVMutableVideoComposition? = nil
     var audioMix: AVMutableAudioMix? = nil
     
-    private var playerLayer: AVPlayerLayer? {
-        return playerView.playerLayer
-    }
-    
-    
-    /*
-     A token obtained from calling `player`'s `addPeriodicTimeObserverForInterval(_:queue:usingBlock:)`
-     method.
-     */
-    
-    private var playerItem: AVPlayerItem? = nil
-    
-    // MARK: - IBOutlets
-    
-    @IBOutlet weak var playerView: PlayerView!
 
-    @IBOutlet weak var cameraButton: UIButton! {
-        didSet {
-            cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum)
-        }
-    }
-    
     // MARK: - IBActions
     
     func export()
@@ -356,16 +327,6 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     
-    @IBAction func AddVideo(_ sender: UIButton) {
-        let picker = UIImagePickerController()
-        picker.sourceType = .savedPhotosAlbum
-        picker.mediaTypes = [kUTTypeMovie as String]
-        picker.delegate = self
-        picker.allowsEditing = true
-        present(picker, animated: true)
-    }
-    
-    
     // MARK: - Error Handling
     
     func handleErrorWithMessage(_ message: String?, error: Error? = nil) {
@@ -388,14 +349,14 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     // MARK: Delegate
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        picker.presentingViewController?.dismiss(animated: true, completion: nil)
+        
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let videoURL = info[UIImagePickerControllerMediaURL] as? URL {
             addClip(videoURL)
         }
-        picker.presentingViewController?.dismiss(animated: true, completion: nil)
+        picker.presentingViewController?.dismiss(animated: false, completion: nil)
 
     }
     

@@ -4,53 +4,13 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Main View Controller-->
         <scene sceneID="5dr-Lq-hUu">
             <objects>
-                <viewController storyboardIdentifier="MainViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="G8I-hc-TQb" customClass="MainViewController" customModule="AsciiArt" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="YBs-ig-oq4"/>
-                        <viewControllerLayoutGuide type="bottom" id="nr4-Tu-eJf"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="7Y5-0K-2yx">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hu7-DO-mQg" customClass="PlayerView" customModule="AsciiArt" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="44" width="375" height="624"/>
-                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                            </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tMi-Co-jgb">
-                                <rect key="frame" x="156.66666666666666" y="668" width="62" height="30"/>
-                                <state key="normal" title="添加视频"/>
-                                <connections>
-                                    <action selector="AddVideo:" destination="G8I-hc-TQb" eventType="touchUpInside" id="Cli-yL-nPz"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="hu7-DO-mQg" firstAttribute="top" secondItem="YBs-ig-oq4" secondAttribute="bottom" id="EN9-ed-Eic"/>
-                            <constraint firstItem="tMi-Co-jgb" firstAttribute="centerX" secondItem="Ebh-r4-GKs" secondAttribute="centerX" id="RK4-sg-jDv"/>
-                            <constraint firstItem="tMi-Co-jgb" firstAttribute="top" secondItem="hu7-DO-mQg" secondAttribute="bottom" id="azD-k3-AfQ"/>
-                            <constraint firstItem="hu7-DO-mQg" firstAttribute="trailing" secondItem="Ebh-r4-GKs" secondAttribute="trailing" id="cxQ-gp-rIp"/>
-                            <constraint firstItem="Ebh-r4-GKs" firstAttribute="bottom" secondItem="tMi-Co-jgb" secondAttribute="bottom" constant="80" id="hOh-Je-31g"/>
-                            <constraint firstItem="hu7-DO-mQg" firstAttribute="leading" secondItem="Ebh-r4-GKs" secondAttribute="leading" id="i3v-8Y-cRP"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="Ebh-r4-GKs"/>
-                    </view>
-                    <connections>
-                        <outlet property="cameraButton" destination="tMi-Co-jgb" id="mA4-We-I3y"/>
-                        <outlet property="playerView" destination="hu7-DO-mQg" id="xiM-Yi-Zs3"/>
-                        <outlet property="view" destination="7Y5-0K-2yx" id="kfq-2M-EAZ"/>
-                    </connections>
-                </viewController>
+                <viewController storyboardIdentifier="MainViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="G8I-hc-TQb" customClass="MainViewController" customModule="weixin" customModuleProvider="target" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0JK-fP-XLx" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-676" y="674.6305418719212"/>
