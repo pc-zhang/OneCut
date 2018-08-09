@@ -117,7 +117,7 @@
                                 </connections>
                             </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.25" maximumZoomScale="2" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="hf9-HS-VQh" userLabel="Timeline View">
-                                <rect key="frame" x="0.0" y="531" width="375" height="69"/>
+                                <rect key="frame" x="0.0" y="512" width="375" height="69"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="HJy-Cd-SgE">
@@ -166,14 +166,6 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tMi-Co-jgb">
-                                <rect key="frame" x="326" y="550" width="30" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Add"/>
-                                <connections>
-                                    <action selector="AddVideo:" destination="G8I-hc-TQb" eventType="touchUpInside" id="Cli-yL-nPz"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hMU-6L-YiQ">
                                 <rect key="frame" x="324" y="46" width="46" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -190,20 +182,78 @@
                                     <action selector="recordButtonTapped" destination="G8I-hc-TQb" eventType="touchUpInside" id="vlb-Di-OuJ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3PN-Pn-kGv">
-                                <rect key="frame" x="8" y="723" width="68" height="30"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.25" maximumZoomScale="2" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="a4B-sO-aRR" userLabel="Timeline View">
+                                <rect key="frame" x="0.0" y="589" width="375" height="69"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="recognize"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gSJ-eh-ixK">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="segment" id="W3l-Us-uHt" customClass="SegmentView" customModule="OneCut" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="9.6666666666666661" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="JqQ-Og-PGi">
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                    <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gVr-wR-gLO">
+                                                        <size key="itemSize" width="50" height="50"/>
+                                                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                    </collectionViewFlowLayout>
+                                                    <cells>
+                                                        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="image" id="xjP-og-nu0">
+                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                                                <autoresizingMask key="autoresizingMask"/>
+                                                            </view>
+                                                        </collectionViewCell>
+                                                    </cells>
+                                                </collectionView>
+                                            </subviews>
+                                        </view>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="JqQ-Og-PGi" firstAttribute="top" secondItem="W3l-Us-uHt" secondAttribute="top" id="PKT-Vl-lVr"/>
+                                            <constraint firstItem="JqQ-Og-PGi" firstAttribute="leading" secondItem="W3l-Us-uHt" secondAttribute="leading" id="PS1-e6-HYR"/>
+                                            <constraint firstAttribute="trailing" secondItem="JqQ-Og-PGi" secondAttribute="trailing" id="hq6-PQ-2d2"/>
+                                            <constraint firstAttribute="bottom" secondItem="JqQ-Og-PGi" secondAttribute="bottom" id="sj6-hB-zTv"/>
+                                        </constraints>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tMi-Co-jgb">
+                                <rect key="frame" x="321" y="531" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Add"/>
                                 <connections>
-                                    <action selector="recognize:" destination="G8I-hc-TQb" eventType="touchUpInside" id="IJW-l7-3HS"/>
+                                    <action selector="AddVideo:" destination="G8I-hc-TQb" eventType="touchUpInside" id="Cli-yL-nPz"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hQL-AM-tlP">
-                                <rect key="frame" x="315" y="632" width="31" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8JA-QM-3MR">
+                                <rect key="frame" x="321" y="603" width="30" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="ascii"/>
+                                <state key="normal" title="Add"/>
                                 <connections>
-                                    <action selector="AsciiEffect:" destination="G8I-hc-TQb" eventType="touchUpInside" id="Soo-n6-q4v"/>
+                                    <action selector="AddVideo:" destination="G8I-hc-TQb" eventType="touchUpInside" id="fEP-0a-Q6A"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5A-eM-25l">
+                                <rect key="frame" x="26" y="723" width="43" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="weixin"/>
+                                <connections>
+                                    <action selector="weixinEffect:" destination="G8I-hc-TQb" eventType="touchUpInside" id="rrf-pi-GF2"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -211,13 +261,14 @@
                         <viewLayoutGuide key="safeArea" id="Ebh-r4-GKs"/>
                     </view>
                     <connections>
-                        <outlet property="cameraButton" destination="tMi-Co-jgb" id="mA4-We-I3y"/>
                         <outlet property="copyButton" destination="8Fk-V7-Ytg" id="tqv-tx-y8b"/>
+                        <outlet property="firstTrackAddButton" destination="tMi-Co-jgb" id="mA4-We-I3y"/>
                         <outlet property="playPauseButton" destination="2ut-Iw-LNe" id="Dnn-s9-J57"/>
                         <outlet property="playerView" destination="hu7-DO-mQg" id="xiM-Yi-Zs3"/>
                         <outlet property="recordButton" destination="CC1-OY-hXx" id="XAk-mE-LEU"/>
                         <outlet property="redoButton" destination="U4r-Re-ND9" id="l0e-GY-KML"/>
                         <outlet property="removeButton" destination="mFv-uz-DXc" id="o1j-t1-SV9"/>
+                        <outlet property="secondTrackAddButton" destination="8JA-QM-3MR" id="YLT-pq-UDV"/>
                         <outlet property="splitButton" destination="nJK-pN-g70" id="SBf-7G-LKI"/>
                         <outlet property="startTimeLabel" destination="e3x-oC-ppg" id="B4d-nr-3tS"/>
                         <outlet property="textView" destination="kPJ-Gv-V1o" id="v1F-K4-VFt"/>

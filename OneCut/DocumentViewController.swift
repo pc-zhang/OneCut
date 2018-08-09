@@ -46,6 +46,8 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             // Add two video tracks and two audio tracks.
             _ = composition!.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)
             
+            _ = composition!.addMutableTrack(withMediaType: AVMediaType.video, preferredTrackID: kCMPersistentTrackID_Invalid)
+            
             _ = composition!.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
         }
         
@@ -461,14 +463,110 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             timelineView.panGestureRecognizer.addTarget(self, action: #selector(MainViewController.pan))
         }
     }
-    @IBOutlet weak var cameraButton: UIButton! {
+    
+    @IBOutlet weak var firstTrackAddButton: UIButton! {
         didSet {
-            cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum)
+            firstTrackAddButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum)
         }
     }
     
+    @IBOutlet weak var secondTrackAddButton: UIButton! {
+        didSet {
+            firstTrackAddButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum)
+        }
+    }
+    
+    
     // MARK: - IBActions
     
+    @IBAction func weixinEffect(_ sender: UIButton) {
+        videoComposition = AVMutableVideoComposition()
+        guard let videoComposition = self.videoComposition else {
+            return
+        }
+        videoComposition.renderSize = CGSize(width: 1080, height: 1920)
+        videoComposition.frameDuration = CMTimeMake(1, 30)
+        
+        // Add two video tracks and two audio tracks.
+        let firstVideoTrack = composition?.tracks(withMediaType: .video).first!
+        
+        let secondVideoTrack = composition?.tracks(withMediaType: .video)[1]
+        
+        let audioTrack = composition?.tracks(withMediaType: .audio).first!
+        
+        let instruction = AVMutableVideoCompositionInstruction()
+        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition!.duration)
+        
+        let transformer1 = AVMutableVideoCompositionLayerInstruction(assetTrack: firstVideoTrack!)
+        
+        let transformer2 = AVMutableVideoCompositionLayerInstruction(assetTrack: secondVideoTrack!)
+        
+        if true {
+            transformer1.setTransform(CGAffineTransform.identity.scaledBy(x: 1/3.0, y: 1/3.0), at: kCMTimeZero)
+            
+//            transformer2.setTransform(CGAffineTransform.identity.scaledBy(x: scale, y: scale), at: kCMTimeZero)
+            
+        }
+//        else {
+//            transformer1.setCropRectangle(CGRect(x: videoAssetTrack.naturalSize.width/2, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
+//            transformer1.setTransform(CGAffineTransform.identity.scaledBy(x: scale/3.0, y: scale/3.0).translatedBy(x: videoAssetTrack.naturalSize.width/2-15, y: videoAssetTrack.naturalSize.height/8), at: kCMTimeZero)
+//
+//            transformer2.setCropRectangle(CGRect(x: 0, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
+//            transformer2.setTransform(CGAffineTransform.identity.scaledBy(x: scale, y: scale), at: kCMTimeZero)
+//        }
+        
+        instruction.layerInstructions = [transformer1, transformer2]
+        videoComposition.instructions = [instruction]
+        
+        let weixin = CALayer()
+        weixin.contents = UIImage(named: "weixintop")!.cgImage!
+        weixin.frame = CGRect(origin: .zero, size: videoComposition.renderSize)
+        weixin.contentsGravity = "top"
+        weixin.contentsScale = CGFloat(UIImage(named: "weixintop")!.cgImage!.width) / videoComposition.renderSize.width * 1.1
+        
+        let weixinbottom = CALayer()
+        weixinbottom.contents = UIImage(named: "weixinbottom")!.cgImage!
+        weixinbottom.frame = CGRect(origin: .zero, size: videoComposition.renderSize)
+        weixinbottom.contentsGravity = "bottom"
+        weixinbottom.contentsScale = CGFloat(UIImage(named: "weixinbottom")!.cgImage!.width) / videoComposition.renderSize.width * 1.2
+        
+        weixin.addSublayer(weixinbottom)
+        
+        let textLayer = CATextLayer()
+        
+        textLayer.string = "00:00"
+        textLayer.foregroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        textLayer.fontSize = 50.0
+        textLayer.font = UIFont(name: "Helvetica", size: 36.0)
+        
+        textLayer.alignmentMode = kCAAlignmentCenter
+        textLayer.frame = weixin.frame
+        textLayer.frame.origin = .zero
+        textLayer.frame.origin.y = videoComposition.renderSize.height / 4
+        textLayer.frame.size.height = textLayer.preferredFrameSize().height
+        
+        let anim = CAKeyframeAnimation(keyPath: "string")
+        let count = Int(CMTimeGetSeconds(composition!.duration)) + 1
+        anim.duration = Double(count)
+        anim.calculationMode = kCAAnimationDiscrete
+        anim.keyTimes = (0...count).map {Double($0)/3.0/Double(count)} as [NSNumber]
+        anim.values = (0...count).map {self.createTimeString(time: Float(1000+$0))}
+        textLayer.add(anim, forKey: nil)
+        
+        weixin.addSublayer(textLayer)
+        
+        let parentLayer = CALayer()
+        let videoLayer = CALayer()
+        parentLayer.frame = CGRect(origin: .zero, size: videoComposition.renderSize)
+        videoLayer.frame = CGRect(origin: .zero, size: videoComposition.renderSize)
+        
+        parentLayer.addSublayer(videoLayer)
+        parentLayer.addSublayer(weixin)
+        videoComposition.animationTool = AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
+        
+        updatePlayer()
+        
+    }
     
     @IBAction func AsciiEffect(_ sender: Any) {
         videoComposition = AVMutableVideoComposition(asset: self.composition!, applyingCIFiltersWithHandler: {
@@ -568,7 +666,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     @objc func video(videoPath: NSString, didFinishSavingWithError error:NSError, contextInfo contextInfo:Any) -> Void {
     }
     
-    func addClip(_ movieURL: URL) {
+    func addClip(_ movieURL: URL, trackAdded: Int) {
         let newAsset = AVURLAsset(url: movieURL, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
         /*
          Using AVAsset now runs the risk of blocking the current thread (the
@@ -616,32 +714,21 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                  it our player's current item.
                  */
                 
-                let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first
+                let videoAssetTrack = newAsset.tracks(withMediaType: .video).first!
                 
+                let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video)[trackAdded]
                 
-                for s in compositionVideoTrack!.segments {
-                    let timeRangeInAsset = s.timeMapping.target // assumes non-scaled edit
+                try! compositionVideoTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, newAsset.duration), of: videoAssetTrack, at: kCMTimeZero)
+                
+                if trackAdded == 0 {
+                    self.push(op:.add(0))
+                } else {
+                    let audioAssetTrack = newAsset.tracks(withMediaType: .audio).first!
                     
-                    if timeRangeInAsset.containsTime(self.player.currentTime()) {
-                        
-                        let index = compositionVideoTrack!.segments.index(of: s)
-                        
-                        try! self.composition!.insertTimeRange(CMTimeRangeMake(kCMTimeZero, newAsset.duration), of: newAsset, at: timeRangeInAsset.end)
-                        
-                        self.push(op:.add(index! + 1))
-                        
-                        // update timeline
-                        self.updatePlayer()
-                        
-                        return
-                    }
+                    let compositionAudioTrack = self.composition!.tracks(withMediaType: .audio).first!
+                    
+                    try! compositionAudioTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, newAsset.duration), of: audioAssetTrack, at: kCMTimeZero)
                 }
-                
-                let index = compositionVideoTrack!.segments.count
-                
-                try! self.composition!.insertTimeRange(CMTimeRangeMake(kCMTimeZero, newAsset.duration), of: newAsset, at: compositionVideoTrack!.timeRange.end)
-                
-                self.push(op:.add(index))
                 
                 // update timeline
                 self.updatePlayer()
@@ -845,7 +932,14 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
     }
     
+    var trackAdded = 0
+    
     @IBAction func AddVideo(_ sender: UIButton) {
+        if sender == firstTrackAddButton {
+            self.trackAdded = 0
+        } else {
+            self.trackAdded = 1
+        }
         let picker = UIImagePickerController()
         picker.sourceType = .savedPhotosAlbum
         picker.mediaTypes = [kUTTypeMovie as String]
@@ -997,7 +1091,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let videoURL = info[UIImagePickerControllerMediaURL] as? URL {
-            addClip(videoURL)
+            addClip(videoURL, trackAdded: trackAdded)
         }
         picker.presentingViewController?.dismiss(animated: true, completion: nil)
     }
@@ -1030,7 +1124,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first!
         
-        assert(self.composition!.tracks(withMediaType: AVMediaType.video).count == 1)
+        assert(self.composition!.tracks(withMediaType: AVMediaType.video).count == 2)
         
         return compositionVideoTrack.segments.count
     }
