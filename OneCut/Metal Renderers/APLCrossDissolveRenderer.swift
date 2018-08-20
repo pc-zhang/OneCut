@@ -134,7 +134,7 @@ class APLCrossDissolveRenderer: APLMetalRenderer {
         pipelineDescriptor.vertexFunction = vertexFunction
         pipelineDescriptor.fragmentFunction = fragmentFunction
         // Pixel format of the color attachments texture: BGRA.
-        pipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormat.bgra8Unorm
+        pipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormat.rgba8Unorm
         pipelineDescriptor.colorAttachments[0].isBlendingEnabled = false
 
         return try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
@@ -151,7 +151,7 @@ class APLCrossDissolveRenderer: APLMetalRenderer {
         pipelineDescriptor.vertexFunction = vertexFunction
         pipelineDescriptor.fragmentFunction = fragmentFunction
         // Pixel format of the color attachments texture: BGRA.
-        pipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormat.bgra8Unorm
+        pipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormat.rgba8Unorm
 
         /*
          Enable blending. The blend descriptor property values are then used to determine how source and

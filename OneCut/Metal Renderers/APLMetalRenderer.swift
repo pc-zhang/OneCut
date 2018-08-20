@@ -58,7 +58,7 @@ class APLMetalRenderer: Any {
         */
         let status =
             CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, metalTextureCache, pixelBuffer, nil,
-                                                      MTLPixelFormat.bgra8Unorm, width, height, 0, &texture)
+                                                      MTLPixelFormat.rgba8Unorm, width, height, 0, &texture)
         if status == kCVReturnSuccess {
             guard let textureFromImage = texture else { return nil }
 

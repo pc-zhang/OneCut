@@ -9,6 +9,7 @@
 import Foundation
 import AVFoundation
 import CoreVideo
+import UIKit
 
 class APLCustomVideoCompositor: NSObject, AVVideoCompositing {
 
@@ -78,6 +79,23 @@ class APLCustomVideoCompositor: NSObject, AVVideoCompositing {
                         self.newRenderedPixelBufferForRequest(asyncVideoCompositionRequest) else {
                             asyncVideoCompositionRequest.finish(with: PixelBufferRequestError.newRenderedPixelBufferForRequestFailure)
                             return
+                    }
+                    
+                    if true {
+                        // lock the buffer, create a new context and draw the watermark image
+                        CVPixelBufferLockBaseAddress(resultPixels, CVPixelBufferLockFlags.readOnly)
+                        var bitmapInfo  = CGBitmapInfo.byteOrder32Little.rawValue
+                        bitmapInfo |= CGImageAlphaInfo.premultipliedFirst.rawValue & CGBitmapInfo.alphaInfoMask.rawValue
+                        let newContext = CGContext.init(data: CVPixelBufferGetBaseAddress(resultPixels), width: CVPixelBufferGetWidth(resultPixels), height: CVPixelBufferGetHeight(resultPixels), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(resultPixels), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo:bitmapInfo)
+                        
+                        let weixintop = UIImage(named: "weixintop")!.cgImage!
+                        let weixinbottom = UIImage(named: "weixinbottom")!.cgImage!
+                        
+                        let scale = Double(newContext!.width)/Double(weixintop.width)
+                        
+                        newContext?.draw(weixintop, in: CGRect(x:0, y:newContext!.height - Int(scale * Double(weixintop.height)), width: newContext!.width, height:  Int(scale * Double(weixintop.height))))
+                        newContext?.draw(weixinbottom, in: CGRect(origin: .zero, size: CGSize(width: newContext!.width, height: Int(Double(newContext!.width)/Double(weixinbottom.width) * Double(weixinbottom.height)))))
+                        CVPixelBufferUnlockBaseAddress(resultPixels, CVPixelBufferLockFlags.readOnly)
                     }
 
                     // The resulting pixelbuffer from Metal renderer is passed along to the request.

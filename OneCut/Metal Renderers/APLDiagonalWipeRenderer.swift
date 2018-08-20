@@ -201,7 +201,7 @@ class APLDiagonalWipeRenderer: APLMetalRenderer {
         pipelineDescriptor.vertexFunction = vertexFunction
         pipelineDescriptor.fragmentFunction = fragmentFunction
         // Pixel format of the color attachments texture: BGRA.
-        pipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormat.bgra8Unorm
+        pipelineDescriptor.colorAttachments[0].pixelFormat = MTLPixelFormat.rgba8Unorm
 
         return try device.makeRenderPipelineState(descriptor: pipelineDescriptor)
     }
