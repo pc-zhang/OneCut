@@ -65,6 +65,21 @@ class APLCustomVideoCompositor: NSObject, AVVideoCompositing {
     enum PixelBufferRequestError: Error {
         case newRenderedPixelBufferForRequestFailure
     }
+    
+    let timeRemainingFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.zeroFormattingBehavior = .pad
+        formatter.allowedUnits = [.minute, .second]
+        
+        return formatter
+    }()
+    
+    private func createTimeString(time: Double) -> String {
+        let components = NSDateComponents()
+        components.second = Int(max(0.0, time))
+        
+        return timeRemainingFormatter.string(from: components as DateComponents)!
+    }
 
     func startRequest(_ asyncVideoCompositionRequest: AVAsynchronousVideoCompositionRequest) {
 
@@ -95,6 +110,27 @@ class APLCustomVideoCompositor: NSObject, AVVideoCompositing {
                         
                         newContext?.draw(weixintop, in: CGRect(x:0, y:newContext!.height - Int(scale * Double(weixintop.height)), width: newContext!.width, height:  Int(scale * Double(weixintop.height))))
                         newContext?.draw(weixinbottom, in: CGRect(origin: .zero, size: CGSize(width: newContext!.width, height: Int(Double(newContext!.width)/Double(weixinbottom.width) * Double(weixinbottom.height)))))
+                        
+                        let weixin = CALayer()
+                        weixin.frame = CGRect(origin: .zero, size: CGSize(width: newContext!.width, height: newContext!.height))
+                        
+                        let textLayer = CATextLayer()
+                        textLayer.string = self.createTimeString(time: 1000 + CMTimeGetSeconds(asyncVideoCompositionRequest.compositionTime))
+                        textLayer.foregroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+                        textLayer.font = UIFont(name: "Helvetica", size: 36.0)
+                        
+                        textLayer.alignmentMode = kCAAlignmentCenter
+                        textLayer.frame.origin = .zero
+                        textLayer.frame.size = textLayer.preferredFrameSize()
+                        let textscale: CGFloat = (CGFloat(newContext!.width) / 6) / textLayer.frame.size.width
+                        textLayer.setAffineTransform(CGAffineTransform.identity.scaledBy(x: textscale, y: textscale).translatedBy(x: (CGFloat(newContext!.width) - textLayer.frame.size.width)/2/textscale, y: CGFloat(newContext!.width)/CGFloat(weixinbottom.width) * CGFloat(weixinbottom.height)/textscale))
+                        
+                        weixin.addSublayer(textLayer)
+                        
+                        weixin.isGeometryFlipped = true
+                        weixin.render(in: newContext!)
+                        
+//                        request.compositionTime
                         CVPixelBufferUnlockBaseAddress(resultPixels, CVPixelBufferLockFlags.readOnly)
                     }
 
