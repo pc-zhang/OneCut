@@ -103,16 +103,19 @@ class APLCustomVideoCompositor: NSObject, AVVideoCompositing {
                         bitmapInfo |= CGImageAlphaInfo.premultipliedFirst.rawValue & CGBitmapInfo.alphaInfoMask.rawValue
                         let newContext = CGContext.init(data: CVPixelBufferGetBaseAddress(resultPixels), width: CVPixelBufferGetWidth(resultPixels), height: CVPixelBufferGetHeight(resultPixels), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(resultPixels), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo:bitmapInfo)
                         
-                        let weixintop = UIImage(named: "weixintop")!.cgImage!
-                        let weixinbottom = UIImage(named: "weixinbottom")!.cgImage!
-                        
-                        let scale = Double(newContext!.width)/Double(weixintop.width)
-                        
-                        newContext?.draw(weixintop, in: CGRect(x:0, y:newContext!.height - Int(scale * Double(weixintop.height)), width: newContext!.width, height:  Int(scale * Double(weixintop.height))))
-                        newContext?.draw(weixinbottom, in: CGRect(origin: .zero, size: CGSize(width: newContext!.width, height: Int(Double(newContext!.width)/Double(weixinbottom.width) * Double(weixinbottom.height)))))
-                        
                         let weixin = CALayer()
+                        weixin.contents = UIImage(named: "weixintop")!.cgImage!
                         weixin.frame = CGRect(origin: .zero, size: CGSize(width: newContext!.width, height: newContext!.height))
+                        weixin.contentsGravity = "top"
+                        weixin.contentsScale = CGFloat(UIImage(named: "weixintop")!.cgImage!.width) / CGFloat(newContext!.width) * 1.1
+                        
+                        let weixinbottom = CALayer()
+                        weixinbottom.contents = UIImage(named: "weixinbottom")!.cgImage!
+                        weixinbottom.frame = CGRect(origin: .zero, size: CGSize(width: newContext!.width, height: newContext!.height))
+                        weixinbottom.contentsGravity = "bottom"
+                        weixinbottom.contentsScale = CGFloat(UIImage(named: "weixinbottom")!.cgImage!.width) / CGFloat(newContext!.width) * 1.2
+                        
+                        weixin.addSublayer(weixinbottom)
                         
                         let textLayer = CATextLayer()
                         textLayer.string = self.createTimeString(time: 1000 + CMTimeGetSeconds(asyncVideoCompositionRequest.compositionTime))
@@ -122,8 +125,8 @@ class APLCustomVideoCompositor: NSObject, AVVideoCompositing {
                         textLayer.alignmentMode = kCAAlignmentCenter
                         textLayer.frame.origin = .zero
                         textLayer.frame.size = textLayer.preferredFrameSize()
-                        let textscale: CGFloat = (CGFloat(newContext!.width) / 6) / textLayer.frame.size.width
-                        textLayer.setAffineTransform(CGAffineTransform.identity.scaledBy(x: textscale, y: textscale).translatedBy(x: (CGFloat(newContext!.width) - textLayer.frame.size.width)/2/textscale, y: CGFloat(newContext!.width)/CGFloat(weixinbottom.width) * CGFloat(weixinbottom.height)/textscale))
+                        let textscale: CGFloat = (CGFloat(weixin.frame.width) / 7) / textLayer.frame.size.width
+                        textLayer.setAffineTransform(CGAffineTransform.identity.scaledBy(x: textscale, y: textscale).translatedBy(x: (CGFloat(weixin.frame.width) - textLayer.frame.size.width)/2/textscale, y: CGFloat(UIImage(named: "weixinbottom")!.cgImage!.height)/weixinbottom.contentsScale/textscale))
                         
                         weixin.addSublayer(textLayer)
                         
