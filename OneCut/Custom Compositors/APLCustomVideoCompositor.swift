@@ -96,47 +96,6 @@ class APLCustomVideoCompositor: NSObject, AVVideoCompositing {
                             return
                     }
                     
-                    if true {
-                        // lock the buffer, create a new context and draw the watermark image
-                        CVPixelBufferLockBaseAddress(resultPixels, CVPixelBufferLockFlags.readOnly)
-                        var bitmapInfo  = CGBitmapInfo.byteOrder32Little.rawValue
-                        bitmapInfo |= CGImageAlphaInfo.premultipliedFirst.rawValue & CGBitmapInfo.alphaInfoMask.rawValue
-                        let newContext = CGContext.init(data: CVPixelBufferGetBaseAddress(resultPixels), width: CVPixelBufferGetWidth(resultPixels), height: CVPixelBufferGetHeight(resultPixels), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(resultPixels), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo:bitmapInfo)
-                        
-                        let weixin = CALayer()
-                        weixin.contents = UIImage(named: "weixintop")!.cgImage!
-                        weixin.frame = CGRect(origin: .zero, size: CGSize(width: newContext!.width, height: newContext!.height))
-                        weixin.contentsGravity = "top"
-                        weixin.contentsScale = CGFloat(UIImage(named: "weixintop")!.cgImage!.width) / CGFloat(newContext!.width) * 1.1
-                        
-                        let weixinbottom = CALayer()
-                        weixinbottom.contents = UIImage(named: "weixinbottom")!.cgImage!
-                        weixinbottom.frame = CGRect(origin: .zero, size: CGSize(width: newContext!.width, height: newContext!.height))
-                        weixinbottom.contentsGravity = "bottom"
-                        weixinbottom.contentsScale = CGFloat(UIImage(named: "weixinbottom")!.cgImage!.width) / CGFloat(newContext!.width) * 1.2
-                        
-                        weixin.addSublayer(weixinbottom)
-                        
-                        let textLayer = CATextLayer()
-                        textLayer.string = self.createTimeString(time: 1000 + CMTimeGetSeconds(asyncVideoCompositionRequest.compositionTime))
-                        textLayer.foregroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-                        textLayer.font = UIFont(name: "Helvetica", size: 36.0)
-                        
-                        textLayer.alignmentMode = kCAAlignmentCenter
-                        textLayer.frame.origin = .zero
-                        textLayer.frame.size = textLayer.preferredFrameSize()
-                        let textscale: CGFloat = (CGFloat(weixin.frame.width) / 7) / textLayer.frame.size.width
-                        textLayer.setAffineTransform(CGAffineTransform.identity.scaledBy(x: textscale, y: textscale).translatedBy(x: (CGFloat(weixin.frame.width) - textLayer.frame.size.width)/2/textscale, y: CGFloat(UIImage(named: "weixinbottom")!.cgImage!.height)/weixinbottom.contentsScale/textscale))
-                        
-                        weixin.addSublayer(textLayer)
-                        
-                        weixin.isGeometryFlipped = true
-                        weixin.render(in: newContext!)
-                        
-//                        request.compositionTime
-                        CVPixelBufferUnlockBaseAddress(resultPixels, CVPixelBufferLockFlags.readOnly)
-                    }
-
                     // The resulting pixelbuffer from Metal renderer is passed along to the request.
                     asyncVideoCompositionRequest.finish(withComposedVideoFrame: resultPixels)
                 }
@@ -198,6 +157,47 @@ class APLCustomVideoCompositor: NSObject, AVVideoCompositing {
                                         andBackgroundSourceBuffer:backgroundSourceBuffer,
                                         forTweenFactor:Float(tweenFactor))
 
+        if true {
+            // lock the buffer, create a new context and draw the watermark image
+            CVPixelBufferLockBaseAddress(dstPixels, CVPixelBufferLockFlags.readOnly)
+            var bitmapInfo  = CGBitmapInfo.byteOrder32Little.rawValue
+            bitmapInfo |= CGImageAlphaInfo.premultipliedFirst.rawValue & CGBitmapInfo.alphaInfoMask.rawValue
+            let newContext = CGContext.init(data: CVPixelBufferGetBaseAddress(dstPixels), width: CVPixelBufferGetWidth(dstPixels), height: CVPixelBufferGetHeight(dstPixels), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(dstPixels), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo:bitmapInfo)
+            
+            let weixin = CALayer()
+            weixin.contents = UIImage(named: "weixintop")!.cgImage!
+            weixin.frame = CGRect(origin: .zero, size: CGSize(width: newContext!.width, height: newContext!.height))
+            weixin.contentsGravity = "top"
+            weixin.contentsScale = CGFloat(UIImage(named: "weixintop")!.cgImage!.width) / CGFloat(newContext!.width) * 1.1
+            
+            let weixinbottom = CALayer()
+            weixinbottom.contents = UIImage(named: "weixinbottom")!.cgImage!
+            weixinbottom.frame = CGRect(origin: .zero, size: CGSize(width: newContext!.width, height: newContext!.height))
+            weixinbottom.contentsGravity = "bottom"
+            weixinbottom.contentsScale = CGFloat(UIImage(named: "weixinbottom")!.cgImage!.width) / CGFloat(newContext!.width) * 1.2
+            
+            weixin.addSublayer(weixinbottom)
+            
+            let textLayer = CATextLayer()
+            textLayer.string = self.createTimeString(time: 1000 + CMTimeGetSeconds(request.compositionTime))
+            textLayer.foregroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            textLayer.font = UIFont(name: "Helvetica", size: 36.0)
+            
+            textLayer.alignmentMode = kCAAlignmentCenter
+            textLayer.frame.origin = .zero
+            textLayer.frame.size = textLayer.preferredFrameSize()
+            let textscale: CGFloat = (CGFloat(weixin.frame.width) / 7) / textLayer.frame.size.width
+            textLayer.setAffineTransform(CGAffineTransform.identity.scaledBy(x: textscale, y: textscale).translatedBy(x: (CGFloat(weixin.frame.width) - textLayer.frame.size.width)/2/textscale, y: CGFloat(UIImage(named: "weixinbottom")!.cgImage!.height)/weixinbottom.contentsScale/textscale))
+            
+            weixin.addSublayer(textLayer)
+            
+            weixin.isGeometryFlipped = true
+            weixin.render(in: newContext!)
+            
+            //                        request.compositionTime
+            CVPixelBufferUnlockBaseAddress(dstPixels, CVPixelBufferLockFlags.readOnly)
+        }
+        
         return dstPixels
     }
 }
