@@ -44,15 +44,9 @@ class APLCustomVideoCompositor: NSObject, AVVideoCompositing {
         }
     }
 
-    /// Instance of `APLMetalRenderer` used to issue rendering commands to subclasses.
-    private var metalRenderer: APLMetalRenderer? = nil
     
     override init() {
         super.init()
-    }
-
-    fileprivate init(metalRenderer: APLMetalRenderer) {
-        self.metalRenderer = metalRenderer
     }
 
     // MARK: AVVideoCompositing protocol functions
@@ -149,13 +143,9 @@ class APLCustomVideoCompositor: NSObject, AVVideoCompositing {
         }
 
         // Destination pixel buffer into which we render the output.
-        guard let dstPixels = renderContext?.newPixelBuffer() else { return nil }
+        let dstPixels = foregroundSourceBuffer
 
         if renderContextDidChange { renderContextDidChange = false }
-
-        metalRenderer!.renderPixelBuffer(dstPixels, usingForegroundSourceBuffer:foregroundSourceBuffer,
-                                        andBackgroundSourceBuffer:backgroundSourceBuffer,
-                                        forTweenFactor:Float(tweenFactor))
 
         if true {
             // lock the buffer, create a new context and draw the watermark image
@@ -163,6 +153,14 @@ class APLCustomVideoCompositor: NSObject, AVVideoCompositing {
             var bitmapInfo  = CGBitmapInfo.byteOrder32Little.rawValue
             bitmapInfo |= CGImageAlphaInfo.premultipliedFirst.rawValue & CGBitmapInfo.alphaInfoMask.rawValue
             let newContext = CGContext.init(data: CVPixelBufferGetBaseAddress(dstPixels), width: CVPixelBufferGetWidth(dstPixels), height: CVPixelBufferGetHeight(dstPixels), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(dstPixels), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo:bitmapInfo)
+            
+            let outputImage = CIImage(cvPixelBuffer: backgroundSourceBuffer)
+            let temporaryContext = CIContext(options: nil)
+            let videoImage = temporaryContext.createCGImage(outputImage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(backgroundSourceBuffer), height: CVPixelBufferGetHeight(backgroundSourceBuffer)))
+            
+            let scale = CGFloat(newContext!.height)/3/CGFloat(videoImage!.height)
+            
+            newContext?.draw(videoImage!, in: CGRect(x: CGFloat(newContext!.width) - CGFloat(videoImage!.width)*scale - CGFloat(newContext!.width)/40, y: CGFloat(newContext!.height) - CGFloat(newContext!.height/3) - CGFloat(newContext!.height)/16, width: CGFloat(videoImage!.width)*scale, height: CGFloat(newContext!.height/3)))
             
             let weixin = CALayer()
             weixin.contents = UIImage(named: "weixintop")!.cgImage!
@@ -199,22 +197,6 @@ class APLCustomVideoCompositor: NSObject, AVVideoCompositing {
         }
         
         return dstPixels
-    }
-}
-
-class APLCrossDissolveCompositor: APLCustomVideoCompositor {
-
-    override init() {
-        let newRenderer = APLCrossDissolveRenderer()
-        super.init(metalRenderer: newRenderer!)
-    }
-}
-
-class APLDiagonalWipeCompositor: APLCustomVideoCompositor {
-
-    override init() {
-        let newRenderer = APLDiagonalWipeRenderer()
-        super.init(metalRenderer: newRenderer!)
     }
 }
 

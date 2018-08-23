@@ -486,7 +486,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
         videoComposition.renderSize = self.composition!.naturalSize
         videoComposition.frameDuration = CMTimeMake(1, 30)
-        videoComposition.customVideoCompositorClass = APLDiagonalWipeCompositor.self
+        videoComposition.customVideoCompositorClass = APLCustomVideoCompositor.self
         
         // Add two video tracks and two audio tracks.
         let firstVideoTrack = composition?.tracks(withMediaType: .video).first!

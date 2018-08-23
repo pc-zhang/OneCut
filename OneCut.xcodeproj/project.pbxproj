@@ -13,11 +13,7 @@
 		F02CC2E92108A27800926D14 /* AsciiArtist.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02CC2E52108A27800926D14 /* AsciiArtist.swift */; };
 		F02CC2EA2108A27800926D14 /* Pixel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F02CC2E62108A27800926D14 /* Pixel.swift */; };
 		F0A87B2B21292B400051A4D9 /* APLCustomVideoCompositor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A87B2521292B3E0051A4D9 /* APLCustomVideoCompositor.swift */; };
-		F0A87B2C21292B400051A4D9 /* APLMetalRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A87B2621292B3E0051A4D9 /* APLMetalRenderer.swift */; };
-		F0A87B2D21292B400051A4D9 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = F0A87B2721292B3F0051A4D9 /* Shaders.metal */; };
 		F0A87B2E21292B400051A4D9 /* APLCustomVideoCompositionInstruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A87B2821292B3F0051A4D9 /* APLCustomVideoCompositionInstruction.swift */; };
-		F0A87B2F21292B400051A4D9 /* APLDiagonalWipeRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A87B2921292B3F0051A4D9 /* APLDiagonalWipeRenderer.swift */; };
-		F0A87B3021292B400051A4D9 /* APLCrossDissolveRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A87B2A21292B3F0051A4D9 /* APLCrossDissolveRenderer.swift */; };
 		F0C7513220EB3EFF0088D34F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7513120EB3EFF0088D34F /* AppDelegate.swift */; };
 		F0C7513D20EB3F000088D34F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0C7513C20EB3F000088D34F /* Assets.xcassets */; };
 		F0C7514020EB3F000088D34F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0C7513E20EB3F000088D34F /* LaunchScreen.storyboard */; };
@@ -43,11 +39,7 @@
 		F02CC2E52108A27800926D14 /* AsciiArtist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsciiArtist.swift; sourceTree = "<group>"; };
 		F02CC2E62108A27800926D14 /* Pixel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pixel.swift; sourceTree = "<group>"; };
 		F0A87B2521292B3E0051A4D9 /* APLCustomVideoCompositor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APLCustomVideoCompositor.swift; sourceTree = "<group>"; };
-		F0A87B2621292B3E0051A4D9 /* APLMetalRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APLMetalRenderer.swift; sourceTree = "<group>"; };
-		F0A87B2721292B3F0051A4D9 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		F0A87B2821292B3F0051A4D9 /* APLCustomVideoCompositionInstruction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APLCustomVideoCompositionInstruction.swift; sourceTree = "<group>"; };
-		F0A87B2921292B3F0051A4D9 /* APLDiagonalWipeRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APLDiagonalWipeRenderer.swift; sourceTree = "<group>"; };
-		F0A87B2A21292B3F0051A4D9 /* APLCrossDissolveRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APLCrossDissolveRenderer.swift; sourceTree = "<group>"; };
 		F0C7512E20EB3EFF0088D34F /* OneCut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneCut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0C7513120EB3EFF0088D34F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F0C7513C20EB3F000088D34F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -117,17 +109,6 @@
 			path = "Custom Compositors";
 			sourceTree = "<group>";
 		};
-		F0A87B3221292B910051A4D9 /* Metal Renderers */ = {
-			isa = PBXGroup;
-			children = (
-				F0A87B2A21292B3F0051A4D9 /* APLCrossDissolveRenderer.swift */,
-				F0A87B2921292B3F0051A4D9 /* APLDiagonalWipeRenderer.swift */,
-				F0A87B2621292B3E0051A4D9 /* APLMetalRenderer.swift */,
-				F0A87B2721292B3F0051A4D9 /* Shaders.metal */,
-			);
-			path = "Metal Renderers";
-			sourceTree = "<group>";
-		};
 		F0C7512520EB3EFF0088D34F = {
 			isa = PBXGroup;
 			children = (
@@ -149,7 +130,6 @@
 		F0C7513020EB3EFF0088D34F /* OneCut */ = {
 			isa = PBXGroup;
 			children = (
-				F0A87B3221292B910051A4D9 /* Metal Renderers */,
 				F0A87B3121292B480051A4D9 /* Custom Compositors */,
 				F0C7514920EB3F620088D34F /* DocumentViewController.swift */,
 				F0C7514820EB3F620088D34F /* DocumentBrowserViewController.swift */,
@@ -301,17 +281,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0A87B2F21292B400051A4D9 /* APLDiagonalWipeRenderer.swift in Sources */,
 				F0A87B2E21292B400051A4D9 /* APLCustomVideoCompositionInstruction.swift in Sources */,
 				F0C7514A20EB3F620088D34F /* Document.swift in Sources */,
 				F02CC2E72108A27800926D14 /* AsciiPalette.swift in Sources */,
 				F0F1129120FCA8E600A983D0 /* SubtitlesCollectionViewController.swift in Sources */,
 				F0C7514C20EB3F620088D34F /* DocumentViewController.swift in Sources */,
-				F0A87B2C21292B400051A4D9 /* APLMetalRenderer.swift in Sources */,
 				F0F1129620FE291600A983D0 /* KDDragAndDropCollectionView.swift in Sources */,
-				F0A87B2D21292B400051A4D9 /* Shaders.metal in Sources */,
 				F0DBB68F2100BD85008DC736 /* AppStoreCollectionViewLayoutDemoViewController.swift in Sources */,
-				F0A87B3021292B400051A4D9 /* APLCrossDissolveRenderer.swift in Sources */,
 				F02CC2E92108A27800926D14 /* AsciiArtist.swift in Sources */,
 				F0A87B2B21292B400051A4D9 /* APLCustomVideoCompositor.swift in Sources */,
 				F02CC2EA2108A27800926D14 /* Pixel.swift in Sources */,
