@@ -261,6 +261,7 @@
                         <viewLayoutGuide key="safeArea" id="Ebh-r4-GKs"/>
                     </view>
                     <connections>
+                        <outlet property="backgroundTimelineView" destination="a4B-sO-aRR" id="6n0-mS-2Go"/>
                         <outlet property="copyButton" destination="8Fk-V7-Ytg" id="tqv-tx-y8b"/>
                         <outlet property="firstTrackAddButton" destination="tMi-Co-jgb" id="mA4-We-I3y"/>
                         <outlet property="playPauseButton" destination="2ut-Iw-LNe" id="Dnn-s9-J57"/>
