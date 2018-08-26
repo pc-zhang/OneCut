@@ -340,7 +340,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     var emptyView = UIView(frame: CGRect.zero)
     var seekTimer: Timer? = nil
-    var visibleTimeRange: CGFloat = 30
+    var visibleTimeRange: CGFloat = 15
     var scaledDurationToWidth: CGFloat {
         return timelineView.frame.width / visibleTimeRange
     }
@@ -507,28 +507,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         let secondVideoTrack = composition?.tracks(withMediaType: .video)[1]
         
         let audioTrack = composition?.tracks(withMediaType: .audio).first!
-        
-        let instruction = AVMutableVideoCompositionInstruction()
-        instruction.timeRange = CMTimeRangeMake(kCMTimeZero, composition!.duration)
-        
-        let transformer1 = AVMutableVideoCompositionLayerInstruction(assetTrack: firstVideoTrack!)
-        
-        let transformer2 = AVMutableVideoCompositionLayerInstruction(assetTrack: secondVideoTrack!)
-        
-        if true {
-            transformer1.setTransform(CGAffineTransform.identity.scaledBy(x: videoComposition.renderSize.width / firstVideoTrack!.naturalSize.width/3.0, y: videoComposition.renderSize.width / firstVideoTrack!.naturalSize.width/3.0).translatedBy(x: firstVideoTrack!.naturalSize.width*2-15, y: firstVideoTrack!.naturalSize.height/8), at: kCMTimeZero)
-            
-            transformer2.setTransform(CGAffineTransform.identity.scaledBy(x: videoComposition.renderSize.width / secondVideoTrack!.naturalSize.width, y: videoComposition.renderSize.width / secondVideoTrack!.naturalSize.width), at: kCMTimeZero)
-            
-        }
-//        else {
-//            transformer1.setCropRectangle(CGRect(x: videoAssetTrack.naturalSize.width/2, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
-//            transformer1.setTransform(CGAffineTransform.identity.scaledBy(x: scale/3.0, y: scale/3.0).translatedBy(x: videoAssetTrack.naturalSize.width/2-15, y: videoAssetTrack.naturalSize.height/8), at: kCMTimeZero)
-//
-//            transformer2.setCropRectangle(CGRect(x: 0, y: 0, width: videoAssetTrack.naturalSize.width/2, height: videoAssetTrack.naturalSize.height), at: kCMTimeZero)
-//            transformer2.setTransform(CGAffineTransform.identity.scaledBy(x: scale, y: scale), at: kCMTimeZero)
-//        }
-        
 
         let videoInstruction =
             APLCustomVideoCompositionInstruction(theSourceTrackIDs:
@@ -541,14 +519,15 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         videoInstruction.backgroundTrackID =
         secondVideoTrack!.trackID
         
-        instruction.layerInstructions = [transformer1, transformer2]
         videoComposition.instructions = [videoInstruction]
         
         
-//        videoComposition.animationTool = AVVideoCompositionCoreAnimationTool(additionalLayer: weixin, asTrackID: kCMPersistentTrackID_Invalid)
-//        AVVideoCompositionCoreAnimationTool(postProcessingAsVideoLayer: videoLayer, in: parentLayer)
+        playerItem = AVPlayerItem(asset: composition!)
+        playerItem!.videoComposition = videoComposition
+        playerItem!.audioMix = audioMix
+        player.replaceCurrentItem(with: playerItem)
         
-        updatePlayer()
+        currentTime = Double((timelineView.contentOffset.x + timelineView.frame.width/2) / scaledDurationToWidth)
         
     }
     
@@ -921,8 +900,8 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             if #available(iOS 10.0, *) {
                 seekTimer?.invalidate()
                 seekTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (timer) in
-                    self.timelineView.contentOffset.x = CGFloat(self.currentTime/30*Double(self.timelineView.frame.width)) - self.timelineView.frame.size.width/2
-                    self.backgroundTimelineView.contentOffset.x = CGFloat(self.currentTime/30*Double(self.timelineView.frame.width)) - self.timelineView.frame.size.width/2
+                    self.timelineView.contentOffset.x = CGFloat(self.currentTime/Double(self.visibleTimeRange)*Double(self.timelineView.frame.width)) - self.timelineView.frame.size.width/2
+                    self.backgroundTimelineView.contentOffset.x = CGFloat(self.currentTime/Double(self.visibleTimeRange)*Double(self.timelineView.frame.width)) - self.timelineView.frame.size.width/2
                 })
             } else {
                 // Fallback on earlier versions
@@ -976,6 +955,39 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         if composition == nil {
             return
         }
+        
+        videoComposition = AVMutableVideoComposition()
+        videoComposition!.renderSize = composition!.naturalSize
+        videoComposition!.frameDuration = CMTimeMake(1, 30)
+        
+        let firstVideoTrack = composition!.tracks(withMediaType: .video).first!
+        
+        let secondVideoTrack = composition!.tracks(withMediaType: .video)[1]
+        
+        for segment in firstVideoTrack.segments {
+            let instruction = AVMutableVideoCompositionInstruction()
+            instruction.timeRange = segment.timeMapping.target
+            
+            if segment.isEmpty {
+                instruction.layerInstructions = [AVMutableVideoCompositionLayerInstruction(assetTrack: secondVideoTrack)]
+            } else {
+                instruction.layerInstructions = [AVMutableVideoCompositionLayerInstruction(assetTrack: firstVideoTrack)]
+            }
+            
+            videoComposition!.instructions.append(instruction)
+        }
+        
+        if secondVideoTrack.timeRange.end > firstVideoTrack.timeRange.end {
+            let instruction = AVMutableVideoCompositionInstruction()
+            instruction.timeRange = CMTimeRangeMake(firstVideoTrack.timeRange.end, secondVideoTrack.timeRange.end)
+            
+            let transformer2 = AVMutableVideoCompositionLayerInstruction(assetTrack: secondVideoTrack)
+            
+            instruction.layerInstructions = [transformer2]
+            
+            videoComposition!.instructions.append(instruction)
+        }
+
         
         playerItem = AVPlayerItem(asset: composition!)
         playerItem!.videoComposition = videoComposition
@@ -1125,7 +1137,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func pinch(_ recognizer: UIPinchGestureRecognizer) {
-        visibleTimeRange = 30 * timelineView.zoomScale
+        visibleTimeRange = visibleTimeRange * timelineView.zoomScale
         timelineView.collectionViewLayout.invalidateLayout()
         timelineView.contentOffset.x = CGFloat(self.currentTime/CMTimeGetSeconds(self.composition!.duration)*Double(self.timelineView.frame.width)) - self.timelineView.frame.size.width/2
     }
