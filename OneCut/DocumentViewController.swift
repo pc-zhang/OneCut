@@ -39,6 +39,9 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         self.push(op:.nothing)
         
         playerView.playerLayer.player = player
+        
+        backgroundTimelineView.isHidden = true
+        timelineView.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -252,7 +255,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         guard let videoComposition = self.videoComposition else {
             return
         }
-        videoComposition.renderSize = self.composition!.naturalSize
+        videoComposition.renderSize = CGSize(width: 540, height: 960)
         videoComposition.frameDuration = CMTimeMake(1, 30)
         videoComposition.customVideoCompositorClass = APLCustomVideoCompositor.self
         
@@ -291,7 +294,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     {
         // Create the export session with the composition and set the preset to the highest quality.
         let compatiblePresets = AVAssetExportSession.exportPresets(compatibleWith: composition!)
-        let exporter = AVAssetExportSession(asset: composition!, presetName: AVAssetExportPreset640x480)!
+        let exporter = AVAssetExportSession(asset: composition!, presetName: AVAssetExportPreset960x540)!
         // Set the desired output URL for the file created by the export process.
         exporter.outputURL = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent(String(Int(Date.timeIntervalSinceReferenceDate))).appendingPathExtension("mov")
         // Set the output file type to be a QuickTime movie.
@@ -329,8 +332,10 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     @objc func video(videoPath: NSString, didFinishSavingWithError error:NSError, contextInfo contextInfo:Any) -> Void {
     }
     
+    
     func addClip(_ movieURL: URL, trackAdded: Int) {
         let newAsset = AVURLAsset(url: movieURL, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
+        
         /*
          Using AVAsset now runs the risk of blocking the current thread (the
          main UI thread) whilst I/O happens to populate the properties. It's
@@ -657,7 +662,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
         
         videoComposition = AVMutableVideoComposition()
-        videoComposition!.renderSize = composition!.naturalSize
+        videoComposition!.renderSize = CGSize(width: 540, height: 960)
         videoComposition!.frameDuration = CMTimeMake(1, 30)
         
         let firstVideoTrack = composition!.tracks(withMediaType: .video).first!
@@ -669,9 +674,13 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             instruction.timeRange = segment.timeMapping.target
             
             if segment.isEmpty {
-                instruction.layerInstructions = [AVMutableVideoCompositionLayerInstruction(assetTrack: secondVideoTrack)]
+                let transformer2 = AVMutableVideoCompositionLayerInstruction(assetTrack: secondVideoTrack)
+                transformer2.setTransform(CGAffineTransform.identity.scaledBy(x: videoComposition!.renderSize.width/secondVideoTrack.naturalSize.width, y: videoComposition!.renderSize.height/secondVideoTrack.naturalSize.height), at: instruction.timeRange.start)
+                instruction.layerInstructions = [transformer2]
             } else {
-                instruction.layerInstructions = [AVMutableVideoCompositionLayerInstruction(assetTrack: firstVideoTrack)]
+                let transformer1 = AVMutableVideoCompositionLayerInstruction(assetTrack: firstVideoTrack)
+                transformer1.setTransform(CGAffineTransform.identity.scaledBy(x: videoComposition!.renderSize.width/firstVideoTrack.naturalSize.width, y: videoComposition!.renderSize.height/firstVideoTrack.naturalSize.height), at: instruction.timeRange.start)
+                instruction.layerInstructions = [transformer1]
             }
             
             videoComposition!.instructions.append(instruction)
@@ -682,6 +691,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             instruction.timeRange = CMTimeRangeMake(firstVideoTrack.timeRange.end, secondVideoTrack.timeRange.end)
             
             let transformer2 = AVMutableVideoCompositionLayerInstruction(assetTrack: secondVideoTrack)
+            transformer2.setTransform(CGAffineTransform.identity.scaledBy(x: videoComposition!.renderSize.width/secondVideoTrack.naturalSize.width, y: videoComposition!.renderSize.height/secondVideoTrack.naturalSize.height), at: instruction.timeRange.start)
             
             instruction.layerInstructions = [transformer2]
             
@@ -695,6 +705,22 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         player.replaceCurrentItem(with: playerItem)
         
         currentTime = Double((timelineView.contentOffset.x + timelineView.frame.width/2) / scaledDurationToWidth)
+        
+        if firstVideoTrack.segments.count != 0 {
+            firstTrackAddButton.isHidden = true
+            timelineView.isHidden = false
+        } else {
+            firstTrackAddButton.isHidden = false
+            timelineView.isHidden = true
+        }
+        
+        if secondVideoTrack.segments.count != 0 {
+            secondTrackAddButton.isHidden = true
+            backgroundTimelineView.isHidden = false
+        } else {
+            secondTrackAddButton.isHidden = false
+            backgroundTimelineView.isHidden = true
+        }
         
     }
     

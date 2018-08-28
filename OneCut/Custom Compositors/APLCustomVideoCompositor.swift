@@ -143,7 +143,7 @@ class APLCustomVideoCompositor: NSObject, AVVideoCompositing {
         }
 
         // Destination pixel buffer into which we render the output.
-        let dstPixels = foregroundSourceBuffer
+        guard let dstPixels = renderContext?.newPixelBuffer() else { return nil }
 
         if renderContextDidChange { renderContextDidChange = false }
 
@@ -152,15 +152,25 @@ class APLCustomVideoCompositor: NSObject, AVVideoCompositing {
             CVPixelBufferLockBaseAddress(dstPixels, CVPixelBufferLockFlags.readOnly)
             var bitmapInfo  = CGBitmapInfo.byteOrder32Little.rawValue
             bitmapInfo |= CGImageAlphaInfo.premultipliedFirst.rawValue & CGBitmapInfo.alphaInfoMask.rawValue
-            let newContext = CGContext.init(data: CVPixelBufferGetBaseAddress(dstPixels), width: CVPixelBufferGetWidth(dstPixels), height: CVPixelBufferGetHeight(dstPixels), bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(dstPixels), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo:bitmapInfo)
+            let newContext = CGContext.init(data: CVPixelBufferGetBaseAddress(dstPixels), width: 540, height: 960, bitsPerComponent: 8, bytesPerRow: CVPixelBufferGetBytesPerRow(dstPixels), space: CGColorSpaceCreateDeviceRGB(), bitmapInfo:bitmapInfo)
             
-            let outputImage = CIImage(cvPixelBuffer: backgroundSourceBuffer)
-            let temporaryContext = CIContext(options: nil)
-            let videoImage = temporaryContext.createCGImage(outputImage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(backgroundSourceBuffer), height: CVPixelBufferGetHeight(backgroundSourceBuffer)))
+            if true {
+                let foregroundImage = CIImage(cvPixelBuffer: foregroundSourceBuffer)
+                let temporaryContext = CIContext(options: nil)
+                let videoImage = temporaryContext.createCGImage(foregroundImage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(foregroundSourceBuffer), height: CVPixelBufferGetHeight(foregroundSourceBuffer)))
+                
+                newContext?.draw(videoImage!, in: CGRect(origin: .zero, size: CGSize(width: newContext!.width, height: newContext!.height)))
+            }
             
-            let scale = CGFloat(newContext!.height)/3/CGFloat(videoImage!.height)
-            
-            newContext?.draw(videoImage!, in: CGRect(x: CGFloat(newContext!.width) - CGFloat(videoImage!.width)*scale - CGFloat(newContext!.width)/40, y: CGFloat(newContext!.height) - CGFloat(newContext!.height/3) - CGFloat(newContext!.height)/16, width: CGFloat(videoImage!.width)*scale, height: CGFloat(newContext!.height/3)))
+            if true {
+                let backgroundImage = CIImage(cvPixelBuffer: backgroundSourceBuffer)
+                let temporaryContext = CIContext(options: nil)
+                let videoImage = temporaryContext.createCGImage(backgroundImage, from: CGRect(x: 0, y: 0, width: CVPixelBufferGetWidth(backgroundSourceBuffer), height: CVPixelBufferGetHeight(backgroundSourceBuffer)))
+                
+                let scale = CGFloat(newContext!.height)/3/CGFloat(videoImage!.height)
+                
+                newContext?.draw(videoImage!, in: CGRect(x: CGFloat(newContext!.width) - CGFloat(videoImage!.width)*scale - CGFloat(newContext!.width)/40, y: CGFloat(newContext!.height) - CGFloat(newContext!.height/3) - CGFloat(newContext!.height)/16, width: CGFloat(videoImage!.width)*scale, height: CGFloat(newContext!.height/3)))
+            }
             
             let weixin = CALayer()
             weixin.contents = UIImage(named: "weixintop")!.cgImage!
@@ -185,7 +195,7 @@ class APLCustomVideoCompositor: NSObject, AVVideoCompositing {
             textLayer.frame.origin = .zero
             textLayer.frame.size = textLayer.preferredFrameSize()
             let textscale: CGFloat = (CGFloat(weixin.frame.width) / 7) / textLayer.frame.size.width
-            textLayer.setAffineTransform(CGAffineTransform.identity.scaledBy(x: textscale, y: textscale).translatedBy(x: (CGFloat(weixin.frame.width) - textLayer.frame.size.width)/2/textscale, y: CGFloat(UIImage(named: "weixinbottom")!.cgImage!.height)/weixinbottom.contentsScale/textscale))
+            textLayer.setAffineTransform(CGAffineTransform.identity.scaledBy(x: textscale, y: textscale).translatedBy(x: (CGFloat(weixin.frame.width) - textLayer.frame.size.width)/2/textscale, y: CGFloat(UIImage(named: "weixinbottom")!.cgImage!.height)/weixinbottom.contentsScale/textscale + 30))
             
             weixin.addSublayer(textLayer)
             

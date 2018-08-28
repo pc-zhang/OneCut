@@ -81,7 +81,7 @@
                                     <action selector="weixinEffect:" destination="G8I-hc-TQb" eventType="touchUpInside" id="rrf-pi-GF2"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uIs-N9-a4d">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uIs-N9-a4d" customClass="TimelineView" customModule="OneCut" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="467" width="375" height="232"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
@@ -94,7 +94,7 @@
                                         </connections>
                                     </button>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.25" maximumZoomScale="2" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="hf9-HS-VQh" userLabel="Timeline1">
-                                        <rect key="frame" x="0.0" y="40" width="317" height="69"/>
+                                        <rect key="frame" x="0.0" y="40" width="375" height="69"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="HJy-Cd-SgE">
@@ -144,7 +144,7 @@
                                         </cells>
                                     </collectionView>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.25" maximumZoomScale="2" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="a4B-sO-aRR" userLabel="Timeline2">
-                                        <rect key="frame" x="0.0" y="117" width="317" height="69"/>
+                                        <rect key="frame" x="0.0" y="117" width="375" height="69"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gSJ-eh-ixK">
@@ -201,20 +201,20 @@
                                             <action selector="undo:" destination="G8I-hc-TQb" eventType="touchUpInside" id="wXS-Za-e5I"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U4r-Re-ND9" userLabel="Redo Button">
-                                        <rect key="frame" x="60" y="199" width="37" height="25"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" image="redo_ban"/>
-                                        <connections>
-                                            <action selector="redo:" destination="G8I-hc-TQb" eventType="touchUpInside" id="Ib0-MX-NVd"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8JA-QM-3MR">
                                         <rect key="frame" x="325" y="126" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <state key="normal" backgroundImage="add"/>
                                         <connections>
                                             <action selector="AddVideo:" destination="G8I-hc-TQb" eventType="touchUpInside" id="fEP-0a-Q6A"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U4r-Re-ND9" userLabel="Redo Button">
+                                        <rect key="frame" x="53" y="199" width="37" height="25"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="redo_ban"/>
+                                        <connections>
+                                            <action selector="redo:" destination="G8I-hc-TQb" eventType="touchUpInside" id="Ib0-MX-NVd"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -264,11 +264,11 @@
         <image name="copy" width="70" height="140"/>
         <image name="export" width="58" height="58"/>
         <image name="fullscreen" width="47" height="55"/>
-        <image name="redo_ban" width="155" height="77"/>
+        <image name="redo_ban" width="110" height="70"/>
         <image name="remove" width="71" height="138"/>
         <image name="speed" width="78" height="139"/>
         <image name="split" width="71" height="140"/>
-        <image name="undo_ban" width="102" height="85"/>
+        <image name="undo_ban" width="110" height="70"/>
         <image name="weixin" width="70" height="140"/>
     </resources>
 </document>

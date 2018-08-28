@@ -10,6 +10,7 @@
 		D1B54F0B755442D1D714DE84 /* Pods_OneCut.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF6CC1A04370BB81EEE0D8CE /* Pods_OneCut.framework */; };
 		F0A87B2B21292B400051A4D9 /* APLCustomVideoCompositor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A87B2521292B3E0051A4D9 /* APLCustomVideoCompositor.swift */; };
 		F0A87B2E21292B400051A4D9 /* APLCustomVideoCompositionInstruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A87B2821292B3F0051A4D9 /* APLCustomVideoCompositionInstruction.swift */; };
+		F0ACBD09213510F700BD785C /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0ACBD08213510F700BD785C /* TimelineView.swift */; };
 		F0C7513220EB3EFF0088D34F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7513120EB3EFF0088D34F /* AppDelegate.swift */; };
 		F0C7513D20EB3F000088D34F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0C7513C20EB3F000088D34F /* Assets.xcassets */; };
 		F0C7514020EB3F000088D34F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0C7513E20EB3F000088D34F /* LaunchScreen.storyboard */; };
@@ -26,6 +27,7 @@
 		AF6CC1A04370BB81EEE0D8CE /* Pods_OneCut.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneCut.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0A87B2521292B3E0051A4D9 /* APLCustomVideoCompositor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APLCustomVideoCompositor.swift; sourceTree = "<group>"; };
 		F0A87B2821292B3F0051A4D9 /* APLCustomVideoCompositionInstruction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APLCustomVideoCompositionInstruction.swift; sourceTree = "<group>"; };
+		F0ACBD08213510F700BD785C /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
 		F0C7512E20EB3EFF0088D34F /* OneCut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneCut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0C7513120EB3EFF0088D34F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F0C7513C20EB3F000088D34F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 				F0C7514720EB3F620088D34F /* Document.swift */,
 				F0C7514D20EB3F6C0088D34F /* PlayerView.swift */,
 				F0C7514E20EB3F6C0088D34F /* SegmentView.swift */,
+				F0ACBD08213510F700BD785C /* TimelineView.swift */,
 				F0C7514120EB3F000088D34F /* Info.plist */,
 				F0C7515320EB44340088D34F /* Supporting Files */,
 			);
@@ -241,6 +244,7 @@
 				F0C7514B20EB3F620088D34F /* DocumentBrowserViewController.swift in Sources */,
 				F0C7514F20EB3F6C0088D34F /* PlayerView.swift in Sources */,
 				F0C7515020EB3F6C0088D34F /* SegmentView.swift in Sources */,
+				F0ACBD09213510F700BD785C /* TimelineView.swift in Sources */,
 				F0C7513220EB3EFF0088D34F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
