@@ -431,33 +431,27 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func redoOp(op: OpType) {
-        var _timelineIndex: Int = 0
         
         switch op {
         case let .copy(index, timelineIndex):
             whichTimeline(timelineIndex).insertItems(at: [IndexPath(item: index + 1, section: 0)])
-            _timelineIndex = timelineIndex
             break
             
         case let .split(index, timelineIndex):
             whichTimeline(timelineIndex).insertItems(at: [IndexPath(item: index + 1, section: 0)])
             whichTimeline(timelineIndex).reloadItems(at: [IndexPath(item: index, section: 0)])
-            _timelineIndex = timelineIndex
             break
             
         case let .add(index, timelineIndex):
             whichTimeline(timelineIndex).insertItems(at: [IndexPath(item: index, section: 0)])
-            _timelineIndex = timelineIndex
             break
             
         case let .remove(index, timelineIndex):
-            whichTimeline(timelineIndex).deleteItems(at: [IndexPath(item: index, section: 0)])
-            _timelineIndex = timelineIndex
+            whichTimeline(timelineIndex).reloadData()
             break
             
         case let .update(index, timelineIndex):
             whichTimeline(timelineIndex).reloadItems(at: [IndexPath(item: index, section: 0)])
-            _timelineIndex = timelineIndex
             break
             
         default:
@@ -481,7 +475,10 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             break
             
         case let .remove(index, timelineIndex):
-            whichTimeline(timelineIndex).insertItems(at: [IndexPath(item: index, section: 0)])
+            whichTimeline(timelineIndex).reloadData()
+            
+        case let .update(index, timelineIndex):
+            whichTimeline(timelineIndex).reloadItems(at: [IndexPath(item: index, section: 0)])
             
         default:
             _ = 1
@@ -522,7 +519,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         for s in compositionVideoTrack.segments {
             timeRangeInAsset = s.timeMapping.target // assumes non-scaled edit
             
-            if timeRangeInAsset!.containsTime(player.currentTime()) {
+            if !s.isEmpty && timeRangeInAsset!.containsTime(player.currentTime()) {
                 let index = compositionVideoTrack.segments.index(of: s)
                 
                 try! compositionVideoTrack.insertTimeRange(timeRangeInAsset!, of: compositionVideoTrack, at: timeRangeInAsset!.end)
@@ -547,7 +544,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         for s in compositionVideoTrack!.segments {
             timeRangeInAsset = s.timeMapping.target; // assumes non-scaled edit
             
-            if timeRangeInAsset!.containsTime(player.currentTime()) {
+            if !s.isEmpty && timeRangeInAsset!.containsTime(player.currentTime()) {
                 let index = compositionVideoTrack!.segments.index(of: s)
                 
                 try! self.composition!.insertTimeRange(timeRangeInAsset!, of: composition!, at: timeRangeInAsset!.end)
@@ -569,16 +566,16 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         for s in compositionVideoTrack.segments {
             timeRangeInAsset = s.timeMapping.target; // assumes non-scaled edit
             
-            if timeRangeInAsset!.containsTime(player.currentTime()) {
+            if !s.isEmpty && timeRangeInAsset!.containsTime(player.currentTime()) {
                 let index = compositionVideoTrack.segments.index(of: s)
                 
-                try! compositionVideoTrack.removeTimeRange(timeRangeInAsset!)
-                
                 let count = compositionVideoTrack.segments.count
+
+                try! compositionVideoTrack.removeTimeRange(timeRangeInAsset!)
                 
                 try! compositionVideoTrack.insertEmptyTimeRange(timeRangeInAsset!)
                 
-                if compositionVideoTrack.segments.count != count {
+                if compositionVideoTrack.segments.count == count {
                     push(op:.update(index!, 0))
                 } else {
                     push(op:.remove(index!, 0))
