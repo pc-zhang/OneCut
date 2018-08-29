@@ -11,11 +11,10 @@ import AVFoundation
 import UIKit
 import MobileCoreServices
 import NVActivityIndicatorView
-import Speech
 
 private var MainViewControllerKVOContext = 0
 
-class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, NVActivityIndicatorViewable, SFSpeechRecognizerDelegate {
+class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, NVActivityIndicatorViewable {
     
     // MARK: Properties
     
@@ -249,6 +248,21 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     
     // MARK: - IBActions
+    
+    var global_rate: Float = 1
+    
+    @IBAction func speed(_ sender: Any) {
+        if global_rate == 1 {
+            global_rate = 0.5
+        } else {
+            global_rate = 1
+        }
+        
+        if player.rate != 0 {
+            player.rate = global_rate
+        }
+    }
+    
     
     @IBAction func weixinEffect(_ sender: UIButton) {
         videoComposition = AVMutableVideoComposition()
@@ -589,14 +603,14 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     @IBAction func playPauseButtonWasPressed(_ sender: UIButton) {
-        if player.rate != 1.0 {
+        if player.rate == 0 {
             // Not playing forward, so play.
             if currentTime == duration {
                 // At end, so got back to begining.
                 currentTime = 0.0
             }
             
-            player.play()
+            player.rate = global_rate
             
             //todo: animate
             if #available(iOS 10.0, *) {
