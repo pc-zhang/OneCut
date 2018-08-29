@@ -766,7 +766,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
 
             let newRate = (change?[NSKeyValueChangeKey.newKey] as! NSNumber).doubleValue
 
-            let buttonImageName = newRate == 1.0 ? "PauseButton" : "PlayButton"
+            let buttonImageName = newRate == 0 ? "PlayButton":"PauseButton"
 
             let buttonImage = UIImage(named: buttonImageName)
 
