@@ -400,19 +400,22 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video)[trackAdded]
                 
+                compositionVideoTrack.preferredTransform = videoAssetTrack.preferredTransform
+
+                
                 try! compositionVideoTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, newAsset.duration), of: videoAssetTrack, at: kCMTimeZero)
                 
-                if trackAdded == 0 {
-                    self.push(op:.add(0, trackAdded))
-                } else {
-                    let audioAssetTrack = newAsset.tracks(withMediaType: .audio).first!
-                    
+
+                if let audioAssetTrack = newAsset.tracks(withMediaType: .audio).first {
+                
                     let compositionAudioTrack = self.composition!.tracks(withMediaType: .audio).first!
                     
+                    compositionAudioTrack.removeTimeRange(compositionAudioTrack.timeRange)
                     try! compositionAudioTrack.insertTimeRange(CMTimeRangeMake(kCMTimeZero, newAsset.duration), of: audioAssetTrack, at: kCMTimeZero)
-                    
-                    self.push(op:.add(0, trackAdded))
+
                 }
+                
+                self.push(op:.add(0, trackAdded))
                 
                 // update timeline
                 self.updatePlayer()
@@ -931,6 +934,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         _composition.removeTrack(_track)
         let imageGenerator = AVAssetImageGenerator.init(asset: _composition)
         imageGenerator.maximumSize = CGSize(width: self.timelineView.bounds.height * 2, height: self.timelineView.bounds.height * 2)
+        imageGenerator.appliesPreferredTrackTransform = true
         
         if true {
             var times = [NSValue]()
