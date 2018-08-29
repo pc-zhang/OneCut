@@ -448,16 +448,15 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         switch op {
         case let .copy(index, timelineIndex):
-            whichTimeline(timelineIndex).insertItems(at: [IndexPath(item: index + 1, section: 0)])
+            whichTimeline(timelineIndex).reloadData()
             break
             
         case let .split(index, timelineIndex):
-            whichTimeline(timelineIndex).insertItems(at: [IndexPath(item: index + 1, section: 0)])
-            whichTimeline(timelineIndex).reloadItems(at: [IndexPath(item: index, section: 0)])
+            whichTimeline(timelineIndex).reloadData()
             break
             
         case let .add(index, timelineIndex):
-            whichTimeline(timelineIndex).insertItems(at: [IndexPath(item: index, section: 0)])
+            whichTimeline(timelineIndex).reloadData()
             break
             
         case let .remove(index, timelineIndex):
@@ -465,7 +464,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             break
             
         case let .update(index, timelineIndex):
-            whichTimeline(timelineIndex).reloadItems(at: [IndexPath(item: index, section: 0)])
+            whichTimeline(timelineIndex).reloadData()
             break
             
         default:
@@ -477,14 +476,13 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     func undoOp(op: OpType) {
         switch op {
         case let .copy(index, timelineIndex):
-            whichTimeline(timelineIndex).deleteItems(at: [IndexPath(item: index + 1, section: 0)])
+            whichTimeline(timelineIndex).reloadData()
             
         case let .split(index, timelineIndex):
-            whichTimeline(timelineIndex).deleteItems(at: [IndexPath(item: index+1, section: 0)])
-            whichTimeline(timelineIndex).reloadItems(at: [IndexPath(item: index, section: 0)])
+            whichTimeline(timelineIndex).reloadData()
             
         case let .add(index, timelineIndex):
-            whichTimeline(timelineIndex).deleteItems(at: [IndexPath(item: index, section: 0)])
+            whichTimeline(timelineIndex).reloadData()
             
             break
             
@@ -492,7 +490,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             whichTimeline(timelineIndex).reloadData()
             
         case let .update(index, timelineIndex):
-            whichTimeline(timelineIndex).reloadItems(at: [IndexPath(item: index, section: 0)])
+            whichTimeline(timelineIndex).reloadData()
             
         default:
             _ = 1
