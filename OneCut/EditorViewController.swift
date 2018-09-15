@@ -11,10 +11,15 @@ import AVFoundation
 import UIKit
 import MobileCoreServices
 import NVActivityIndicatorView
+import YPImagePicker
+import AVKit
+import Photos
 
-private var MainViewControllerKVOContext = 0
+private var EditorViewControllerKVOContext = 0
 
-class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, NVActivityIndicatorViewable {
+class EditorViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, NVActivityIndicatorViewable {
+    
+    var selectedItems = [YPMediaItem]()
     
     // MARK: Properties
     
@@ -22,6 +27,177 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     fileprivate let maxImageSize = CGSize(width: 120, height: 120)
     
     // MARK: - View Controller
+    
+    // MARK: - Configuration
+    @objc
+    func showPicker() {
+        
+        var config = YPImagePickerConfiguration()
+        
+        /* Uncomment and play around with the configuration 👨‍🔬 🚀 */
+        
+        /* Set this to true if you want to force the  library output to be a squared image. Defaults to false */
+        //         config.library.onlySquare = true
+        
+        /* Set this to true if you want to force the camera output to be a squared image. Defaults to true */
+        // config.onlySquareImagesFromCamera = false
+        
+        /* Ex: cappedTo:1024 will make sure images from the library or the camera will be
+         resized to fit in a 1024x1024 box. Defaults to original image size. */
+        // config.targetImageSize = .cappedTo(size: 1024)
+        
+        /* Choose what media types are available in the library. Defaults to `.photo` */
+        config.library.mediaType = .photoAndVideo
+        
+        /* Enables selecting the front camera by default, useful for avatars. Defaults to false */
+        // config.usesFrontCamera = true
+        
+        /* Adds a Filter step in the photo taking process. Defaults to true */
+        // config.showsFilters = false
+        
+        /* Manage filters by yourself */
+        //        config.filters = [YPFilter(name: "Mono", coreImageFilterName: "CIPhotoEffectMono"),
+        //                          YPFilter(name: "Normal", coreImageFilterName: "")]
+        //        config.filters.remove(at: 1)
+        //        config.filters.insert(YPFilter(name: "Blur", coreImageFilterName: "CIBoxBlur"), at: 1)
+        
+        /* Enables you to opt out from saving new (or old but filtered) images to the
+         user's photo library. Defaults to true. */
+        config.shouldSaveNewPicturesToAlbum = false
+        
+        /* Choose the videoCompression. Defaults to AVAssetExportPresetHighestQuality */
+        config.video.compression = AVAssetExportPresetMediumQuality
+        
+        /* Defines the name of the album when saving pictures in the user's photo library.
+         In general that would be your App name. Defaults to "DefaultYPImagePickerAlbumName" */
+        // config.albumName = "ThisIsMyAlbum"
+        
+        /* Defines which screen is shown at launch. Video mode will only work if `showsVideo = true`.
+         Default value is `.photo` */
+        config.startOnScreen = .library
+        
+        /* Defines which screens are shown at launch, and their order.
+         Default value is `[.library, .photo]` */
+        config.screens = [.library, .photo, .video]
+        
+        /* Can forbid the items with very big height with this property */
+        //        config.library.minWidthForItem = UIScreen.main.bounds.width * 0.8
+        
+        /* Defines the time limit for recording videos.
+         Default is 30 seconds. */
+        // config.video.recordingTimeLimit = 5.0
+        
+        /* Defines the time limit for videos from the library.
+         Defaults to 60 seconds. */
+        config.video.libraryTimeLimit = 500.0
+        
+        /* Adds a Crop step in the photo taking process, after filters. Defaults to .none */
+        config.showsCrop = .rectangle(ratio: (16/9))
+        
+        /* Defines the overlay view for the camera. Defaults to UIView(). */
+        // let overlayView = UIView()
+        // overlayView.backgroundColor = .red
+        // overlayView.alpha = 0.3
+        // config.overlayView = overlayView
+        
+        /* Customize wordings */
+        config.wordings.libraryTitle = "Gallery"
+        
+        /* Defines if the status bar should be hidden when showing the picker. Default is true */
+        config.hidesStatusBar = false
+        
+        config.library.maxNumberOfItems = 5
+        
+        /* Disable scroll to change between mode */
+        // config.isScrollToChangeModesEnabled = false
+        //        config.library.minNumberOfItems = 2
+        
+        /* Skip selection gallery after multiple selections */
+        // config.library.skipSelectionsGallery = true
+        
+        /* Here we use a per picker configuration. Configuration is always shared.
+         That means than when you create one picker with configuration, than you can create other picker with just
+         let picker = YPImagePicker() and the configuration will be the same as the first picker. */
+        
+        
+        /* Only show library pictures from the last 3 days */
+        //let threDaysTimeInterval: TimeInterval = 3 * 60 * 60 * 24
+        //let fromDate = Date().addingTimeInterval(-threDaysTimeInterval)
+        //let toDate = Date()
+        //let options = PHFetchOptions()
+        //options.predicate = NSPredicate(format: "creationDate > %@ && creationDate < %@", fromDate as CVarArg, toDate as CVarArg)
+        //
+        ////Just a way to set order
+        //let sortDescriptor = NSSortDescriptor(key: "creationDate", ascending: true)
+        //options.sortDescriptors = [sortDescriptor]
+        //
+        //config.library.options = options
+        
+        let picker = YPImagePicker(configuration: config)
+        
+        /* Change configuration directly */
+        // YPImagePickerConfiguration.shared.wordings.libraryTitle = "Gallery2"
+        
+        
+        /* Multiple media implementation */
+        picker.didFinishPicking { [unowned picker] items, cancelled in
+            
+            if cancelled {
+                print("Picker was canceled")
+                picker.dismiss(animated: true, completion: nil)
+                return
+            }
+            _ = items.map { print("🧀 \($0)") }
+            
+            self.selectedItems = items
+            if let firstItem = items.first {
+                switch firstItem {
+                case .photo(let photo):
+//                    self.selectedImageV.image = photo.image
+                    picker.dismiss(animated: true, completion: nil)
+                case .video(let video):
+//                    self.selectedImageV.image = video.thumbnail
+                    
+                    let assetURL = video.url
+                    let playerVC = AVPlayerViewController()
+                    let player = AVPlayer(playerItem: AVPlayerItem(url:assetURL))
+                    playerVC.player = player
+                    
+                    picker.dismiss(animated: true, completion: { [weak self] in
+                        self?.present(playerVC, animated: true, completion: nil)
+                        print("😀 \(String(describing: self?.resolutionForLocalVideo(url: assetURL)!))")
+                    })
+                }
+            }
+        }
+        
+        /* Single Photo implementation. */
+        // picker.didFinishPicking { [unowned picker] items, _ in
+        //     self.selectedItems = items
+        //     self.selectedImageV.image = items.singlePhoto?.image
+        //     picker.dismiss(animated: true, completion: nil)
+        // }
+        
+        /* Single Video implementation. */
+        //picker.didFinishPicking { [unowned picker] items, cancelled in
+        //    if cancelled { picker.dismiss(animated: true, completion: nil); return }
+        //
+        //    self.selectedItems = items
+        //    self.selectedImageV.image = items.singleVideo?.thumbnail
+        //
+        //    let assetURL = items.singleVideo!.url
+        //    let playerVC = AVPlayerViewController()
+        //    let player = AVPlayer(playerItem: AVPlayerItem(url:assetURL))
+        //    playerVC.player = player
+        //
+        //    picker.dismiss(animated: true, completion: { [weak self] in
+        //        self?.present(playerVC, animated: true, completion: nil)
+        //        print("😀 \(String(describing: self?.resolutionForLocalVideo(url: assetURL)!))")
+        //    })
+        //}
+        
+        present(picker, animated: true, completion: nil)
+    }
     
     override func viewDidLoad() {
         // add composition
@@ -63,9 +239,9 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
          and not those destined for a subclass that also happens to be observing
          these properties.
          */
-        addObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.duration), options: [.new, .initial], context: &MainViewControllerKVOContext)
-        addObserver(self, forKeyPath: #keyPath(MainViewController.player.rate), options: [.new, .initial], context: &MainViewControllerKVOContext)
-        addObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.status), options: [.new, .initial], context: &MainViewControllerKVOContext)
+        addObserver(self, forKeyPath: #keyPath(EditorViewController.player.currentItem.duration), options: [.new, .initial], context: &EditorViewControllerKVOContext)
+        addObserver(self, forKeyPath: #keyPath(EditorViewController.player.rate), options: [.new, .initial], context: &EditorViewControllerKVOContext)
+        addObserver(self, forKeyPath: #keyPath(EditorViewController.player.currentItem.status), options: [.new, .initial], context: &EditorViewControllerKVOContext)
         
         // Make sure we don't have a strong reference cycle by only capturing self as weak.
         let interval = CMTimeMake(20, 600)
@@ -86,9 +262,9 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         
         player.pause()
         
-        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.duration), context: &MainViewControllerKVOContext)
-        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.rate), context: &MainViewControllerKVOContext)
-        removeObserver(self, forKeyPath: #keyPath(MainViewController.player.currentItem.status), context: &MainViewControllerKVOContext)
+        removeObserver(self, forKeyPath: #keyPath(EditorViewController.player.currentItem.duration), context: &EditorViewControllerKVOContext)
+        removeObserver(self, forKeyPath: #keyPath(EditorViewController.player.rate), context: &EditorViewControllerKVOContext)
+        removeObserver(self, forKeyPath: #keyPath(EditorViewController.player.currentItem.status), context: &EditorViewControllerKVOContext)
     }
 
     
@@ -217,8 +393,8 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             timelineView.contentOffset = CGPoint(x:-timelineView.frame.width / 2, y:0)
             timelineView.contentInset = UIEdgeInsets(top: 0, left: timelineView.frame.width/2, bottom: 0, right: timelineView.frame.width/2)
             timelineView.addSubview(emptyView)
-            //            timelineView.pinchGestureRecognizer?.addTarget(self, action: #selector(MainViewController.pinch))
-            timelineView.panGestureRecognizer.addTarget(self, action: #selector(MainViewController.pan))
+            //            timelineView.pinchGestureRecognizer?.addTarget(self, action: #selector(EditorViewController.pinch))
+            timelineView.panGestureRecognizer.addTarget(self, action: #selector(EditorViewController.pan))
         }
     }
     
@@ -229,8 +405,8 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             backgroundTimelineView.contentOffset = CGPoint(x:-backgroundTimelineView.frame.width / 2, y:0)
             backgroundTimelineView.contentInset = UIEdgeInsets(top: 0, left: backgroundTimelineView.frame.width/2, bottom: 0, right: backgroundTimelineView.frame.width/2)
             backgroundTimelineView.addSubview(emptyView)
-            //            timelineView.pinchGestureRecognizer?.addTarget(self, action: #selector(MainViewController.pinch))
-            backgroundTimelineView.panGestureRecognizer.addTarget(self, action: #selector(MainViewController.pan))
+            //            timelineView.pinchGestureRecognizer?.addTarget(self, action: #selector(EditorViewController.pinch))
+            backgroundTimelineView.panGestureRecognizer.addTarget(self, action: #selector(EditorViewController.pan))
         }
     }
     
@@ -355,7 +531,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
          main UI thread) whilst I/O happens to populate the properties. It's
          prudent to defer our work until the properties we need have been loaded.
          */
-        newAsset.loadValuesAsynchronously(forKeys: MainViewController.assetKeysRequiredToPlay) {
+        newAsset.loadValuesAsynchronously(forKeys: EditorViewController.assetKeysRequiredToPlay) {
             /*
              The asset invokes its completion handler on an arbitrary queue.
              To avoid multiple threads using our internal state at the same time
@@ -368,7 +544,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                  Test whether the values of each of the keys we need have been
                  successfully loaded.
                  */
-                for key in MainViewController.assetKeysRequiredToPlay {
+                for key in EditorViewController.assetKeysRequiredToPlay {
                     var error: NSError?
                     
                     if newAsset.statusOfValue(forKey: key, error: &error) == .failed {
@@ -656,15 +832,17 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     @IBAction func AddVideo(_ sender: UIButton) {
         if sender == firstTrackAddButton {
             self.trackAdded = 0
+            let picker = UIImagePickerController()
+            picker.sourceType = .savedPhotosAlbum
+            picker.mediaTypes = [kUTTypeMovie as String]
+            picker.delegate = self
+            picker.allowsEditing = false
+            present(picker, animated: true)
         } else {
             self.trackAdded = 1
+            showPicker()
         }
-        let picker = UIImagePickerController()
-        picker.sourceType = .savedPhotosAlbum
-        picker.mediaTypes = [kUTTypeMovie as String]
-        picker.delegate = self
-        picker.allowsEditing = false
-        present(picker, animated: true)
+        
     }
     
     
@@ -742,12 +920,12 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     //   Update our UI when player or `player.currentItem` changes.
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         // Make sure the this KVO callback was intended for this view controller.
-        guard context == &MainViewControllerKVOContext else {
+        guard context == &EditorViewControllerKVOContext else {
             super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
             return
         }
         
-        if keyPath == #keyPath(MainViewController.player.currentItem.duration) {
+        if keyPath == #keyPath(EditorViewController.player.currentItem.duration) {
             // Update timeSlider and enable/disable controls when duration > 0.0
 
             /*
@@ -762,7 +940,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             }
 
         }
-        else if keyPath == #keyPath(MainViewController.player.rate) {
+        else if keyPath == #keyPath(EditorViewController.player.rate) {
             // Update `playPauseButton` image.
 
             let newRate = (change?[NSKeyValueChangeKey.newKey] as! NSNumber).doubleValue
@@ -773,7 +951,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
 
             playPauseButton.setImage(buttonImage, for: UIControlState())
         }
-        else if keyPath == #keyPath(MainViewController.player.currentItem.status) {
+        else if keyPath == #keyPath(EditorViewController.player.currentItem.status) {
             // Display an error if status becomes `.Failed`.
 
             /*
@@ -806,8 +984,8 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     // Trigger KVO for anyone observing our properties affected by player and player.currentItem
     override class func keyPathsForValuesAffectingValue(forKey key: String) -> Set<String> {
         let affectedKeyPathsMappingByKey: [String: Set<String>] = [
-            "duration":     [#keyPath(MainViewController.player.currentItem.duration)],
-            "rate":         [#keyPath(MainViewController.player.rate)]
+            "duration":     [#keyPath(EditorViewController.player.currentItem.duration)],
+            "rate":         [#keyPath(EditorViewController.player.rate)]
         ]
         
         return affectedKeyPathsMappingByKey[key] ?? super.keyPathsForValuesAffectingValue(forKey: key)
@@ -970,4 +1148,14 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         return segmentView
     }
     
+}
+
+// Support methods
+extension EditorViewController {
+    /* Gives a resolution for the video by URL */
+    func resolutionForLocalVideo(url: URL) -> CGSize? {
+        guard let track = AVURLAsset(url: url).tracks(withMediaType: AVMediaType.video).first else { return nil }
+        let size = track.naturalSize.applying(track.preferredTransform)
+        return CGSize(width: fabs(size.width), height: fabs(size.height))
+    }
 }
