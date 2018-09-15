@@ -30,7 +30,7 @@ class EditorViewController: UIViewController, UICollectionViewDelegateFlowLayout
     
     // MARK: - Configuration
     @objc
-    func showPicker() {
+    func showPicker(trackAdded: Int) {
         
         var config = YPImagePickerConfiguration()
         
@@ -159,12 +159,10 @@ class EditorViewController: UIViewController, UICollectionViewDelegateFlowLayout
 //                    self.selectedImageV.image = video.thumbnail
                     
                     let assetURL = video.url
-                    let playerVC = AVPlayerViewController()
-                    let player = AVPlayer(playerItem: AVPlayerItem(url:assetURL))
-                    playerVC.player = player
-                    
+
+                    self.addClip(assetURL, trackAdded: trackAdded)
+
                     picker.dismiss(animated: true, completion: { [weak self] in
-                        self?.present(playerVC, animated: true, completion: nil)
                         print("😀 \(String(describing: self?.resolutionForLocalVideo(url: assetURL)!))")
                     })
                 }
@@ -832,15 +830,16 @@ class EditorViewController: UIViewController, UICollectionViewDelegateFlowLayout
     @IBAction func AddVideo(_ sender: UIButton) {
         if sender == firstTrackAddButton {
             self.trackAdded = 0
-            let picker = UIImagePickerController()
-            picker.sourceType = .savedPhotosAlbum
-            picker.mediaTypes = [kUTTypeMovie as String]
-            picker.delegate = self
-            picker.allowsEditing = false
-            present(picker, animated: true)
+//            let picker = UIImagePickerController()
+//            picker.sourceType = .savedPhotosAlbum
+//            picker.mediaTypes = [kUTTypeMovie as String]
+//            picker.delegate = self
+//            picker.allowsEditing = false
+//            present(picker, animated: true)
+            showPicker(trackAdded: self.trackAdded)
         } else {
             self.trackAdded = 1
-            showPicker()
+            showPicker(trackAdded: self.trackAdded)
         }
         
     }
