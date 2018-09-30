@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="G8I-hc-TQb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="G8I-hc-TQb">
     <device id="retina5_9" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
-        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -50,7 +49,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e3x-oC-ppg" userLabel="StartTime">
-                                        <rect key="frame" x="8" y="399.66666666666669" width="34" height="14.333333333333314"/>
+                                        <rect key="frame" x="8" y="399" width="34" height="14.333333333333314"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                         <color key="textColor" red="0.70588235290000001" green="0.70196078429999997" blue="0.73333333329999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -68,22 +67,8 @@
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="D6Q-tG-niT">
                                 <rect key="frame" x="20" y="708" width="335" height="50"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="F5A-eM-25l" userLabel="Weixin">
-                                        <rect key="frame" x="0.0" y="0.0" width="25" height="50"/>
-                                        <state key="normal" backgroundImage="weixin"/>
-                                        <connections>
-                                            <action selector="weixinEffect:" destination="G8I-hc-TQb" eventType="touchUpInside" id="rrf-pi-GF2"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3K6-sj-9eg" userLabel="Speed">
-                                        <rect key="frame" x="77.666666666666671" y="0.0" width="25" height="50"/>
-                                        <state key="normal" backgroundImage="speed"/>
-                                        <connections>
-                                            <action selector="speed:" destination="G8I-hc-TQb" eventType="touchUpInside" id="Kaw-fP-a7q"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nJK-pN-g70" userLabel="Split Button">
-                                        <rect key="frame" x="155" y="0.0" width="25" height="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="25" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="25" id="0pa-j5-lWD"/>
                                             <constraint firstAttribute="height" constant="50" id="6FE-Mk-K3d"/>
@@ -91,13 +76,6 @@
                                         <state key="normal" backgroundImage="split"/>
                                         <connections>
                                             <action selector="splitClip:" destination="G8I-hc-TQb" eventType="touchUpInside" id="ndU-DI-Yuq"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Psa-3f-f8J" userLabel="Copy Button">
-                                        <rect key="frame" x="232.66666666666666" y="0.0" width="24.999999999999972" height="50"/>
-                                        <state key="normal" backgroundImage="copy"/>
-                                        <connections>
-                                            <action selector="copyClip:" destination="G8I-hc-TQb" eventType="touchUpInside" id="Ees-ir-zcr"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mFv-uz-DXc" userLabel="Remove Button">
@@ -109,85 +87,18 @@
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="Psa-3f-f8J" firstAttribute="width" secondItem="nJK-pN-g70" secondAttribute="width" id="2Gi-W5-8xE"/>
-                                    <constraint firstItem="F5A-eM-25l" firstAttribute="width" secondItem="nJK-pN-g70" secondAttribute="width" id="54m-yk-MoZ"/>
                                     <constraint firstItem="mFv-uz-DXc" firstAttribute="width" secondItem="nJK-pN-g70" secondAttribute="width" id="5mt-Zo-YVo"/>
                                     <constraint firstItem="mFv-uz-DXc" firstAttribute="height" secondItem="nJK-pN-g70" secondAttribute="height" id="HdZ-Z4-DU3"/>
-                                    <constraint firstItem="3K6-sj-9eg" firstAttribute="height" secondItem="nJK-pN-g70" secondAttribute="height" id="Q9T-H0-Efg"/>
-                                    <constraint firstItem="Psa-3f-f8J" firstAttribute="height" secondItem="nJK-pN-g70" secondAttribute="height" id="Utv-Bv-s6b"/>
-                                    <constraint firstItem="3K6-sj-9eg" firstAttribute="width" secondItem="nJK-pN-g70" secondAttribute="width" id="VoL-G6-UmY"/>
-                                    <constraint firstItem="F5A-eM-25l" firstAttribute="height" secondItem="nJK-pN-g70" secondAttribute="height" id="de2-2n-0vX"/>
-                                    <constraint firstItem="3K6-sj-9eg" firstAttribute="firstBaseline" secondItem="F5A-eM-25l" secondAttribute="firstBaseline" id="fgU-U6-NWi"/>
-                                    <constraint firstItem="F5A-eM-25l" firstAttribute="baseline" secondItem="3K6-sj-9eg" secondAttribute="baseline" id="gcx-K5-ERp"/>
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uIs-N9-a4d" customClass="TimelineView" customModule="OneCut" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="478" width="375" height="210"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tMi-Co-jgb">
-                                        <rect key="frame" x="315" y="40" width="50" height="50"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="tMi-Co-jgb" secondAttribute="height" multiplier="1:1" id="Uac-ct-bRP"/>
-                                        </constraints>
-                                        <state key="normal" backgroundImage="add"/>
-                                        <connections>
-                                            <action selector="AddVideo:" destination="G8I-hc-TQb" eventType="touchUpInside" id="Cli-yL-nPz"/>
-                                        </connections>
-                                    </button>
-                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.25" maximumZoomScale="2" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="hf9-HS-VQh" userLabel="Timeline1">
-                                        <rect key="frame" x="0.0" y="40" width="375" height="50"/>
-                                        <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="HJy-Cd-SgE">
-                                            <size key="itemSize" width="50" height="50"/>
-                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                        </collectionViewFlowLayout>
-                                        <cells>
-                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="segment" id="BOq-Nh-pyY" customClass="SegmentView" customModule="OneCut" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <subviews>
-                                                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="NN5-g3-brT">
-                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                            <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                                            <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="eQk-Wv-lcs">
-                                                                <size key="itemSize" width="50" height="50"/>
-                                                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                                            </collectionViewFlowLayout>
-                                                            <cells>
-                                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="image" id="zUg-q2-yOb">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                                        <autoresizingMask key="autoresizingMask"/>
-                                                                    </view>
-                                                                </collectionViewCell>
-                                                            </cells>
-                                                        </collectionView>
-                                                    </subviews>
-                                                </view>
-                                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="trailing" secondItem="NN5-g3-brT" secondAttribute="trailing" id="4E4-AP-bCv"/>
-                                                    <constraint firstItem="NN5-g3-brT" firstAttribute="leading" secondItem="BOq-Nh-pyY" secondAttribute="leading" id="Ln1-Lm-ig7"/>
-                                                    <constraint firstItem="NN5-g3-brT" firstAttribute="top" secondItem="BOq-Nh-pyY" secondAttribute="top" id="kPy-vp-zqk"/>
-                                                    <constraint firstAttribute="bottom" secondItem="NN5-g3-brT" secondAttribute="bottom" id="vgF-l1-YLi"/>
-                                                </constraints>
-                                            </collectionViewCell>
-                                        </cells>
-                                    </collectionView>
                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.25" maximumZoomScale="2" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="a4B-sO-aRR" userLabel="Timeline2">
-                                        <rect key="frame" x="0.0" y="100" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="80" width="375" height="50"/>
                                         <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="fHG-eo-pep"/>
+                                            <constraint firstAttribute="height" constant="50" id="fcI-Fo-YHi"/>
                                         </constraints>
                                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gSJ-eh-ixK">
                                             <size key="itemSize" width="50" height="50"/>
@@ -247,7 +158,10 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8JA-QM-3MR">
-                                        <rect key="frame" x="315" y="100" width="50" height="50"/>
+                                        <rect key="frame" x="162.66666666666666" y="80" width="50" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="8JA-QM-3MR" secondAttribute="height" multiplier="1:1" id="1mN-EM-sKB"/>
+                                        </constraints>
                                         <state key="normal" backgroundImage="add"/>
                                         <connections>
                                             <action selector="AddVideo:" destination="G8I-hc-TQb" eventType="touchUpInside" id="fEP-0a-Q6A"/>
@@ -264,28 +178,17 @@
                                 <color key="backgroundColor" red="0.12549019607843137" green="0.12549019607843137" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="U4r-Re-ND9" firstAttribute="height" secondItem="txo-ro-r4L" secondAttribute="height" id="0G4-43-SLx"/>
-                                    <constraint firstItem="a4B-sO-aRR" firstAttribute="top" secondItem="hf9-HS-VQh" secondAttribute="bottom" constant="10" id="1uY-tI-E0S"/>
                                     <constraint firstAttribute="bottom" secondItem="txo-ro-r4L" secondAttribute="bottom" constant="10" id="22Y-yQ-KS1"/>
-                                    <constraint firstItem="a4B-sO-aRR" firstAttribute="width" secondItem="uIs-N9-a4d" secondAttribute="width" id="3lm-ON-xRM"/>
-                                    <constraint firstItem="8JA-QM-3MR" firstAttribute="height" secondItem="a4B-sO-aRR" secondAttribute="height" id="5V7-oe-kTd"/>
-                                    <constraint firstAttribute="bottom" secondItem="a4B-sO-aRR" secondAttribute="bottom" constant="60" id="7Kd-al-q8Q"/>
-                                    <constraint firstItem="8JA-QM-3MR" firstAttribute="width" secondItem="tMi-Co-jgb" secondAttribute="height" multiplier="1:1" id="8oF-3s-RAj"/>
+                                    <constraint firstItem="8JA-QM-3MR" firstAttribute="centerX" secondItem="uIs-N9-a4d" secondAttribute="centerX" id="2gw-mx-FOf"/>
+                                    <constraint firstItem="a4B-sO-aRR" firstAttribute="centerY" secondItem="uIs-N9-a4d" secondAttribute="centerY" id="4Mb-Z1-Zpq"/>
                                     <constraint firstItem="txo-ro-r4L" firstAttribute="leading" secondItem="uIs-N9-a4d" secondAttribute="leading" constant="10" id="8z2-tk-3XN"/>
-                                    <constraint firstItem="hf9-HS-VQh" firstAttribute="height" secondItem="a4B-sO-aRR" secondAttribute="height" id="9Bs-6D-W2A"/>
-                                    <constraint firstItem="tMi-Co-jgb" firstAttribute="centerY" secondItem="hf9-HS-VQh" secondAttribute="centerY" id="9W2-w0-6qI"/>
-                                    <constraint firstItem="a4B-sO-aRR" firstAttribute="leading" secondItem="hf9-HS-VQh" secondAttribute="leading" id="Cgh-mm-FYZ"/>
+                                    <constraint firstItem="a4B-sO-aRR" firstAttribute="width" secondItem="uIs-N9-a4d" secondAttribute="width" id="D1W-7N-KMi"/>
+                                    <constraint firstItem="8JA-QM-3MR" firstAttribute="height" secondItem="a4B-sO-aRR" secondAttribute="height" id="EHU-XX-cuu"/>
                                     <constraint firstItem="U4r-Re-ND9" firstAttribute="width" secondItem="txo-ro-r4L" secondAttribute="width" id="GcH-L8-VA5"/>
-                                    <constraint firstItem="hf9-HS-VQh" firstAttribute="width" secondItem="a4B-sO-aRR" secondAttribute="width" id="IXD-qm-P68"/>
-                                    <constraint firstItem="8JA-QM-3MR" firstAttribute="centerY" secondItem="a4B-sO-aRR" secondAttribute="centerY" id="LC8-dS-ryt"/>
                                     <constraint firstItem="U4r-Re-ND9" firstAttribute="leading" secondItem="txo-ro-r4L" secondAttribute="trailing" constant="10" id="N7R-VI-Oey"/>
-                                    <constraint firstItem="hf9-HS-VQh" firstAttribute="leading" secondItem="uIs-N9-a4d" secondAttribute="leading" id="NVe-dE-kfn"/>
-                                    <constraint firstAttribute="trailing" secondItem="8JA-QM-3MR" secondAttribute="trailing" constant="10" id="ciO-hW-E8J"/>
-                                    <constraint firstItem="a4B-sO-aRR" firstAttribute="leading" secondItem="uIs-N9-a4d" secondAttribute="leading" id="gFL-Iy-zUC"/>
-                                    <constraint firstItem="tMi-Co-jgb" firstAttribute="height" secondItem="hf9-HS-VQh" secondAttribute="height" id="glh-eo-aqZ"/>
-                                    <constraint firstAttribute="trailing" secondItem="a4B-sO-aRR" secondAttribute="trailing" id="pGg-eg-8oZ"/>
-                                    <constraint firstAttribute="trailing" secondItem="hf9-HS-VQh" secondAttribute="trailing" id="rJQ-6p-rfV"/>
+                                    <constraint firstItem="a4B-sO-aRR" firstAttribute="centerX" secondItem="uIs-N9-a4d" secondAttribute="centerX" id="aCB-U9-lXG"/>
+                                    <constraint firstItem="8JA-QM-3MR" firstAttribute="centerY" secondItem="a4B-sO-aRR" secondAttribute="centerY" id="ary-YD-SnJ"/>
                                     <constraint firstItem="U4r-Re-ND9" firstAttribute="centerY" secondItem="txo-ro-r4L" secondAttribute="centerY" id="tCF-HB-MnV"/>
-                                    <constraint firstAttribute="trailing" secondItem="tMi-Co-jgb" secondAttribute="trailing" constant="10" id="w58-Cz-udK"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -308,8 +211,6 @@
                     </view>
                     <connections>
                         <outlet property="backgroundTimelineView" destination="a4B-sO-aRR" id="6n0-mS-2Go"/>
-                        <outlet property="copyButton" destination="Psa-3f-f8J" id="VmA-6D-oT7"/>
-                        <outlet property="firstTrackAddButton" destination="tMi-Co-jgb" id="mA4-We-I3y"/>
                         <outlet property="playPauseButton" destination="2ut-Iw-LNe" id="Dnn-s9-J57"/>
                         <outlet property="playerView" destination="hu7-DO-mQg" id="xiM-Yi-Zs3"/>
                         <outlet property="redoButton" destination="U4r-Re-ND9" id="l0e-GY-KML"/>
@@ -317,7 +218,6 @@
                         <outlet property="secondTrackAddButton" destination="8JA-QM-3MR" id="YLT-pq-UDV"/>
                         <outlet property="splitButton" destination="nJK-pN-g70" id="SBf-7G-LKI"/>
                         <outlet property="startTimeLabel" destination="e3x-oC-ppg" id="B4d-nr-3tS"/>
-                        <outlet property="timelineView" destination="hf9-HS-VQh" id="VlD-q5-eFd"/>
                         <outlet property="undoButton" destination="txo-ro-r4L" id="jer-yP-EXY"/>
                         <outlet property="view" destination="7Y5-0K-2yx" id="kfq-2M-EAZ"/>
                     </connections>
@@ -330,13 +230,10 @@
     <resources>
         <image name="PlayButton" width="49" height="56"/>
         <image name="add" width="180" height="181"/>
-        <image name="copy" width="70" height="140"/>
         <image name="export" width="58" height="58"/>
         <image name="redo_ban" width="110" height="70"/>
         <image name="remove" width="71" height="138"/>
-        <image name="speed" width="78" height="139"/>
         <image name="split" width="71" height="140"/>
         <image name="undo_ban" width="110" height="70"/>
-        <image name="weixin" width="70" height="140"/>
     </resources>
 </document>

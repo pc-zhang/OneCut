@@ -7,15 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D1B54F0B755442D1D714DE84 /* Pods_OneCut.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF6CC1A04370BB81EEE0D8CE /* Pods_OneCut.framework */; };
-		F0A87B2B21292B400051A4D9 /* APLCustomVideoCompositor.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A87B2521292B3E0051A4D9 /* APLCustomVideoCompositor.swift */; };
-		F0A87B2E21292B400051A4D9 /* APLCustomVideoCompositionInstruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0A87B2821292B3F0051A4D9 /* APLCustomVideoCompositionInstruction.swift */; };
 		F0ACBD09213510F700BD785C /* TimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0ACBD08213510F700BD785C /* TimelineView.swift */; };
 		F0C7513220EB3EFF0088D34F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7513120EB3EFF0088D34F /* AppDelegate.swift */; };
 		F0C7513D20EB3F000088D34F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0C7513C20EB3F000088D34F /* Assets.xcassets */; };
 		F0C7514020EB3F000088D34F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0C7513E20EB3F000088D34F /* LaunchScreen.storyboard */; };
-		F0C7514A20EB3F620088D34F /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7514720EB3F620088D34F /* Document.swift */; };
-		F0C7514B20EB3F620088D34F /* DocumentBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7514820EB3F620088D34F /* DocumentBrowserViewController.swift */; };
 		F0C7514C20EB3F620088D34F /* DocumentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7514920EB3F620088D34F /* DocumentViewController.swift */; };
 		F0C7514F20EB3F6C0088D34F /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7514D20EB3F6C0088D34F /* PlayerView.swift */; };
 		F0C7515020EB3F6C0088D34F /* SegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7514E20EB3F6C0088D34F /* SegmentView.swift */; };
@@ -23,23 +18,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		950801BD8380DFDBA8D063B4 /* Pods-OneCut.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneCut.release.xcconfig"; path = "Pods/Target Support Files/Pods-OneCut/Pods-OneCut.release.xcconfig"; sourceTree = "<group>"; };
-		AF6CC1A04370BB81EEE0D8CE /* Pods_OneCut.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneCut.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F0A87B2521292B3E0051A4D9 /* APLCustomVideoCompositor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APLCustomVideoCompositor.swift; sourceTree = "<group>"; };
-		F0A87B2821292B3F0051A4D9 /* APLCustomVideoCompositionInstruction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APLCustomVideoCompositionInstruction.swift; sourceTree = "<group>"; };
 		F0ACBD08213510F700BD785C /* TimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineView.swift; sourceTree = "<group>"; };
 		F0C7512E20EB3EFF0088D34F /* OneCut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneCut.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0C7513120EB3EFF0088D34F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F0C7513C20EB3F000088D34F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F0C7513F20EB3F000088D34F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F0C7514120EB3F000088D34F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F0C7514720EB3F620088D34F /* Document.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
-		F0C7514820EB3F620088D34F /* DocumentBrowserViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentBrowserViewController.swift; sourceTree = "<group>"; };
 		F0C7514920EB3F620088D34F /* DocumentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DocumentViewController.swift; sourceTree = "<group>"; };
 		F0C7514D20EB3F6C0088D34F /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
 		F0C7514E20EB3F6C0088D34F /* SegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentView.swift; sourceTree = "<group>"; };
 		F0C7515120EB3FAA0088D34F /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		F5248738762CAB0988E15221 /* Pods-OneCut.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneCut.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneCut/Pods-OneCut.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,46 +35,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D1B54F0B755442D1D714DE84 /* Pods_OneCut.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		AC8682DA574FF54F373BC603 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				AF6CC1A04370BB81EEE0D8CE /* Pods_OneCut.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		C6A7F6977F9528ACB1F06908 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				F5248738762CAB0988E15221 /* Pods-OneCut.debug.xcconfig */,
-				950801BD8380DFDBA8D063B4 /* Pods-OneCut.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		F0A87B3121292B480051A4D9 /* Custom Compositors */ = {
-			isa = PBXGroup;
-			children = (
-				F0A87B2821292B3F0051A4D9 /* APLCustomVideoCompositionInstruction.swift */,
-				F0A87B2521292B3E0051A4D9 /* APLCustomVideoCompositor.swift */,
-			);
-			path = "Custom Compositors";
-			sourceTree = "<group>";
-		};
 		F0C7512520EB3EFF0088D34F = {
 			isa = PBXGroup;
 			children = (
 				F0C7513020EB3EFF0088D34F /* OneCut */,
 				F0C7512F20EB3EFF0088D34F /* Products */,
-				C6A7F6977F9528ACB1F06908 /* Pods */,
-				AC8682DA574FF54F373BC603 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,11 +60,8 @@
 		F0C7513020EB3EFF0088D34F /* OneCut */ = {
 			isa = PBXGroup;
 			children = (
-				F0A87B3121292B480051A4D9 /* Custom Compositors */,
 				F0C7514920EB3F620088D34F /* DocumentViewController.swift */,
-				F0C7514820EB3F620088D34F /* DocumentBrowserViewController.swift */,
 				F0C7515120EB3FAA0088D34F /* Main.storyboard */,
-				F0C7514720EB3F620088D34F /* Document.swift */,
 				F0C7514D20EB3F6C0088D34F /* PlayerView.swift */,
 				F0C7514E20EB3F6C0088D34F /* SegmentView.swift */,
 				F0ACBD08213510F700BD785C /* TimelineView.swift */,
@@ -132,11 +88,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F0C7514420EB3F000088D34F /* Build configuration list for PBXNativeTarget "OneCut" */;
 			buildPhases = (
-				4E06D1CF8CBCD4BBBBCDFE37 /* [CP] Check Pods Manifest.lock */,
 				F0C7512A20EB3EFF0088D34F /* Sources */,
 				F0C7512B20EB3EFF0088D34F /* Frameworks */,
 				F0C7512C20EB3EFF0088D34F /* Resources */,
-				8498B809C39CACD4F02A7261 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -193,55 +147,12 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		4E06D1CF8CBCD4BBBBCDFE37 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-OneCut-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8498B809C39CACD4F02A7261 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-OneCut/Pods-OneCut-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/NVActivityIndicatorView/NVActivityIndicatorView.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NVActivityIndicatorView.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OneCut/Pods-OneCut-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		F0C7512A20EB3EFF0088D34F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0A87B2E21292B400051A4D9 /* APLCustomVideoCompositionInstruction.swift in Sources */,
-				F0C7514A20EB3F620088D34F /* Document.swift in Sources */,
 				F0C7514C20EB3F620088D34F /* DocumentViewController.swift in Sources */,
-				F0A87B2B21292B400051A4D9 /* APLCustomVideoCompositor.swift in Sources */,
-				F0C7514B20EB3F620088D34F /* DocumentBrowserViewController.swift in Sources */,
 				F0C7514F20EB3F6C0088D34F /* PlayerView.swift in Sources */,
 				F0C7515020EB3F6C0088D34F /* SegmentView.swift in Sources */,
 				F0ACBD09213510F700BD785C /* TimelineView.swift in Sources */,
@@ -379,7 +290,6 @@
 		};
 		F0C7514520EB3F000088D34F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F5248738762CAB0988E15221 /* Pods-OneCut.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -399,7 +309,6 @@
 		};
 		F0C7514620EB3F000088D34F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 950801BD8380DFDBA8D063B4 /* Pods-OneCut.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

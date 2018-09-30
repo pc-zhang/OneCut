@@ -10,11 +10,10 @@ import Foundation
 import AVFoundation
 import UIKit
 import MobileCoreServices
-import NVActivityIndicatorView
 
 private var MainViewControllerKVOContext = 0
 
-class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, NVActivityIndicatorViewable {
+class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     // MARK: Properties
     
@@ -40,7 +39,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         playerView.playerLayer.player = player
         
         backgroundTimelineView.isHidden = true
-        timelineView.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -99,7 +97,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var seekTimer: Timer? = nil
     var visibleTimeRange: CGFloat = 15
     var scaledDurationToWidth: CGFloat {
-        return timelineView.frame.width / visibleTimeRange
+        return backgroundTimelineView.frame.width / visibleTimeRange
     }
 
     struct opsAndComps {
@@ -202,25 +200,12 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     // MARK: - IBOutlets
     
     @IBOutlet weak var splitButton: UIButton!
-    @IBOutlet weak var copyButton: UIButton!
     @IBOutlet weak var removeButton: UIButton!
     @IBOutlet weak var undoButton: UIButton!
     @IBOutlet weak var redoButton: UIButton!
-    @IBOutlet weak var documentNameLabel: UILabel!
     @IBOutlet weak var startTimeLabel: UILabel!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var playerView: PlayerView!
-    @IBOutlet weak var timelineView: UICollectionView! {
-        didSet {
-            timelineView.delegate = self
-            timelineView.dataSource = self
-            timelineView.contentOffset = CGPoint(x:-timelineView.frame.width / 2, y:0)
-            timelineView.contentInset = UIEdgeInsets(top: 0, left: timelineView.frame.width/2, bottom: 0, right: timelineView.frame.width/2)
-            timelineView.addSubview(emptyView)
-            //            timelineView.pinchGestureRecognizer?.addTarget(self, action: #selector(MainViewController.pinch))
-            timelineView.panGestureRecognizer.addTarget(self, action: #selector(MainViewController.pan))
-        }
-    }
     
     @IBOutlet weak var backgroundTimelineView: UICollectionView! {
         didSet {
@@ -229,80 +214,16 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             backgroundTimelineView.contentOffset = CGPoint(x:-backgroundTimelineView.frame.width / 2, y:0)
             backgroundTimelineView.contentInset = UIEdgeInsets(top: 0, left: backgroundTimelineView.frame.width/2, bottom: 0, right: backgroundTimelineView.frame.width/2)
             backgroundTimelineView.addSubview(emptyView)
-            //            timelineView.pinchGestureRecognizer?.addTarget(self, action: #selector(MainViewController.pinch))
             backgroundTimelineView.panGestureRecognizer.addTarget(self, action: #selector(MainViewController.pan))
         }
     }
     
-    @IBOutlet weak var firstTrackAddButton: UIButton! {
-        didSet {
-            firstTrackAddButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum)
-        }
-    }
-    
-    @IBOutlet weak var secondTrackAddButton: UIButton! {
-        didSet {
-            firstTrackAddButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum)
-        }
-    }
+    @IBOutlet weak var secondTrackAddButton: UIButton!
     
     
     // MARK: - IBActions
     
     var global_rate: Float = 1
-    
-    @IBAction func speed(_ sender: Any) {
-        if global_rate == 1 {
-            global_rate = 0.5
-        } else {
-            global_rate = 1
-        }
-        
-        if player.rate != 0 {
-            player.rate = global_rate
-        }
-    }
-    
-    
-    @IBAction func weixinEffect(_ sender: UIButton) {
-        videoComposition = AVMutableVideoComposition()
-        guard let videoComposition = self.videoComposition else {
-            return
-        }
-        videoComposition.renderSize = CGSize(width: 540, height: 960)
-        videoComposition.frameDuration = CMTimeMake(1, 30)
-        videoComposition.customVideoCompositorClass = APLCustomVideoCompositor.self
-        
-        // Add two video tracks and two audio tracks.
-        let firstVideoTrack = composition?.tracks(withMediaType: .video).first!
-        
-        let secondVideoTrack = composition?.tracks(withMediaType: .video)[1]
-        
-        let audioTrack = composition?.tracks(withMediaType: .audio).first!
-
-        let videoInstruction =
-            APLCustomVideoCompositionInstruction(theSourceTrackIDs:
-        [NSNumber(value:firstVideoTrack!.trackID),
-        NSNumber(value:secondVideoTrack!.trackID)],
-                             forTimeRange: CMTimeRange(start: kCMTimeZero, duration: composition!.duration))
-        // First track -> Foreground track while compositing.
-        videoInstruction.foregroundTrackID = firstVideoTrack!.trackID
-        // Second track -> Background track while compositing.
-        videoInstruction.backgroundTrackID =
-        secondVideoTrack!.trackID
-        
-        videoComposition.instructions = [videoInstruction]
-        
-        
-        playerItem = AVPlayerItem(asset: composition!)
-        playerItem!.videoComposition = videoComposition
-        playerItem!.audioMix = audioMix
-        player.replaceCurrentItem(with: playerItem)
-        
-        currentTime = Double((timelineView.contentOffset.x + timelineView.frame.width/2) / scaledDurationToWidth)
-        
-    }
-    
     
     @IBAction func export(_ sender: Any)
     {
@@ -317,9 +238,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         exporter.videoComposition = self.videoComposition
         // Asynchronously export the composition to a video file and save this file to the camera roll once export completes.
         
-        let size = CGSize(width: 100, height: 100)
-        
-        startAnimating(size, message: "正在导出...", type: NVActivityIndicatorType(rawValue: NVActivityIndicatorType.lineScalePulseOut.rawValue)!)
         
         exporter.exportAsynchronously {
             DispatchQueue.main.async {
@@ -327,23 +245,13 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                     if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(exporter.outputURL!.path)){
                         UISaveVideoAtPathToSavedPhotosAlbum(exporter.outputURL!.path, self, #selector(self.video), nil)
                     }
-                    NVActivityIndicatorPresenter.sharedInstance.setMessage("导出成功")
                     
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-                        self.stopAnimating()
-                    }
-                } else {
-                    NVActivityIndicatorPresenter.sharedInstance.setMessage("导出失败")
-                    
-                    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-                        self.stopAnimating()
-                    }
                 }
             }
         }
     }
     
-    @objc func video(videoPath: NSString, didFinishSavingWithError error:NSError, contextInfo contextInfo:Any) -> Void {
+    @objc func video(videoPath: NSString, didFinishSavingWithError error:NSError, contextInfo:Any) -> Void {
     }
     
     
@@ -426,9 +334,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func whichTrack(_ timeline: UICollectionView) -> Int {
-        if timeline == timelineView {
-            return 0
-        } else if timeline == backgroundTimelineView {
+        if timeline == backgroundTimelineView {
             return 1
         } else {
             assert(2==100)
@@ -437,13 +343,11 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     func whichTimeline(_ timelineIndex: Int) -> UICollectionView {
-        if timelineIndex == 0 {
-            return timelineView
-        } else if timelineIndex == 1 {
+        if timelineIndex == 1 {
             return backgroundTimelineView
         } else {
             assert(1==100)
-            return timelineView
+            return backgroundTimelineView
         }
     }
     
@@ -551,27 +455,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         updatePlayer()
     }
     
-    @IBAction func copyClip(_ sender: Any) {
-        var timeRangeInAsset: CMTimeRange? = nil
-        
-        let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first
-        
-        for s in compositionVideoTrack!.segments {
-            timeRangeInAsset = s.timeMapping.target; // assumes non-scaled edit
-            
-            if !s.isEmpty && timeRangeInAsset!.containsTime(player.currentTime()) {
-                let index = compositionVideoTrack!.segments.index(of: s)
-                
-                try! self.composition!.insertTimeRange(timeRangeInAsset!, of: composition!, at: timeRangeInAsset!.end)
-                
-                push(op:.copy(index!, 0))
-                
-                break
-            }
-        }
-        
-        updatePlayer()
-    }
     
     @IBAction func removeClip(_ sender: Any) {
         var timeRangeInAsset: CMTimeRange? = nil
@@ -617,8 +500,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             if #available(iOS 10.0, *) {
                 seekTimer?.invalidate()
                 seekTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true, block: { (timer) in
-                    self.timelineView.contentOffset.x = CGFloat(self.currentTime/Double(self.visibleTimeRange)*Double(self.timelineView.frame.width)) - self.timelineView.frame.size.width/2
-                    self.backgroundTimelineView.contentOffset.x = CGFloat(self.currentTime/Double(self.visibleTimeRange)*Double(self.timelineView.frame.width)) - self.timelineView.frame.size.width/2
+                    self.backgroundTimelineView.contentOffset.x = CGFloat(self.currentTime/Double(self.visibleTimeRange)*Double(self.backgroundTimelineView.frame.width)) - self.backgroundTimelineView.frame.size.width/2
                 })
             } else {
                 // Fallback on earlier versions
@@ -654,11 +536,9 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var trackAdded = 0
     
     @IBAction func AddVideo(_ sender: UIButton) {
-        if sender == firstTrackAddButton {
-            self.trackAdded = 0
-        } else {
-            self.trackAdded = 1
-        }
+
+        self.trackAdded = 1
+
         let picker = UIImagePickerController()
         picker.sourceType = .savedPhotosAlbum
         picker.mediaTypes = [kUTTypeMovie as String]
@@ -716,15 +596,8 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         playerItem!.audioMix = audioMix
         player.replaceCurrentItem(with: playerItem)
         
-        currentTime = Double((timelineView.contentOffset.x + timelineView.frame.width/2) / scaledDurationToWidth)
+        currentTime = Double((backgroundTimelineView.contentOffset.x + backgroundTimelineView.frame.width/2) / scaledDurationToWidth)
         
-        if firstVideoTrack.segments.count != 0 {
-            firstTrackAddButton.isHidden = true
-            timelineView.isHidden = false
-        } else {
-            firstTrackAddButton.isHidden = false
-            timelineView.isHidden = true
-        }
         
         if secondVideoTrack.segments.count != 0 {
             secondTrackAddButton.isHidden = true
@@ -855,10 +728,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         if player.rate == 0 {
             let _timelineView = scrollView as! UICollectionView
             currentTime = Double((_timelineView.contentOffset.x + _timelineView.frame.width/2) / (_timelineView.frame.width / visibleTimeRange))
-            if let timelineView = self.timelineView, let backgroundTimelineView = self.backgroundTimelineView {
-                timelineView.contentOffset.x = _timelineView.contentOffset.x
-                backgroundTimelineView.contentOffset.x = _timelineView.contentOffset.x
-            }
         }
     }
     
@@ -874,11 +743,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         picker.presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
-    func pinch(_ recognizer: UIPinchGestureRecognizer) {
-        visibleTimeRange = visibleTimeRange * timelineView.zoomScale
-        timelineView.collectionViewLayout.invalidateLayout()
-        timelineView.contentOffset.x = CGFloat(self.currentTime/CMTimeGetSeconds(self.composition!.duration)*Double(self.timelineView.frame.width)) - self.timelineView.frame.size.width/2
-    }
     
     @objc func pan(_ recognizer: UIPanGestureRecognizer) {
         player.pause()
@@ -890,7 +754,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         let index = whichTrack(collectionView)
         let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video)[index]
         
-        return CGSize(width: CGFloat(CMTimeGetSeconds((compositionVideoTrack.segments[indexPath.row].timeMapping.target.duration))) * scaledDurationToWidth, height: timelineView.frame.height)
+        return CGSize(width: CGFloat(CMTimeGetSeconds((compositionVideoTrack.segments[indexPath.row].timeMapping.target.duration))) * scaledDurationToWidth, height: backgroundTimelineView.frame.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
@@ -933,7 +797,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         let _track = _composition.tracks(withMediaType: .video)[1-_timelineIndex]
         _composition.removeTrack(_track)
         let imageGenerator = AVAssetImageGenerator.init(asset: _composition)
-        imageGenerator.maximumSize = CGSize(width: self.timelineView.bounds.height * 2, height: self.timelineView.bounds.height * 2)
+        imageGenerator.maximumSize = CGSize(width: self.backgroundTimelineView.bounds.height * 2, height: self.backgroundTimelineView.bounds.height * 2)
         imageGenerator.appliesPreferredTrackTransform = true
         
         if true {
@@ -942,7 +806,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             let timerange = (compositionVideoTrack.segments[indexPath.item].timeMapping.target)
             
             // Generate an image at time zero.
-            let incrementTime = CMTime(seconds: Double(timelineView.frame.height /  scaledDurationToWidth), preferredTimescale: 600)
+            let incrementTime = CMTime(seconds: Double(backgroundTimelineView.frame.height /  scaledDurationToWidth), preferredTimescale: 600)
             
             var iterTime = timerange.start
             
@@ -956,7 +820,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 if (image != nil) {
                     DispatchQueue.main.async {
                         let nextX = CGFloat(CMTimeGetSeconds(requestedTime - timerange.start)) * self.scaledDurationToWidth
-                        let nextView = UIImageView.init(frame: CGRect(x: nextX, y: 0.0, width: self.timelineView.bounds.height, height: self.timelineView.bounds.height))
+                        let nextView = UIImageView.init(frame: CGRect(x: nextX, y: 0.0, width: self.backgroundTimelineView.bounds.height, height: self.backgroundTimelineView.bounds.height))
                         nextView.contentMode = .scaleAspectFill
                         nextView.clipsToBounds = true
                         nextView.image = UIImage.init(cgImage: image!)
