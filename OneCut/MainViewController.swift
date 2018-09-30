@@ -255,7 +255,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     
-    func addClip(_ movieURL: URL, trackAdded: Int) {
+    func addClip(_ movieURL: URL) {
         let newAsset = AVURLAsset(url: movieURL, options: [AVURLAssetPreferPreciseDurationAndTimingKey: true])
         
         /*
@@ -306,7 +306,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 let videoAssetTrack = newAsset.tracks(withMediaType: .video).first!
                 
-                let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video)[trackAdded]
+                let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first!
                 
                 compositionVideoTrack.preferredTransform = videoAssetTrack.preferredTransform
 
@@ -323,7 +323,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
 
                 }
                 
-                self.push(op:.add(0, trackAdded))
+                self.push(op:.add(0, 0))
                 
                 // update timeline
                 self.updatePlayer()
@@ -333,75 +333,33 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
     }
     
-    func whichTrack(_ timeline: UICollectionView) -> Int {
-        if timeline == backgroundTimelineView {
-            return 1
-        } else {
-            assert(2==100)
-            return 0
-        }
-    }
-    
-    func whichTimeline(_ timelineIndex: Int) -> UICollectionView {
-        if timelineIndex == 1 {
-            return backgroundTimelineView
-        } else {
-            assert(1==100)
-            return backgroundTimelineView
-        }
-    }
-    
     func redoOp(op: OpType) {
         
         switch op {
         case let .copy(index, timelineIndex):
-            whichTimeline(timelineIndex).reloadData()
             break
             
         case let .split(index, timelineIndex):
-            whichTimeline(timelineIndex).reloadData()
             break
             
         case let .add(index, timelineIndex):
-            whichTimeline(timelineIndex).reloadData()
             break
             
         case let .remove(index, timelineIndex):
-            whichTimeline(timelineIndex).reloadData()
             break
             
         case let .update(index, timelineIndex):
-            whichTimeline(timelineIndex).reloadData()
             break
             
         default:
             _ = 1
         }
         
+        backgroundTimelineView.reloadData()
     }
     
     func undoOp(op: OpType) {
-        switch op {
-        case let .copy(index, timelineIndex):
-            whichTimeline(timelineIndex).reloadData()
-            
-        case let .split(index, timelineIndex):
-            whichTimeline(timelineIndex).reloadData()
-            
-        case let .add(index, timelineIndex):
-            whichTimeline(timelineIndex).reloadData()
-            
-            break
-            
-        case let .remove(index, timelineIndex):
-            whichTimeline(timelineIndex).reloadData()
-            
-        case let .update(index, timelineIndex):
-            whichTimeline(timelineIndex).reloadData()
-            
-        default:
-            _ = 1
-        }
+        backgroundTimelineView.reloadData()
     }
     
     @IBAction func undo(_ sender: Any) {
@@ -599,7 +557,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         currentTime = Double((backgroundTimelineView.contentOffset.x + backgroundTimelineView.frame.width/2) / scaledDurationToWidth)
         
         
-        if secondVideoTrack.segments.count != 0 {
+        if firstVideoTrack.segments.count != 0 {
             secondTrackAddButton.isHidden = true
             backgroundTimelineView.isHidden = false
         } else {
@@ -738,7 +696,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         if let videoURL = info[UIImagePickerControllerMediaURL] as? URL {
-            addClip(videoURL, trackAdded: trackAdded)
+            addClip(videoURL)
         }
         picker.presentingViewController?.dismiss(animated: true, completion: nil)
     }
@@ -751,8 +709,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        let index = whichTrack(collectionView)
-        let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video)[index]
+        let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first!
         
         return CGSize(width: CGFloat(CMTimeGetSeconds((compositionVideoTrack.segments[indexPath.row].timeMapping.target.duration))) * scaledDurationToWidth, height: backgroundTimelineView.frame.height)
     }
@@ -767,9 +724,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        let index = whichTrack(collectionView)
-        
-        let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video)[index]
+        let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first!
         
         assert(self.composition!.tracks(withMediaType: AVMediaType.video).count == 2)
         
@@ -784,19 +739,9 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             view.removeFromSuperview()
         }
         
-        let index = whichTrack(collectionView)
-        let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video)[index]
-        
-        if compositionVideoTrack.segments[indexPath.row].isEmpty {
-            return segmentView
-        }
-        
-        let _composition = composition!.mutableCopy() as! AVMutableComposition
-        let _timelineIndex = whichTrack(collectionView)
-        assert(_timelineIndex == 0 || _timelineIndex == 1)
-        let _track = _composition.tracks(withMediaType: .video)[1-_timelineIndex]
-        _composition.removeTrack(_track)
-        let imageGenerator = AVAssetImageGenerator.init(asset: _composition)
+        let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first!
+
+        let imageGenerator = AVAssetImageGenerator.init(asset: composition!)
         imageGenerator.maximumSize = CGSize(width: self.backgroundTimelineView.bounds.height * 2, height: self.backgroundTimelineView.bounds.height * 2)
         imageGenerator.appliesPreferredTrackTransform = true
         
