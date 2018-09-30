@@ -34,8 +34,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             _ = composition!.addMutableTrack(withMediaType: AVMediaType.audio, preferredTrackID: kCMPersistentTrackID_Invalid)
         }
         
-        self.push(op:.nothing)
-        
         playerView.playerLayer.player = player
         
         backgroundTimelineView.isHidden = true
@@ -99,37 +97,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     var scaledDurationToWidth: CGFloat {
         return backgroundTimelineView.frame.width / visibleTimeRange
     }
-
-    struct opsAndComps {
-        var comp: AVMutableComposition
-        var op: OpType
-    }
-    var stack: [opsAndComps] = []
-    var undoPos: Int = -1 {
-        didSet {
-            let undoButtonImageName = undoPos <= 0 ? "undo_ban" : "undo"
-            
-            let undoButtonImage = UIImage(named: undoButtonImageName)
-            
-            undoButton.setImage(undoButtonImage, for: UIControlState())
-            
-            let redoButtonImageName = undoPos == stack.count - 1 ? "redo_ban" : "redo"
-            
-            let redoButtonImage = UIImage(named: redoButtonImageName)
-            
-            redoButton.setImage(redoButtonImage, for: UIControlState())
-        }
-    }
-    
-    enum OpType {
-        case add(Int, Int)
-        case remove(Int, Int)
-        case update(Int, Int)
-        case split(Int, Int)
-        case copy(Int, Int)
-        case nothing
-    }
-    
     
     // Attempt load and test these asset keys before playing.
     static let assetKeysRequiredToPlay = [
@@ -201,8 +168,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     @IBOutlet weak var splitButton: UIButton!
     @IBOutlet weak var removeButton: UIButton!
-    @IBOutlet weak var undoButton: UIButton!
-    @IBOutlet weak var redoButton: UIButton!
     @IBOutlet weak var startTimeLabel: UILabel!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var playerView: PlayerView!
@@ -323,8 +288,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
 
                 }
                 
-                self.push(op:.add(0, 0))
-                
                 // update timeline
                 self.updatePlayer()
                 
@@ -333,60 +296,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         }
     }
     
-    func redoOp(op: OpType) {
-        
-        switch op {
-        case let .copy(index, timelineIndex):
-            break
-            
-        case let .split(index, timelineIndex):
-            break
-            
-        case let .add(index, timelineIndex):
-            break
-            
-        case let .remove(index, timelineIndex):
-            break
-            
-        case let .update(index, timelineIndex):
-            break
-            
-        default:
-            _ = 1
-        }
-        
-        backgroundTimelineView.reloadData()
-    }
-    
-    func undoOp(op: OpType) {
-        backgroundTimelineView.reloadData()
-    }
-    
-    @IBAction func undo(_ sender: Any) {
-        if undoPos <= 0 {
-            return
-        }
-        
-        undoPos -= 1 
-        self.composition = stack[undoPos].comp.mutableCopy() as! AVMutableComposition
-        
-        undoOp(op: stack[undoPos+1].op)
-        
-        updatePlayer()
-    }
-    
-    @IBAction func redo(_ sender: Any) {
-        if undoPos == stack.count - 1 {
-            return
-        }
-        
-        undoPos += 1
-        self.composition = stack[undoPos].comp.mutableCopy() as! AVMutableComposition
-        
-        redoOp(op: stack[undoPos].op)
-        
-        updatePlayer()
-    }
     
     @IBAction func splitClip(_ sender: Any) {
         var timeRangeInAsset: CMTimeRange? = nil
@@ -403,8 +312,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 
                 try! compositionVideoTrack.removeTimeRange(CMTimeRange(start:player.currentTime(), duration:timeRangeInAsset!.duration - CMTime(value: 1, timescale: 600)))
                 
-                
-                push(op:.split(index!, 0))
                 
                 break
             }
@@ -430,12 +337,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
                 try! compositionVideoTrack.removeTimeRange(timeRangeInAsset!)
                 
                 try! compositionVideoTrack.insertEmptyTimeRange(timeRangeInAsset!)
-                
-                if compositionVideoTrack.segments.count == count {
-                    push(op:.update(index!, 0))
-                } else {
-                    push(op:.remove(index!, 0))
-                }
                 
                 break
             }
@@ -469,19 +370,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             player.pause()
             seekTimer?.invalidate()
         }
-    }
-    
-    func push(op: OpType) {
-        var newComposition = self.composition!.mutableCopy() as! AVMutableComposition
-        
-        while undoPos < stack.count - 1 {
-            stack.removeLast()
-        }
-        
-        stack.append(opsAndComps(comp: newComposition, op: op))
-        undoPos = stack.count - 1
-        
-        redoOp(op: op)
     }
     
     
@@ -565,6 +453,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
             backgroundTimelineView.isHidden = true
         }
         
+        backgroundTimelineView.reloadData()
     }
     
     
@@ -707,76 +596,72 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
         seekTimer?.invalidate()
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first!
         
-        return CGSize(width: CGFloat(CMTimeGetSeconds((compositionVideoTrack.segments[indexPath.row].timeMapping.target.duration))) * scaledDurationToWidth, height: backgroundTimelineView.frame.height)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(0, 0, 0, 1)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 1
+        return compositionVideoTrack.segments.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first!
+        var times = [NSValue]()
         
-        assert(self.composition!.tracks(withMediaType: AVMediaType.video).count == 2)
+        let timerange = compositionVideoTrack.segments[section].timeMapping.target
         
-        return compositionVideoTrack.segments.count
+        // Generate an image at time zero.
+        let incrementTime = CMTime(seconds: Double(backgroundTimelineView.frame.height /  scaledDurationToWidth), preferredTimescale: 600)
+        
+        var iterTime = timerange.start
+        
+        while iterTime <= timerange.end {
+            times.append(iterTime as NSValue)
+            iterTime = CMTimeAdd(iterTime, incrementTime);
+        }
+        
+        return times.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let segmentView = collectionView.dequeueReusableCell(withReuseIdentifier: "segment", for: indexPath)
-        segmentView.backgroundColor = #colorLiteral(red: 1, green: 0, blue: 0, alpha: 0)
-        for view in segmentView.subviews {
+        let imageViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: "image", for: indexPath)
+        imageViewCell.backgroundColor = #colorLiteral(red: 1, green: 0, blue: 0, alpha: 0)
+        for view in imageViewCell.subviews {
             view.removeFromSuperview()
         }
         
-        let compositionVideoTrack = self.composition!.tracks(withMediaType: AVMediaType.video).first!
+        let compositionVideoTrack = self.composition!.tracks(withMediaType: .video).first!
 
+        let height = self.backgroundTimelineView.bounds.height
         let imageGenerator = AVAssetImageGenerator.init(asset: composition!)
-        imageGenerator.maximumSize = CGSize(width: self.backgroundTimelineView.bounds.height * 2, height: self.backgroundTimelineView.bounds.height * 2)
+        imageGenerator.maximumSize = CGSize(width: height, height: height)
         imageGenerator.appliesPreferredTrackTransform = true
         
-        if true {
-            var times = [NSValue]()
-            
-            let timerange = (compositionVideoTrack.segments[indexPath.item].timeMapping.target)
-            
-            // Generate an image at time zero.
-            let incrementTime = CMTime(seconds: Double(backgroundTimelineView.frame.height /  scaledDurationToWidth), preferredTimescale: 600)
-            
-            var iterTime = timerange.start
-            
-            while iterTime <= timerange.end {
-                times.append(iterTime as NSValue)
-                iterTime = CMTimeAdd(iterTime, incrementTime);
-            }
-            
-            // Set a videoComposition on the ImageGenerator if the underlying movie has more than 1 video track.
-            imageGenerator.generateCGImagesAsynchronously(forTimes: times as [NSValue]) { (requestedTime, image, actualTime, result, error) in
-                if (image != nil) {
-                    DispatchQueue.main.async {
-                        let nextX = CGFloat(CMTimeGetSeconds(requestedTime - timerange.start)) * self.scaledDurationToWidth
-                        let nextView = UIImageView.init(frame: CGRect(x: nextX, y: 0.0, width: self.backgroundTimelineView.bounds.height, height: self.backgroundTimelineView.bounds.height))
-                        nextView.contentMode = .scaleAspectFill
-                        nextView.clipsToBounds = true
-                        nextView.image = UIImage.init(cgImage: image!)
-                        
-                        segmentView.addSubview(nextView)
-                    }
+        let timerange = compositionVideoTrack.segments[indexPath.section].timeMapping.target
+        
+        // Generate an image at time zero.
+        
+        let iterTime = timerange.start + CMTime(seconds: Double(CGFloat(indexPath.item) * height /  scaledDurationToWidth), preferredTimescale: 600)
+        
+        // Set a videoComposition on the ImageGenerator if the underlying movie has more than 1 video track.
+        let times = [iterTime as NSValue]
+        
+        imageGenerator.generateCGImagesAsynchronously(forTimes: times as [NSValue]) { (requestedTime, image, actualTime, result, error) in
+            if (image != nil) {
+                DispatchQueue.main.async {
+                    let imageView = UIImageView.init(frame: imageViewCell.bounds)
+                    imageView.contentMode = .scaleAspectFill
+                    imageView.clipsToBounds = true
+                    imageView.image = UIImage.init(cgImage: image!)
+                    
+                    imageViewCell.addSubview(imageView)
                 }
             }
         }
-        
-        return segmentView
+
+    
+        return imageViewCell
     }
     
 }

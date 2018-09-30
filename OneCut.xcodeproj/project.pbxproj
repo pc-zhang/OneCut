@@ -13,7 +13,6 @@
 		F0C7514020EB3F000088D34F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0C7513E20EB3F000088D34F /* LaunchScreen.storyboard */; };
 		F0C7514C20EB3F620088D34F /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7514920EB3F620088D34F /* MainViewController.swift */; };
 		F0C7514F20EB3F6C0088D34F /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7514D20EB3F6C0088D34F /* PlayerView.swift */; };
-		F0C7515020EB3F6C0088D34F /* SegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0C7514E20EB3F6C0088D34F /* SegmentView.swift */; };
 		F0C7515220EB3FAA0088D34F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0C7515120EB3FAA0088D34F /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -26,7 +25,6 @@
 		F0C7514120EB3F000088D34F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F0C7514920EB3F620088D34F /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		F0C7514D20EB3F6C0088D34F /* PlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
-		F0C7514E20EB3F6C0088D34F /* SegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentView.swift; sourceTree = "<group>"; };
 		F0C7515120EB3FAA0088D34F /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -63,7 +61,6 @@
 				F0C7515120EB3FAA0088D34F /* Main.storyboard */,
 				F0C7514920EB3F620088D34F /* MainViewController.swift */,
 				F0C7514D20EB3F6C0088D34F /* PlayerView.swift */,
-				F0C7514E20EB3F6C0088D34F /* SegmentView.swift */,
 				F0ACBD08213510F700BD785C /* TimelineView.swift */,
 				F0C7514120EB3F000088D34F /* Info.plist */,
 				F0C7515320EB44340088D34F /* Supporting Files */,
@@ -154,7 +151,6 @@
 			files = (
 				F0C7514C20EB3F620088D34F /* MainViewController.swift in Sources */,
 				F0C7514F20EB3F6C0088D34F /* PlayerView.swift in Sources */,
-				F0C7515020EB3F6C0088D34F /* SegmentView.swift in Sources */,
 				F0ACBD09213510F700BD785C /* TimelineView.swift in Sources */,
 				F0C7513220EB3EFF0088D34F /* AppDelegate.swift in Sources */,
 			);
