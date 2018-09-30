@@ -15,11 +15,6 @@ private var MainViewControllerKVOContext = 0
 
 class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
-    // MARK: Properties
-    
-    fileprivate let labelFont = UIFont(name: "Menlo", size: 12)!
-    fileprivate let maxImageSize = CGSize(width: 120, height: 120)
-    
     // MARK: - View Controller
     
     override func viewDidLoad() {
@@ -41,16 +36,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // Access the document
-        document?.open(completionHandler: { (success) in
-            if success {
-                // Display the content of the document, e.g.:
-                //                self.documentNameLabel.text = self.document?.fileURL.lastPathComponent
-            } else {
-                // Make sure to handle the failed import appropriately, e.g., by presenting an error message to the user.
-            }
-        })
         
         /*
          Update the UI when these player properties change.
@@ -162,7 +147,6 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     private var timeObserverToken: Any?
     
     private var playerItem: AVPlayerItem? = nil
-    var document: UIDocument?
     
     // MARK: - IBOutlets
     
@@ -373,18 +357,7 @@ class MainViewController: UIViewController, UICollectionViewDelegateFlowLayout, 
     }
     
     
-    @IBAction func dismissDocumentViewController() {
-        dismiss(animated: true) {
-            self.document?.close(completionHandler: nil)
-        }
-    }
-    
-    var trackAdded = 0
-    
     @IBAction func AddVideo(_ sender: UIButton) {
-
-        self.trackAdded = 1
-
         let picker = UIImagePickerController()
         picker.sourceType = .savedPhotosAlbum
         picker.mediaTypes = [kUTTypeMovie as String]
